@@ -39,17 +39,17 @@ The final milestone is the complete implementation. It needs to be able to (inor
 
 
 ### Assessment
-Total for this project: 50%.
+Total for this project:  **50%**
 
-• Projectplan 5%,due week 2(Tue  30  Jul  9:30am)
+• Projectplan  **(5%)**, due week 2(Tue  30  Jul  9:30am)
 
-• Basicmilestone,15%,demo/interview/implementation,week4(implementation due Mon 12Aug 9:30am; Mon/Tue/Wed/Thu 12/13/14/15  Aug  demo/interviews)
+• Basicmilestone, **(15%)**, demo/interview/implementation, week4 (implementation due Mon 12Aug 9:30am; Mon/Tue/Wed/Thu 12/13/14/15  Aug  demo/interviews)
 
 • Finalmilestone, due week 6(implementation due Mon 26 Aug 9:30am; Mon/Tue/Wed/Thu 26/27/28/29Aug demo/interviews;reportdue  30  Aug  12:30pm; peerevaluation due 30 Aug 11:59pm)
 
-– Demo/interview/implementation,**20%**
+– Demo/interview/implementation, **(20%)**
 
-– Writtenreport,**10%**
+– Writtenreport, **(10%)**
 
 – Confidentialpeerevaluationform(eachstudent)via TeamMates
 
