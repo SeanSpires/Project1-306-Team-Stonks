@@ -42,4 +42,33 @@ public class FileIO {
             e.printStackTrace();
         }
     }
+
+    public void processFile(){
+
+        for(String s: inputStringList){
+            String currentLine = s.trim();
+            if(Character.isDigit(currentLine.charAt(0))){
+
+                String sub = currentLine.substring(2,4);
+                if(sub.equals("->")){
+                    //this is a transition
+                    //check if either nodes are created
+                    //add to parentTasks if applicable
+                    //add to hash map if applicable
+                    //
+                } else {
+                    //this is just a task
+                    //Check if task has been created
+                    //create task
+                }
+            } else {
+                //ignore
+            }
+        }
+
+
+
+    }
+
+
 }
