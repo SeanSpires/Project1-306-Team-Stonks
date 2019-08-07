@@ -6,8 +6,9 @@ import java.util.List;
 
 public class FileIO {
 
-    private List<String> inputStringList = new ArrayList<>();
-    public List<Task> taskList = new ArrayList<>();
+    private List<String> nodeList = new ArrayList<>();
+    private List<Task> taskList = new ArrayList<>();
+    private List<String> transitionList = new ArrayList<>();
 
     public void writeFile(String fileName){
         File outputFile = new File(fileName + ".dot");
@@ -20,7 +21,7 @@ public class FileIO {
         try {
             FileWriter fw = new FileWriter(currentFileName,true);
 
-            for(String s : inputStringList) {
+            for(String s : nodeList) {
                 fw.write(s + "\n");
             }
             fw.close();
@@ -36,7 +37,18 @@ public class FileIO {
         try (BufferedReader br = new BufferedReader((new FileReader(currentFile)))){
             String line;
             while ((line = br.readLine()) != null){
-                inputStringList.add(line);
+                nodeList.add(line);
+                String inputString = line.trim();
+                char firstChar = inputString.charAt(0);
+                if(Character.isDigit(firstChar)){
+                    if(isTransition(line)){
+                        transitionList.add(inputString);
+                    } else {
+                        nodeList.add(inputString);
+                    }
+
+                }
+
             }
 
         }catch (IOException e){
@@ -44,53 +56,45 @@ public class FileIO {
         }
     }
 
-    public void processFile(){
+    public void processNodes(){
+        for(String node : nodeList){
+            int weight = getWeightValue(node);
+            char firstChar = node.charAt(0);
 
-        for(String s: inputStringList){
-            String currentLine = s.trim();
-            char firstChar = currentLine.charAt(0);
-            if(Character.isDigit(firstChar)){
+            createTask(Character.getNumericValue(firstChar), weight);
 
-                String sub = currentLine.substring(2,4);
-                if(sub.equals("->")){
-
-                    //Checks if first node has been created;
-                    int weight = getWeightValue(currentLine);
-                    createTask(Character.getNumericValue(firstChar), weight);
-
-                    //Check if second node has been created;
-                    char charOfSub = currentLine.charAt(5);
+        }
+    }
 
 
+    public void processTransitions(){
 
+        for(String transition: transitionList) {
 
+            int weight = getWeightValue(transition);
 
-                    //this is a transition
-                    //add to parentTasks if applicable
-                    //add to hash map if applicable
-                    //
-                } else {
-                    //this is just a task
-                    //Check if task has been created
-                    int weight = getWeightValue(currentLine);
+            //Parent node
+            int parentNode = Character.getNumericValue(transition.charAt(0));
+            //Child node
+            int childNode = Character.getNumericValue(transition.charAt(5));
 
-                    boolean inList = false;
-                    for(Task t : taskList){
-                        if((t.getNodeNumber()) == (Character.getNumericValue(firstChar))){
-                            t.setWeight(weight);
-                            inList = true;
-                            break;
-                        }
-                    }
-                    if(!inList){
-                        createTask(Character.getNumericValue(firstChar), weight);
-                    }
+            Task parentTask = null;
+            Task childTask = null;
 
+            for(Task task : taskList){
+                if(task.getNodeNumber() == parentNode){
+                    parentTask = task;
+                } else if (task.getNodeNumber() == childNode){
+                    childTask = task;
                 }
-            } else {
-                //ignore
+            }
+
+            if(parentTask != null && childTask != null){
+                parentTask.setSubTasks(childTask, weight);
+                childTask.setParentTasks(parentTask);
             }
         }
+
     }
 
     private void createTask(int nodeNumber,int weight){
@@ -104,6 +108,19 @@ public class FileIO {
         int bracket = input.indexOf(']');
         String weightStr = input.substring(equals, bracket);
         return Integer.valueOf(weightStr);
+    }
+
+    private boolean isTransition(String s){
+        char firstChar = s.charAt(0);
+        if(Character.isDigit(firstChar)){
+            String sub = s.substring(2,4);
+            if(sub.equals("->")) {
+                return true;
+            } else {
+            }
+        }
+        return false;
+
     }
 
 

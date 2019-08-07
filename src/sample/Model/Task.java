@@ -41,6 +41,7 @@ public class Task {
     }
 
     public void setParentTasks(Task task) {
+        if(!parentTasks.contains(task))
         this.parentTasks.add(task);
     }
 
