@@ -1,4 +1,4 @@
-package sample.Controller;
+package MVC.Controller;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;

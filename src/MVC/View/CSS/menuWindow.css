@@ -1,0 +1,25 @@
+#_menuBtn{
+    -fx-font-size: 16px;
+    -fx-font-family: "Doppio One";
+    -fx-background-color: rgba(230,	230, 230);
+    -fx-border-radius: 50;
+}
+
+#_runBtn{
+    -fx-font-size: 16px;
+    -fx-font-family: "Doppio One";
+    -fx-background-color: rgba(210,	210, 210);
+    -fx-border-radius: 50;
+}
+
+#_stopBtn{
+    -fx-font-size: 16px;
+    -fx-font-family: "Doppio One";
+    -fx-background-color: rgba(210,	210, 210);
+    -fx-border-radius: 50;
+}
+
+#_bottomMenu{
+    -fx-background-color: rgba(200,	200, 200, 0.3);
+    -fx-box-shadow: 50px;
+}
