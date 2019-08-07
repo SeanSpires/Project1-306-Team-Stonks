@@ -12,7 +12,7 @@
 
 
 
-## From Project Breif
+## From Project Brief
 MilestonesThere are three milestones for the project implementation.
 
 ### Plan
@@ -41,17 +41,17 @@ The final milestone is the complete implementation. It needs to be able to (inor
 ### Assessment
 Total for this project:  **50%**
 
-• Projectplan  **(5%)**, due week 2(Tue  30  Jul  9:30am)
+• Project plan  **(5%)**, due week 2(Tue  30  Jul  9:30am)
 
-• Basicmilestone, **(15%)**, demo/interview/implementation, week4 (implementation due Mon 12Aug 9:30am; Mon/Tue/Wed/Thu 12/13/14/15  Aug  demo/interviews)
+• Basic milestone, **(15%)**, demo/interview/implementation, week4 (implementation due Mon 12Aug 9:30am; Mon/Tue/Wed/Thu 12/13/14/15  Aug  demo/interviews)
 
-• Finalmilestone, due week 6(implementation due Mon 26 Aug 9:30am; Mon/Tue/Wed/Thu 26/27/28/29Aug demo/interviews;reportdue  30  Aug  12:30pm; peerevaluation due 30 Aug 11:59pm)
+• Final milestone, due week 6(implementation due Mon 26 Aug 9:30am; Mon/Tue/Wed/Thu 26/27/28/29Aug demo/interviews;reportdue  30  Aug  12:30pm; peerevaluation due 30 Aug 11:59pm)
 
 – Demo/interview/implementation, **(20%)**
 
-– Writtenreport, **(10%)**
+– Written report, **(10%)**
 
-– Confidentialpeerevaluationform(eachstudent)via TeamMates
+– Confidential peer evaluation form (eachstudent) via TeamMates
 
 The milestones will be graded according to various criteria.
 These are functionality (finding optimal schedule), speed (time to find the optimal schedule ), high quality of coding standards, comments, documentation and testing. This project has the particular challenge of the contradicting objectives of high software engineering standards of design and code, and the need to have very fast execution speed.
