@@ -51,8 +51,73 @@ Total for this project:  **50%**
 
 – Written report, **(10%)**
 
-– Confidential peer evaluation form (eachstudent) via TeamMates
+– Confidential peer evaluation form (each student) via TeamMates
 
 The milestones will be graded according to various criteria.
 These are functionality (finding optimal schedule), speed (time to find the optimal schedule ), high quality of coding standards, comments, documentation and testing. This project has the particular challenge of the contradicting objectives of high software engineering standards of design and code, and the need to have very fast execution speed.
 
+# Useful Git Commands
+
+#### Initialising Repositories
+
+| Command | Purpose |
+| ------- | ----------- |
+| `git init` | Initialise a local repository |
+| `git clone ssh://git@github.com/[username]/[repository-name].git` | Clone a remote repo as a local repository |
+
+#### Basic Commands
+
+| Command | Purpose |
+| ------- | ----------- |
+| `git status` | See the files that have been changed |
+| `git add [file-name.txt]` | Add a file to the staging area |
+| `git add .` | Add all new and changed files to the staging area |
+| `git commit -m "[commit message]"` | Commit staged changes with a short description |
+| `git rm -r [file-name.txt]` | Remove a file (or folder) |
+
+#### Branching & Merging
+
+| Command | Purpose |
+| ------- | ----------- |
+| `git branch` | List branches (the asterisk denotes the current branch) |
+| `git branch -a` | List all branches (local and remote) |
+| `git branch [branch name]` | Create a new branch |
+| `git branch -d [branch name]` | Delete a branch |
+| `git push origin --delete [branch name]` | Delete a remote branch |
+| `git checkout -b [branch name]` | Create a new branch and switch to it |
+| `git checkout -b [branch name] origin/[branch name]` | Clone a remote branch and switch to it |
+| `git branch -m [old branch name] [new branch name]` | Rename a local branch |
+| `git checkout [branch name]` | Switch to a branch |
+| `git checkout -` | Switch to the branch last checked out |
+| `git checkout -- [file-name.txt]` | Discard changes to a file |
+| `git merge [branch name]` | Merge a branch into the active branch |
+| `git merge [source branch] [target branch]` | Merge a branch into a target branch |
+| `git stash` | Stash changes in a dirty working directory |
+| `git stash clear` | Remove all stashed entries |
+
+#### Sharing & Updating Projects
+
+| Command | Purpose |
+| ------- | ----------- |
+| `git push origin [branch name]` | Push branch to remote repository |
+| `git push -u origin [branch name]` | Push changes to remote repository (and remember the branch) |
+| `git push` | Push changes to remote repository (remembered branch) |
+| `git push origin --delete [branch name]` | Delete a remote branch |
+| `git pull` | Fetch and merge remote repository changes to working directory |
+| `git pull origin [branch name]` | Pull changes from remote repository |
+| `git remote add origin ssh://git@github.com/[username]/[repository-name].git` | Connect local repository to a specified remote repository |
+| `git remote set-url origin ssh://git@github.com/[username]/[repository-name].git` | Set a repository's origin branch to SSH |
+
+#### Inspection & Comparison
+
+| Command | Purpose |
+| ------- | ----------- |
+| `git log` | View changes |
+| `git log --summary` | View changes (detailed) |
+| `git diff [source branch] [target branch]` | Preview changes before merging |
+| `git grep "foo()"` | Search the working directory for foo() |
+
+#### Undo & Reset
+| Command | Purpose |
+| ------- | ----------- |
+| `git reset --hard origin/master` | Discard any local changes and reset working directory with remote repository |
