@@ -12,12 +12,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("View/FXML/menuWindow.fxml"));
         primaryStage.setTitle("Project1-306");
-        Scene mainScene = new Scene(root, 600, 450);
+        Scene mainScene = new Scene(root, 1024, 600);
         mainScene.getStylesheets().add(getClass().getResource("View/CSS/menuWindow.css").toExternalForm());
         primaryStage.setScene(mainScene);
         primaryStage.show();
-
-        System.out.println(javafx.scene.text.Font.getFamilies());
     }
 
 
