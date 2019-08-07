@@ -10,18 +10,18 @@ public class FileIO {
     private List<Task> taskList = new ArrayList<>();
     private List<String> transitionList = new ArrayList<>();
 
-    public void writeFile(String fileName){
+    public void writeFile(String fileName) {
         File outputFile = new File(fileName + ".dot");
 
-        String currentFileName = fileName+".dot";
+        String currentFileName = fileName + ".dot";
 
-        if(outputFile.exists()){
+        if (outputFile.exists()) {
             outputFile.delete();
         }
         try {
-            FileWriter fw = new FileWriter(currentFileName,true);
+            FileWriter fw = new FileWriter(currentFileName, true);
 
-            for(String s : nodeList) {
+            for (String s : nodeList) {
                 fw.write(s + "\n");
             }
             fw.close();
@@ -31,17 +31,16 @@ public class FileIO {
         }
     }
 
-    public void readFile(String fileName){
+    public void readFile(String fileName) {
         File currentFile = new File(fileName);
 
-        try (BufferedReader br = new BufferedReader((new FileReader(currentFile)))){
+        try (BufferedReader br = new BufferedReader((new FileReader(currentFile)))) {
             String line;
-            while ((line = br.readLine()) != null){
-                nodeList.add(line);
+            while ((line = br.readLine()) != null) {
                 String inputString = line.trim();
                 char firstChar = inputString.charAt(0);
-                if(Character.isDigit(firstChar)){
-                    if(isTransition(line)){
+                if (Character.isDigit(firstChar)) {
+                    if (isTransition(inputString)) {
                         transitionList.add(inputString);
                     } else {
                         nodeList.add(inputString);
@@ -51,13 +50,13 @@ public class FileIO {
 
             }
 
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void processNodes(){
-        for(String node : nodeList){
+    public void processNodes() {
+        for (String node : nodeList) {
             int weight = getWeightValue(node);
             char firstChar = node.charAt(0);
 
@@ -67,9 +66,9 @@ public class FileIO {
     }
 
 
-    public void processTransitions(){
+    public void processTransitions() {
 
-        for(String transition: transitionList) {
+        for (String transition : transitionList) {
 
             int weight = getWeightValue(transition);
 
@@ -81,15 +80,15 @@ public class FileIO {
             Task parentTask = null;
             Task childTask = null;
 
-            for(Task task : taskList){
-                if(task.getNodeNumber() == parentNode){
+            for (Task task : taskList) {
+                if (task.getNodeNumber() == parentNode) {
                     parentTask = task;
-                } else if (task.getNodeNumber() == childNode){
+                } else if (task.getNodeNumber() == childNode) {
                     childTask = task;
                 }
             }
 
-            if(parentTask != null && childTask != null){
+            if (parentTask != null && childTask != null) {
                 parentTask.setSubTasks(childTask, weight);
                 childTask.setParentTasks(parentTask);
             }
@@ -97,28 +96,26 @@ public class FileIO {
 
     }
 
-    private void createTask(int nodeNumber,int weight){
+    private void createTask(int nodeNumber, int weight) {
         Task newTask = new Task(nodeNumber);
         newTask.setWeight(weight);
         taskList.add(newTask);
     }
 
-    private int getWeightValue(String input){
+    private int getWeightValue(String input) {
         int equals = input.indexOf('=') + 1;
         int bracket = input.indexOf(']');
         String weightStr = input.substring(equals, bracket);
         return Integer.valueOf(weightStr);
     }
 
-    private boolean isTransition(String s){
-        char firstChar = s.charAt(0);
-        if(Character.isDigit(firstChar)){
-            String sub = s.substring(2,4);
-            if(sub.equals("->")) {
-                return true;
-            } else {
-            }
+    private boolean isTransition(String s) {
+
+        String sub = s.substring(2, 4);
+        if (sub.equals("->")) {
+            return true;
         }
+
         return false;
 
     }

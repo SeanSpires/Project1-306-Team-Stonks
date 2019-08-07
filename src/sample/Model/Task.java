@@ -1,15 +1,17 @@
 package sample.Model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Task {
 
     private int nodeNumber;
     private int weight;
     private int processor;
-    List<Task> parentTasks;
-    HashMap<Task, Integer> subTasks;
+    List<Task> parentTasks = new ArrayList<>();
+    Map<Task, Integer> subTasks = new HashMap<>();
 
     public Task(int nodeNumber){
         this.nodeNumber = nodeNumber;
@@ -45,7 +47,7 @@ public class Task {
         this.parentTasks.add(task);
     }
 
-    public HashMap<Task, Integer> getSubTasks() {
+    public Map<Task, Integer> getSubTasks() {
         return subTasks;
     }
 
