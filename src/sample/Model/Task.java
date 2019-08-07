@@ -5,14 +5,19 @@ import java.util.List;
 
 public class Task {
 
+    private int nodeNumber;
     private int weight;
-    private Processor processor;
+    private int processor;
     List<Task> parentTasks;
     HashMap<Task, Integer> subTasks;
 
-    public Task(int weight){
-        this.weight = weight;
+    public Task(int nodeNumber){
+        this.nodeNumber = nodeNumber;
+//        this.weight = weight;
+    }
 
+    public int getNodeNumber(){
+        return nodeNumber;
     }
 
     public int getWeight() {
@@ -23,11 +28,11 @@ public class Task {
         this.weight = weight;
     }
 
-    public Processor getProcessor() {
+    public int getProcessor() {
         return processor;
     }
 
-    public void setProcessor(Processor processor) {
+    public void setProcessor(int processor) {
         this.processor = processor;
     }
 
@@ -43,7 +48,8 @@ public class Task {
         return subTasks;
     }
 
-    public void setSubTasks() {
+    public void setSubTasks(Task task, Integer weight) {
+        subTasks.put(task, weight);
     }
 
 
