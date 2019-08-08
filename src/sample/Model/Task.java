@@ -11,11 +11,10 @@ public class Task {
     private int weight;
     private int processor;
     List<Task> parentTasks = new ArrayList<>();
-    Map<Task, Integer> subTasks = new HashMap<>();
+    HashMap<Task, Integer> subTasks = new HashMap<>();
 
     public Task(int nodeNumber){
         this.nodeNumber = nodeNumber;
-//        this.weight = weight;
     }
 
     public int getNodeNumber(){
