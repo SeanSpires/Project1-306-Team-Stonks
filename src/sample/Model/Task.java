@@ -46,7 +46,7 @@ public class Task {
         this.parentTasks.add(task);
     }
 
-    public Map<Task, Integer> getSubTasks() {
+    public HashMap<Task, Integer> getSubTasks() {
         return subTasks;
     }
 
