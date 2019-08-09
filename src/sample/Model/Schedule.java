@@ -1,17 +1,18 @@
 package sample.Model;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class Schedule {
 	
-    private HashMap<Task, Integer> tasks = new HashMap<Task, Integer>();
+    private LinkedHashMap<Task, Integer> tasks = new LinkedHashMap<Task, Integer>();
 
-    public HashMap<Task, Integer> getTasks() {
+    public LinkedHashMap<Task, Integer> getTasks() {
         return tasks;
     }
 
-    public void setTasks(HashMap<Task, Integer> tasks) {
+    public void setTasks(LinkedHashMap<Task, Integer> tasks) {
         this.tasks = tasks;
     }
     
