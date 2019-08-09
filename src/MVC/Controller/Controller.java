@@ -1,4 +1,4 @@
-package sample.Controller;
+package MVC.Controller;
 
 public class Controller {
 }
