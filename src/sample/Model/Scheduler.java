@@ -11,7 +11,45 @@ public class Scheduler {
     private Queue<Schedule> schedules = new LinkedList<Schedule>();
     private List<Schedule> scheduleTree = new ArrayList<>();
     
-    
+
+
+    public Schedule createBasicSchedule(List<Task> tasks, int processor) {
+
+        List<Task> rootTasks = getRootTasks(tasks);
+        Task currentTask = rootTasks.first();
+        Schedule schedule = new schedule();
+        int cumulativeWeight = 0;
+
+        while (currentTask.getSubTasks() != null) {
+
+        }
+
+
+        for (Task t : tasks) {
+            t.setProcessor(processor);
+            cumulativeWeight = cumulativeWeight + t.getWeight();
+            schedule.addTask(t, cumulativeWeight);
+        }
+
+        return schedule;
+
+    }
+
+    private List<Task> getRootTasks(List<Task> tasks) {
+        List<Task> rootTasks = new ArrayList<>();
+
+        for (Task t : tasks) {
+            if (t.getParentTasks() == null) {
+                rootTasks.add(t);
+            }
+        }
+
+        return rootTasks;
+    }
+
+
+
+
     public Scheduler(Task rootTask, int numberOfProcessors) {
     	for (int i = 0; i < numberOfProcessors; i++) {
     		Schedule newSchedule = new Schedule();
