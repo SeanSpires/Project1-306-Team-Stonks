@@ -15,8 +15,8 @@ public class Schedule {
         this.tasks = tasks;
     }
     
-    public void addTask(Task task, int weight) {
-    	tasks.put(task, weight);
+    public void addTask(Task task, int startTime) {
+    	tasks.put(task, startTime);
     }
 
     public boolean isComplete(List<Task> allTasks) {
