@@ -1,4 +1,5 @@
-package sample.Model;
+package MVC.Model;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
