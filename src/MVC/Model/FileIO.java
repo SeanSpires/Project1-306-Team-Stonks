@@ -2,6 +2,7 @@ package MVC.Model;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class FileIO {
@@ -10,8 +11,9 @@ public class FileIO {
     private List<Task> taskList = new ArrayList<>();
     private List<String> transitionList = new ArrayList<>();
 
-    public void writeFile(String fileName) {
+    public void writeFile(String fileName, LinkedHashMap<Task, Integer> schedule) {
         File outputFile = new File(fileName + ".dot");
+
 
         String currentFileName = fileName + ".dot";
 
@@ -21,8 +23,18 @@ public class FileIO {
         try {
             FileWriter fw = new FileWriter(currentFileName, true);
 
-            for (String s : nodeList) {
-                fw.write(s + "\n");
+            fw.write("digraph \"outputExample\" {\n");
+
+            for (Task t : schedule.keySet()) {
+                int node = t.getNodeNumber();
+                int weight = t.getWeight();
+                int processor = t.getProcessor();
+                int startTime = schedule.get(t);
+                fw.write("\t"+ node + "\t[Weight=" + weight + ",Start=" + startTime + ",Processor=" + processor + "];\n");
+            }
+
+            for(String s : transitionList){
+                fw.write("\t" + s + "\n");
             }
             fw.close();
 
@@ -120,5 +132,7 @@ public class FileIO {
 
     }
 
-
+    public List<Task> getTaskList() {
+        return taskList;
+    }
 }
