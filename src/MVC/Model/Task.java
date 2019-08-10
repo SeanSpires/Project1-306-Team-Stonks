@@ -4,7 +4,6 @@ package MVC.Model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Task {
 
@@ -12,11 +11,10 @@ public class Task {
     private int weight;
     private int processor;
     List<Task> parentTasks = new ArrayList<>();
-    Map<Task, Integer> subTasks = new HashMap<>();
+    HashMap<Task, Integer> subTasks = new HashMap<>();
 
     public Task(int nodeNumber){
         this.nodeNumber = nodeNumber;
-//        this.weight = weight;
     }
 
     public int getNodeNumber(){
@@ -48,7 +46,7 @@ public class Task {
         this.parentTasks.add(task);
     }
 
-    public Map<Task, Integer> getSubTasks() {
+    public HashMap<Task, Integer> getSubTasks() {
         return subTasks;
     }
 
