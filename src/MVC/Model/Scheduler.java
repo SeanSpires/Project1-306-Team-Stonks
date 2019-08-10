@@ -23,7 +23,7 @@ public class Scheduler {
         Set<Task> subTasks;
         
         taskQueue.addAll(rootTasks);
-        int cumulativeWeight = 0;
+        int startTime = 0;
 
         while (!(taskQueue.isEmpty())) {
         	currentTask = taskQueue.element();
@@ -32,11 +32,13 @@ public class Scheduler {
         	taskQueue.addAll(subTasks);
         	taskQueue.remove(currentTask);
         	
-        	cumulativeWeight = cumulativeWeight + currentTask.getWeight();
+
         	
         	currentTask.setProcessor(processor);
-        	schedule.addTask(currentTask, cumulativeWeight);
+        	schedule.addTask(currentTask, startTime);
         	list.add(currentTask.getNodeNumber());
+
+        	startTime = startTime + currentTask.getWeight();
         }
         
         System.out.println(list);
