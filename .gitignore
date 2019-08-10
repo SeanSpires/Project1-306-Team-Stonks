@@ -26,3 +26,6 @@ hs_err_pid*
 Project1-306.iml
 .idea/
 out/
+
+
+.DS_Store
