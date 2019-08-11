@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    public static String filename;
 
 
     @Override
@@ -22,12 +23,9 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        filename = args[0];
 
 
-
-
-
-        launch(args);
     }
 
     private static void initialise(){
