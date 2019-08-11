@@ -14,10 +14,9 @@ public class FileIO {
 
     public void writeFile(LinkedHashMap<Task, Integer> schedule) {
     	    	
-    	
     	String outputFileName;
     	
-    	if (!(MVC.Main.outputFileName.isEmpty())) {
+    	if (!(MVC.Main.outputFileName == null)) {
     		outputFileName = MVC.Main.outputFileName;
     	}
     	else {

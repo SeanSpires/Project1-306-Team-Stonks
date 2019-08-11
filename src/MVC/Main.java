@@ -39,7 +39,7 @@ public class Main extends Application {
     public static void main(String[] args) {
         inputFileName = args[0];
 
-        if(args.length >= 2){
+        if(args.length > 2){
         	numberOfProcessors = Integer.parseInt(args[1]);
         	
         	if(numberOfProcessors < 1) {
@@ -76,5 +76,8 @@ public class Main extends Application {
         Schedule schedule = scheduler.createBasicSchedule(taskList, 1);
         fileio.writeFile(schedule.getTasks());
     }
+    
+    
+    
 
 }
