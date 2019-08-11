@@ -28,7 +28,6 @@ public class menuController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         fileio = new FileIO();
 
-
     }
 
     @FXML
