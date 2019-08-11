@@ -10,10 +10,11 @@ public class FileIO {
     private List<String> nodeList = new ArrayList<>();
     private List<Task> taskList = new ArrayList<>();
     private List<String> transitionList = new ArrayList<>();
-    String fileName;
+    private String fileName;
 
-    public void writeFile(LinkedHashMap<Task, Integer> schedule) {
-    	    	
+    public void writeFile(Schedule data) {
+    	
+    	LinkedHashMap<Task, Integer> schedule = data.getTasks();
     	String outputFileName;
     	
     	if (!(MVC.Main.outputFileName == null)) {
@@ -25,8 +26,6 @@ public class FileIO {
     	
         File outputFile = new File(outputFileName);
         
-  //      String currentFileName = fileName + "-output.dot";
-
         if (outputFile.exists()) {
             outputFile.delete();
         }

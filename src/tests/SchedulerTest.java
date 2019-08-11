@@ -72,9 +72,6 @@ public class SchedulerTest {
 		
 		List<Integer> scheduledTasks = new ArrayList<>();
 
-//		s.getTasks().keySet().forEach(task -> {
-//		    scheduledTasks.add(task.getNodeNumber());
-//		});
 		
 		for (Task t : s.getTasks().keySet()) {
 			scheduledTasks.add(t.getNodeNumber());
@@ -88,8 +85,8 @@ public class SchedulerTest {
         List<Integer> expectedTasks = new ArrayList<Integer>() {
             {
                 add(1);
-                add(2);
                 add(3);
+                add(2);
                 add(4);
             }
         };
@@ -224,9 +221,6 @@ public class SchedulerTest {
 
         List<Integer> scheduledTasks = new ArrayList<>();
 
-//		s.getTasks().keySet().forEach(task -> {
-//		    scheduledTasks.add(task.getNodeNumber());
-//		});
 
         for (Task t : s.getTasks().keySet()) {
             scheduledTasks.add(t.getNodeNumber());
@@ -240,9 +234,9 @@ public class SchedulerTest {
         List<Integer> expectedTasks = new ArrayList<Integer>() {
             {
                 add(1);
-                add(5);
                 add(2);
                 add(3);
+                add(5);
                 add(4);
             }
         };
@@ -251,8 +245,8 @@ public class SchedulerTest {
             {
                 add(0);
                 add(2);
+                add(5);
                 add(8);
-                add(11);
                 add(14);
 
             }
@@ -306,10 +300,6 @@ public class SchedulerTest {
         Schedule s = scheduler.createBasicSchedule(tasks, 1);
 
         List<Integer> scheduledTasks = new ArrayList<>();
-
-//		s.getTasks().keySet().forEach(task -> {
-//		    scheduledTasks.add(task.getNodeNumber());
-//		});
 
         for (Task t : s.getTasks().keySet()) {
             scheduledTasks.add(t.getNodeNumber());
@@ -399,10 +389,6 @@ public class SchedulerTest {
 
         List<Integer> scheduledTasks = new ArrayList<>();
 
-//		s.getTasks().keySet().forEach(task -> {
-//		    scheduledTasks.add(task.getNodeNumber());
-//		});
-
         for (Task t : s.getTasks().keySet()) {
             scheduledTasks.add(t.getNodeNumber());
             System.out.println(t.getNodeNumber());
@@ -415,10 +401,10 @@ public class SchedulerTest {
         List<Integer> expectedTasks = new ArrayList<Integer>() {
             {
                 add(1);
-                add(3);
                 add(2);
-                add(5);
+                add(3);
                 add(4);
+                add(5);
                 add(6);
             }
         };
@@ -428,8 +414,8 @@ public class SchedulerTest {
                 add(0);
                 add(2);
                 add(5);
-                add(25);
-                add(14);
+                add(8);
+                add(10);
                 add(16);
 
             }

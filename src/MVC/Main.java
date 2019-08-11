@@ -146,7 +146,7 @@ public class Main extends Application {
         taskList = fileio.getTaskList();
         Scheduler scheduler = new Scheduler();
         Schedule schedule = scheduler.createBasicSchedule(taskList, 1);
-        fileio.writeFile(schedule.getTasks());
+        fileio.writeFile(schedule);
     }
 
     private  static void runFailed() {

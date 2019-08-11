@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import MVC.Model.FileIO;
+import MVC.Model.Schedule;
 import MVC.Model.Task;
 import org.junit.After;
 import org.junit.Before;
@@ -62,6 +63,7 @@ public class FileIOTest {
     @Test
     public void testFileWrite(){
         fileIO.readFile("testFile.dot");
+        Schedule schedule = new Schedule();
         LinkedHashMap<Task, Integer> exampleHashmap = new LinkedHashMap<>();
 
         Task task1 = new Task(1);
@@ -71,7 +73,8 @@ public class FileIOTest {
 
         exampleHashmap.put(task1, 0);
         exampleHashmap.put(task2, 5);
-        fileIO.writeFile(exampleHashmap);
+        schedule.setTasks(exampleHashmap);
+        fileIO.writeFile(schedule);
         assertTrue(new File("testFile-output.dot").exists());
     }
 
