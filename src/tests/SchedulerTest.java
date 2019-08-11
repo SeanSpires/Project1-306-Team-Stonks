@@ -18,14 +18,6 @@ public class SchedulerTest {
     private Scheduler scheduler;
 
 
-
-//	@Before
-//    public void setup() {
-//        tasks = new ArrayList<>();
-//        scheduler = new Scheduler();
-//
-//    }
-
 	@Test
 	public void testSimpleSchedule() {
 
