@@ -1,6 +1,12 @@
 # Project1-306
 
-
+## Team Stonks
+Team Members:
+1) WaiHaiDere: Tyger Kong tkon583
+2) MarioSinovcic: Mario Sinovcic msin595
+3) pabloSushibar: Ryan Lim Rlim083
+4) SeanSpires: Sean Spires sspi841
+5) joshiefu: Joshua Fu jfu047
 
 
 ## Guidelines

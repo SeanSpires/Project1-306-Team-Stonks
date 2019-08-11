@@ -10,12 +10,13 @@ public class FileIO {
     private List<String> nodeList = new ArrayList<>();
     private List<Task> taskList = new ArrayList<>();
     private List<String> transitionList = new ArrayList<>();
+    String fileName;
 
-    public void writeFile(String fileName, LinkedHashMap<Task, Integer> schedule) {
-        File outputFile = new File(fileName + ".dot");
+    public void writeFile(LinkedHashMap<Task, Integer> schedule) {
+        File outputFile = new File(fileName + "-output.dot");
 
 
-        String currentFileName = fileName + ".dot";
+        String currentFileName = fileName + "-output.dot";
 
         if (outputFile.exists()) {
             outputFile.delete();
@@ -36,6 +37,8 @@ public class FileIO {
             for(String s : transitionList){
                 fw.write("\t" + s + "\n");
             }
+
+            fw.write('}');
             fw.close();
 
         } catch (IOException e) {
@@ -45,6 +48,9 @@ public class FileIO {
 
     public void readFile(String fileName) {
         File currentFile = new File(fileName);
+        int dot = fileName.indexOf('.');
+        this.fileName = fileName.substring(0,dot);
+
 
         try (BufferedReader br = new BufferedReader((new FileReader(currentFile)))) {
             String line;
