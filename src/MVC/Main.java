@@ -14,9 +14,15 @@ import java.util.List;
 
 public class Main extends Application {
 
-    public static String filename;
+    public static String inputFileName;
 
+    public static String outputFileName;
+    
+    public static boolean isSequential; 
+    
     private static List<Task> taskList;
+    
+    public static int numberOfProcessors;
 
 
     @Override
@@ -31,16 +37,30 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-        filename = args[0];
+        inputFileName = args[0];
 
-        if(args.length == 2){
-            if(args[1].equals("-v")){
+        if(args.length > 2){
+        	numberOfProcessors = Integer.parseInt(args[1]);
+        	
+        	if(numberOfProcessors < 1) {
+        		System.out.println("System cannot run with that number of processors");
+        		System.exit(0);
+        	}
+        	        	
+            if(args[2].equals("-v")){
                 launch();
-            } else {
+            }
+            else if(args[2].equals("-o")) {
+            	outputFileName = args[3];
+            	runAlgorithm();
+                System.exit(0);
+            }
+            else {
                 System.out.println("Wrong parameter input");
                 System.exit(0);
             }
-        } else {
+        } 
+        else {
             runAlgorithm();
             System.exit(0);
         }
@@ -48,7 +68,7 @@ public class Main extends Application {
 
     private static void runAlgorithm(){
         FileIO fileio = new FileIO();
-        fileio.readFile(filename);
+        fileio.readFile(inputFileName);
         fileio.processNodes();
         fileio.processTransitions();
         taskList = fileio.getTaskList();
@@ -56,5 +76,8 @@ public class Main extends Application {
         Schedule schedule = scheduler.createBasicSchedule(taskList, 1);
         fileio.writeFile(schedule.getTasks());
     }
+    
+    
+    
 
 }

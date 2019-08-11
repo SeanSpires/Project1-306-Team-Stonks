@@ -13,16 +13,25 @@ public class FileIO {
     String fileName;
 
     public void writeFile(LinkedHashMap<Task, Integer> schedule) {
-        File outputFile = new File(fileName + "-output.dot");
-
-
-        String currentFileName = fileName + "-output.dot";
+    	    	
+    	String outputFileName;
+    	
+    	if (!(MVC.Main.outputFileName == null)) {
+    		outputFileName = MVC.Main.outputFileName;
+    	}
+    	else {
+    		outputFileName = fileName + "-output.dot";
+    	}
+    	
+        File outputFile = new File(outputFileName);
+        
+  //      String currentFileName = fileName + "-output.dot";
 
         if (outputFile.exists()) {
             outputFile.delete();
         }
         try {
-            FileWriter fw = new FileWriter(currentFileName, true);
+            FileWriter fw = new FileWriter(outputFileName, true);
 
             fw.write("digraph \"outputExample\" {\n");
 
@@ -49,6 +58,7 @@ public class FileIO {
     public void readFile(String fileName) {
         File currentFile = new File(fileName);
         int dot = fileName.indexOf('.');
+        
         this.fileName = fileName.substring(0,dot);
 
 
