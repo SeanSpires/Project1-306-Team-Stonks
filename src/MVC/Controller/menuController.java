@@ -29,7 +29,7 @@ public class menuController implements Initializable {
         taskList = fileio.getTaskList();
         scheduler = new Scheduler();
         schedule = scheduler.createBasicSchedule(taskList, 1);
-        fileio.writeFile("out1", schedule.getTasks());
+        fileio.writeFile(schedule.getTasks());
     }
 
     @FXML
