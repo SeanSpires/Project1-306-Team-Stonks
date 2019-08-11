@@ -43,7 +43,7 @@ public class menuController implements Initializable {
     @FXML
     public void handleRunButton(javafx.event.ActionEvent actionEvent) {
 
-        fileio.readFile(Main.filename);
+        fileio.readFile(Main.inputFileName);
         fileio.processNodes();
         fileio.processTransitions();
         taskList = fileio.getTaskList();
