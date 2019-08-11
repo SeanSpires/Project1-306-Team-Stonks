@@ -17,7 +17,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class menuController implements Initializable {
+public class MenuController implements Initializable {
 
     private FileIO fileio;
     private Scheduler scheduler;
@@ -27,7 +27,6 @@ public class menuController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         fileio = new FileIO();
-
     }
 
     @FXML
@@ -49,32 +48,7 @@ public class menuController implements Initializable {
         taskList = fileio.getTaskList();
         scheduler = new Scheduler();
         schedule = scheduler.createBasicSchedule(taskList, 1);
-        fileio.writeFile(schedule.getTasks());
-
-
-
-
-//        //first ask the user to select the txt file
-//        FileChooser fileChooser = new FileChooser();
-//        fileChooser.setTitle("Dot File Picker");
-//        fileChooser.getExtensionFilters().addAll( new FileChooser.ExtensionFilter("Dot Files", "*.dot"));
-//        Node node = (Node) actionEvent.getSource();
-//        File selectedFile = fileChooser.showOpenDialog(node.getScene().getWindow());
-
-//        //check if the file is usable
-//        if (selectedFile != null) {
-//
-//            //create new FileIO -- taken from initialize
-//
-//
-//        }else {
-//            //if the file is empty show a warning to the user
-//            Alert alert = new Alert(Alert.AlertType.WARNING);
-//            alert.setTitle("Warning Dialog");
-//            alert.setHeaderText("Looks like that file has no valid input.");
-//            alert.setContentText("Try again with another file.");
-//            alert.showAndWait();
-//        }
+        fileio.writeFile(schedule);
     }
 
 
