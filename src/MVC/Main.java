@@ -10,6 +10,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Main extends Application {
@@ -18,7 +20,7 @@ public class Main extends Application {
 
     public static String outputFileName;
     
-    public static boolean isSequential; 
+    public static int numberOfCores;
     
     private static List<Task> taskList;
     
@@ -37,32 +39,102 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        /**
+         * Check if all of the input arguments are valid.
+         * */
+     //        java −jar scheduler.jar INPUT.dot P [OPTION]
+     //        INPUT. dot         a task graph with integer weights in dot format
+     //        P                  number of  processors  to  schedule  the INPUT graph on
+     //        Optional :
+     //        −p N               use N cores for execution in parallel (default  is  sequential)
+     //        −v                 visualise the search
+     //        −o OUPUT           output file  is named OUTPUT (default  isINPUT−output . dot)
+
+        if((args.length < 1) || (args.length > 7)){
+            runFailed();
+        }
+
         inputFileName = args[0];
 
-        if(args.length > 2){
-        	numberOfProcessors = Integer.parseInt(args[1]);
-        	
-        	if(numberOfProcessors < 1) {
-        		System.out.println("System cannot run with that number of processors");
-        		System.exit(0);
-        	}
-        	        	
-            if(args[2].equals("-v")){
-                launch();
-            }
-            else if(args[2].equals("-o")) {
-            	outputFileName = args[3];
-            	runAlgorithm();
-                System.exit(0);
-            }
-            else {
-                System.out.println("Wrong parameter input");
-                System.exit(0);
-            }
-        } 
-        else {
+        if(args.length == 1){
+            System.out.println("No input received for the number of processors.\n Default value set to 1.");
+            numberOfProcessors = 1;
             runAlgorithm();
             System.exit(0);
+        }
+
+        //check if second argument is a valid int
+        if(args.length == 2) {
+            boolean isValid = true;
+
+            try {
+                Integer testValue = Integer.parseInt(args[1]);
+            } catch (NumberFormatException | NullPointerException nfe) {
+                isValid = false;
+            }
+
+            if(isValid){
+                numberOfProcessors = Integer.parseInt(args[1]);
+                runAlgorithm();
+                System.exit(0);
+            }else{
+                System.out.println("Invalid input type for for the number of processors.");
+                runFailed();
+            }
+        }
+
+        if(args.length == 3){
+            if(args[2].equals("-p")) {
+                System.out.println("No valid input for number of cores (after -p).");
+                runFailed();
+
+            }
+            else if(args[2].equals("-o")) {
+                System.out.println("No valid input for file output name (after -o).");
+                runFailed();
+            }
+            else if(args[2].equals("-v")){
+                launch();
+            }
+            else {
+                runFailed();
+            }
+
+
+        }
+
+        if(args.length > 3) {
+            List<String> argsList = Arrays.asList(args);
+            numberOfCores = 1;
+
+            if (argsList.contains("-o")) {
+                try {
+                    outputFileName = args[argsList.indexOf("-o")+1];
+                } catch (NumberFormatException | NullPointerException | ArrayIndexOutOfBoundsException e) {
+                    System.out.println("No valid input for file output name (after -o). test");
+                    runFailed();
+                }
+
+                outputFileName = args[argsList.indexOf("-o")+1];
+
+            }
+            if(argsList.contains("-p")){
+                try{
+                     numberOfCores = Integer.parseInt(args[argsList.indexOf("-p")+1]);
+                } catch (NumberFormatException | NullPointerException | ArrayIndexOutOfBoundsException e) {
+                    System.out.println("No valid input for number of cores (after -p).");
+                    runFailed();
+                }
+            }
+
+            if (argsList.contains("-v")) {
+                launch();
+            }
+
+            System.out.println("\n-p: value:"+numberOfCores+"  -o value:"+outputFileName);
+
+            runAlgorithm();
+            System.exit(1);
         }
     }
 
@@ -76,8 +148,12 @@ public class Main extends Application {
         Schedule schedule = scheduler.createBasicSchedule(taskList, 1);
         fileio.writeFile(schedule.getTasks());
     }
-    
-    
-    
+
+    private  static void runFailed() {
+        System.out.println("ERROR: Invalid input parameters.\n" +
+                "The correct input pattern is shown below:\n" +
+                "\t\tjava −jar scheduler.jar INPUT.dot P [OPTION]");
+        System.exit(1);
+    }
 
 }
