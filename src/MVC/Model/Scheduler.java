@@ -13,7 +13,6 @@ public class Scheduler {
         Schedule schedule = new Schedule();
     	Queue<Task> taskQueue = new LinkedList<>();
         List<Task> rootTasks = getRootTasks(tasks);
-        List<Integer> list = new ArrayList<>();
 
         Task currentTask;
         Set<Task> subTasks;
@@ -30,8 +29,7 @@ public class Scheduler {
         	
         	currentTask.setProcessor(processor);
         	schedule.addTask(currentTask, startTime);
-        	list.add(currentTask.getNodeNumber());
-
+                
         	startTime = startTime + currentTask.getWeight();
         }
             
