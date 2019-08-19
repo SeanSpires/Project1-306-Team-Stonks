@@ -32,7 +32,7 @@ public class FileIO {
         try {
             FileWriter fw = new FileWriter(outputFileName, true);
 
-            fw.write("digraph \"outputExample\" {\n");
+            fw.write("digraph \"" + outputFileName +"\" {\n");
 
             for (Task t : schedule.keySet()) {
                 int node = t.getNodeNumber();
@@ -85,9 +85,10 @@ public class FileIO {
     public void processNodes() {
         for (String node : nodeList) {
             int weight = getWeightValue(node);
-            char firstChar = node.charAt(0);
+            String s = node.substring(0, node.indexOf('\t'));
+            int nodeNumber = Integer.valueOf(s);
 
-            createTask(Character.getNumericValue(firstChar), weight);
+            createTask(nodeNumber, weight);
 
         }
     }
