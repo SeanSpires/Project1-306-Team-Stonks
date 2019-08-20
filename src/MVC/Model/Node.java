@@ -7,6 +7,25 @@ public class Node<Schedule> {
     private Node<Schedule> parentNode;
     private List<Node<Schedule>> childrenNodes = new ArrayList<>();
     private Schedule data;
+    private double upperBound;
+    private double lowerBound;
+    
+    
+    public void setUpperBound(double upperBound) {
+    	this.upperBound = upperBound;
+    }
+    
+    public double getUpperBound() {
+    	return this.upperBound;
+    }
+    
+    public void setLowerBound(double lowerBound) {
+    	this.lowerBound = lowerBound;
+    }
+    
+    public double getLowerBound() {
+    	return this.lowerBound;
+    }
     
     
     public void setParentNode(Node<Schedule> schedule) {

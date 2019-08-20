@@ -56,6 +56,7 @@ public class Scheduler {
     	List<Task> rootTasks = getRootTasks(tasks);
     	List<Node<Schedule>> openNodes = new ArrayList<>();
     	Schedule rootSchedule = new Schedule();
+    	double bestUpperBound = Double.POSITIVE_INFINITY;
     	
     	Node<Schedule> rootNode = new Node<Schedule>();
     	rootNode.setData(rootSchedule);
@@ -81,38 +82,48 @@ public class Scheduler {
     	    		int makeSpan = calcMakeSpan(schedule);
     	    		double lowerBound = calcLowerBound(tasks, schedule,makeSpan, numberOfProcessors);
     	    		double upperBound = calcUpperBound(tasks, schedule, numberOfProcessors);
+    	    		
+    	    		childNode.setLowerBound(lowerBound);
+    	    		childNode.setUpperBound(upperBound);
+    	    		
+    	    		openNodes.add(childNode);
+    	    		
+    	    		if (upperBound < bestUpperBound) {
+    	    			bestUpperBound = upperBound;
+    	    			
+    	    			for (Node<Schedule> node : openNodes) {
+    	    				if (node.getLowerBound() > bestUpperBound) {
+    	    					openNodes.remove(node);
+    	    				}
+    	    			}
+    	    		}
+    	    		
+    	    		if (lowerBound > upperBound) {
+    	    			openNodes.remove(childNode);
+    	    		}
     	    	}
     		}
     	}
     	
     	
+    	Node<Schedule> node = openNodes.get(0);
+    	
+    	for (Node<Schedule> n : openNodes) {
+    		if (n.getLowerBound() < node.getLowerBound()) {
+    			node = n;
+    		}
+    	}
+    	
+    	rootNode = node;
+    	
+    	if (rootNode.getLowerBound() == rootNode.getUpperBound() && rootNode.getData().isComplete(tasks)) {
+    		return rootNode.getData();
+    	}
+    	else {
+    		
+    	}
     	
     	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	  //	Tree<Schedule> scheduleTree = new Tree<Schedule>();
-    	   // 	scheduleTree.setRoot(rootNode);
-    	    	
-//    	    	for (Task task : rootTasks) {
-//    	    		Schedule schedule = new Schedule();
-//    	    		schedule.addTask(task, 0);
-//    	        	Node<Schedule> node = new Node<Schedule>();
-//    	        	
-//    	        	node.setData(schedule);
-//    	    		node.setParentNode(rootNode);
-//    	    		
-//    	    		
-//    	    		rootNode.addChildrenNodes(node);
-//    	    	}
-    	
- 
     	
     	return null;
     }
@@ -120,7 +131,7 @@ public class Scheduler {
 
 
 	private int calcMakeSpan(Schedule schedule) {
-		// TODO Auto-generated method stub
+
 		int makeSpan = 0;
 		Set<Task> tasks = schedule.getTasks().keySet();
 		for (Task t : tasks) {
@@ -174,21 +185,28 @@ public class Scheduler {
 
     }
     
-    private double calcUpperBound(List<Task> unscheduledTasks, Schedule schedule, int numberOfProcessors) {
-		// TODO Auto-generated method stub
+    private double calcUpperBound(List<Task> tasks, Schedule schedule, int numberOfProcessors) {
     	int makeSpan;
+    	int startTime;
     	Task task;
-    	while (!unscheduledTasks.isEmpty()) {
+    	
+    	tasks.removeAll(schedule.getTasks().keySet());
+
+    	
+    	while (!tasks.isEmpty()) {
     		for (int i = 0; i < numberOfProcessors; i++) {
-    			task = getMinTask(unscheduledTasks, schedule);
-    			
+    			task = getMinTask(tasks, schedule);
+    			startTime = calcStartTime(task, schedule, i);
+    			schedule.addTask(task, startTime);
+    			task.setStatus(startTime + task.getWeight()); 
+    			tasks.remove(task);
     		}
 			
     	}
     	
-    	
-    	
-		return 0.0;
+    	makeSpan = calcMakeSpan(schedule);
+    
+		return makeSpan;
 	}
 
 	private Task getMinTask(List<Task> unscheduledTasks, Schedule schedule) {
