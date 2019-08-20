@@ -1,5 +1,11 @@
 package MVC.Controller;
 
+import MVC.Main;
+import MVC.Model.FileIO;
+import MVC.Model.Schedule;
+import MVC.Model.Scheduler;
+import MVC.Model.Task;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -27,12 +34,19 @@ public final class GraphicsController implements Initializable {
 
 	private GraphicsTree graphicsTree;
 
+	private FileIO fileio;
+	private Scheduler scheduler;
+	private Schedule schedule;
+	private List<Task> taskList;
+
 	/**
 	 * Constructs the GUI components and performs events for displaying and
 	 * changing the data in the binary tree.
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+
+		fileio = new FileIO();
 
 		// The center panel for drawing the tree
 		graphicsTree = new GraphicsTree();
@@ -106,27 +120,21 @@ public final class GraphicsController implements Initializable {
 		}
 	}
 
-	/**
-	 * Performs the action when the first traversal button is clicked.
-	 */
-	@FXML private void inorderOnAction(ActionEvent event) {
-		graphicsTree.setInorder();
-		traversal_textarea.setText(graphicsTree.printTree());
+	//------------------------------------------------------------------------------------------------------------------
+	@FXML
+	public void handleRunButton(javafx.event.ActionEvent actionEvent) {
+
+		fileio.readFile(Main.inputFileName);
+		fileio.processNodes();
+		fileio.processTransitions();
+		taskList = fileio.getTaskList();
+		scheduler = new Scheduler();
+		schedule = scheduler.createBasicSchedule(taskList, 1);
+		fileio.writeFile(schedule);
 	}
 
-	/**
-	 *  Performs the action when the second traversal button is clicked.
-	 */
-	@FXML private void preorderOnAction(ActionEvent event) {
-		graphicsTree.setPreorder();
-		traversal_textarea.setText(graphicsTree.printTree());
-	}
-
-	/**
-	 *  Performs the action when the third traversal button is clicked.
-	 */
-	@FXML private void postorderOnAction(ActionEvent event) {
-		graphicsTree.setPostorder();
-		traversal_textarea.setText(graphicsTree.printTree());
+	@FXML
+	public void handleStopButton(javafx.event.ActionEvent actionEvent) {
+		Platform.exit();
 	}
 }

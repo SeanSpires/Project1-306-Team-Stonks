@@ -24,7 +24,7 @@ public final class GraphicsTree extends Canvas {
 	/**
 	 * The initial input values for the tree.
 	 */
-	private static final Integer[] NUMBERS_ARRAY = { 50, 25, 30, 12, 10, 75, 70, 80, 110 };
+	private static Integer[] NUMBERS_ARRAY = { 50, 25, 30, 12, 10, 75, 70, 80, 110 };
 
 	private BinarySearchTree tree;  	// The BST
 	private TreeIterator treeIterator;  // The BST Iterator
@@ -36,6 +36,16 @@ public final class GraphicsTree extends Canvas {
 	 * searching, inserting, deleting, and traversal options.
 	 */
 	public GraphicsTree() {
+
+		widthProperty().addListener(evt -> drawTree());
+		heightProperty().addListener(evt -> drawTree());
+
+		createTree();
+	}
+
+	public GraphicsTree(Integer[] nodes) {
+
+		NUMBERS_ARRAY = nodes;
 
 		widthProperty().addListener(evt -> drawTree());
 		heightProperty().addListener(evt -> drawTree());

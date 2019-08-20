@@ -49,15 +49,6 @@ public class MenuController implements Initializable {
         schedule = scheduler.createBasicSchedule(taskList, 1);
         fileio.writeFile(schedule);
 
-//        // The center panel for drawing the tree
-//        graphicsTree = new ();
-//        // Add the panels onto the border pane
-//        map.setCenter(graphicsTree);
-//
-//        // Bind canvas size to stack pane size. // .subtract(50) to get rid of spacing
-//        graphicsTree.widthProperty().bind(map.widthProperty());
-//        graphicsTree.heightProperty().bind(map.heightProperty());
-
 
     }
 
