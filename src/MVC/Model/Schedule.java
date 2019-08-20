@@ -1,14 +1,24 @@
 package MVC.Model;
 
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 public class Schedule {
 	
     private LinkedHashMap<Task, Integer> tasks = new LinkedHashMap<Task, Integer>();
-
+    
     public LinkedHashMap<Task, Integer> getTasks() {
         return tasks;
+    }
+    
+    public Task getLastTask() {
+    	final Iterator itr = tasks.keySet().iterator();
+        Task lastElement = (Task) itr.next();
+        while(itr.hasNext()) {
+            lastElement = (Task) itr.next();
+        }
+        return lastElement;
     }
 
     public void setTasks(LinkedHashMap<Task, Integer> tasks) {
