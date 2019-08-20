@@ -30,3 +30,8 @@ out/
 
 *.DS_Store
 /bin/
+
+#Output
+*.dot
+MANIFEST.MF
+
