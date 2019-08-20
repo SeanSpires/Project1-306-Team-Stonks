@@ -165,7 +165,7 @@ public final class MenuController implements Initializable {
 	public void handleStopButton(javafx.event.ActionEvent actionEvent) {
 		Platform.exit();
 	}
-	
+
 
 	private Parent createZoomPane(final Group group) {
 		final double SCALE_DELTA = 1.1;
