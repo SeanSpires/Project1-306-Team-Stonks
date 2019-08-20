@@ -6,6 +6,10 @@ import MVC.Model.Schedule;
 import MVC.Model.Scheduler;
 import MVC.Model.Task;
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -14,19 +18,23 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -45,10 +53,9 @@ public final class MenuController implements Initializable {
 	@FXML private BorderPane root_container;
 	@FXML private TextArea traversal_textarea;
 	@FXML private TextField input_field;
-	@FXML private Pane zoomPane;
+	@FXML private Pane centerPane;
 
 	private GraphicsTree graphicsTree;
-    final double SCALE_DELTA = 1.1;
     private FileIO fileio;
     private Scheduler scheduler;
     private Schedule schedule;
@@ -66,16 +73,18 @@ public final class MenuController implements Initializable {
 
 		// The center panel for drawing the tree
 		graphicsTree = new GraphicsTree();
+		Group group = new Group((graphicsTree));
 
-		ZoomablePane zoomablePane = new ZoomablePane();
-		zoomablePane.content.getChildren().add((graphicsTree));
-		zoomPane.getChildren().add(zoomablePane);
+		Parent zoomPane = createZoomPane(group);
+
+		centerPane.getChildren().add(zoomPane);
 
 		// Add the panels onto the border pane
 
 		// Bind canvas size to stack pane size.
 		graphicsTree.widthProperty().bind(root_container.widthProperty());
 		graphicsTree.heightProperty().bind(root_container.heightProperty().subtract(50));
+
 	}
 
 	/**
@@ -156,36 +165,115 @@ public final class MenuController implements Initializable {
 	public void handleStopButton(javafx.event.ActionEvent actionEvent) {
 		Platform.exit();
 	}
+	
 
-
-	public void onScroll(ScrollEvent scrollEvent) {
-	}
-
-	class ZoomablePane extends AnchorPane {
-
+	private Parent createZoomPane(final Group group) {
 		final double SCALE_DELTA = 1.1;
+		final StackPane zoomPane = new StackPane();
 
-		public Group content = new Group();
+		zoomPane.getChildren().add(group);
 
-		public ZoomablePane() {
-			super();
-			getChildren().add(content);
-			content.setAutoSizeChildren(true);
-			setOnScroll((ScrollEvent event) -> {
+		final ScrollPane scroller = new ScrollPane();
+		final Group scrollContent = new Group(zoomPane);
+		scroller.setContent(scrollContent);
+
+		scroller.viewportBoundsProperty().addListener(new ChangeListener<Bounds>() {
+			@Override
+			public void changed(ObservableValue<? extends Bounds> observable,
+								Bounds oldValue, Bounds newValue) {
+				zoomPane.setMinSize(newValue.getWidth(), newValue.getHeight());
+			}
+		});
+
+
+		scroller.setPrefViewportWidth(1024);
+		scroller.setPrefViewportHeight(530);
+		scroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		scroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+		zoomPane.setOnScroll(new EventHandler<ScrollEvent>() {
+			@Override
+			public void handle(ScrollEvent event) {
 				event.consume();
+
 				if (event.getDeltaY() == 0) {
 					return;
 				}
 
-				double scaleFactor
-						= (event.getDeltaY() > 0)
-						? SCALE_DELTA
+				double scaleFactor = (event.getDeltaY() > 0) ? SCALE_DELTA
 						: 1 / SCALE_DELTA;
 
-				content.setScaleX(content.getScaleX() * scaleFactor);
-				content.setScaleY(content.getScaleY() * scaleFactor);
-			});
-		}
+				// amount of scrolling in each direction in scrollContent coordinate
+				// units
+				Point2D scrollOffset = figureScrollOffset(scrollContent, scroller);
 
+				group.setScaleX(group.getScaleX() * scaleFactor);
+				group.setScaleY(group.getScaleY() * scaleFactor);
+
+				// move viewport so that old center remains in the center after the
+				// scaling
+				repositionScroller(scrollContent, scroller, scaleFactor, scrollOffset);
+
+			}
+		});
+
+		// Panning via drag....
+		final ObjectProperty<Point2D> lastMouseCoordinates = new SimpleObjectProperty<Point2D>();
+		scrollContent.setOnMousePressed(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				lastMouseCoordinates.set(new Point2D(event.getX(), event.getY()));
+			}
+		});
+
+		scrollContent.setOnMouseDragged(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				double deltaX = event.getX() - lastMouseCoordinates.get().getX();
+				double extraWidth = scrollContent.getLayoutBounds().getWidth() - scroller.getViewportBounds().getWidth();
+				double deltaH = deltaX * (scroller.getHmax() - scroller.getHmin()) / extraWidth;
+				double desiredH = scroller.getHvalue() - deltaH;
+				scroller.setHvalue(Math.max(0, Math.min(scroller.getHmax(), desiredH)));
+
+				double deltaY = event.getY() - lastMouseCoordinates.get().getY();
+				double extraHeight = scrollContent.getLayoutBounds().getHeight() - scroller.getViewportBounds().getHeight();
+				double deltaV = deltaY * (scroller.getHmax() - scroller.getHmin()) / extraHeight;
+				double desiredV = scroller.getVvalue() - deltaV;
+				scroller.setVvalue(Math.max(0, Math.min(scroller.getVmax(), desiredV)));
+			}
+		});
+
+		return scroller;
+	}
+
+	private Point2D figureScrollOffset(Node scrollContent, ScrollPane scroller) {
+		double extraWidth = scrollContent.getLayoutBounds().getWidth() - scroller.getViewportBounds().getWidth();
+		double hScrollProportion = (scroller.getHvalue() - scroller.getHmin()) / (scroller.getHmax() - scroller.getHmin());
+		double scrollXOffset = hScrollProportion * Math.max(0, extraWidth);
+		double extraHeight = scrollContent.getLayoutBounds().getHeight() - scroller.getViewportBounds().getHeight();
+		double vScrollProportion = (scroller.getVvalue() - scroller.getVmin()) / (scroller.getVmax() - scroller.getVmin());
+		double scrollYOffset = vScrollProportion * Math.max(0, extraHeight);
+		return new Point2D(scrollXOffset, scrollYOffset);
+	}
+
+	private void repositionScroller(Node scrollContent, ScrollPane scroller, double scaleFactor, Point2D scrollOffset) {
+		double scrollXOffset = scrollOffset.getX();
+		double scrollYOffset = scrollOffset.getY();
+		double extraWidth = scrollContent.getLayoutBounds().getWidth() - scroller.getViewportBounds().getWidth();
+		if (extraWidth > 0) {
+			double halfWidth = scroller.getViewportBounds().getWidth() / 2 ;
+			double newScrollXOffset = (scaleFactor - 1) *  halfWidth + scaleFactor * scrollXOffset;
+			scroller.setHvalue(scroller.getHmin() + newScrollXOffset * (scroller.getHmax() - scroller.getHmin()) / extraWidth);
+		} else {
+			scroller.setHvalue(scroller.getHmin());
+		}
+		double extraHeight = scrollContent.getLayoutBounds().getHeight() - scroller.getViewportBounds().getHeight();
+		if (extraHeight > 0) {
+			double halfHeight = scroller.getViewportBounds().getHeight() / 2 ;
+			double newScrollYOffset = (scaleFactor - 1) * halfHeight + scaleFactor * scrollYOffset;
+			scroller.setVvalue(scroller.getVmin() + newScrollYOffset * (scroller.getVmax() - scroller.getVmin()) / extraHeight);
+		} else {
+			scroller.setHvalue(scroller.getHmin());
+		}
 	}
 }

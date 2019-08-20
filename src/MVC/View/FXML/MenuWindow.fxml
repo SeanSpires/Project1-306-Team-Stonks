@@ -46,6 +46,6 @@
       </GridPane>
    </top>
    <center>
-      <Pane fx:id="zoomPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <Pane fx:id="centerPane" prefHeight="530.0" prefWidth="1024.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>
