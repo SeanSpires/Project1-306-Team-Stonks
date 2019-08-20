@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.Controller.menuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.Controller.MenuController">
     <children>
-      <ImageView fitHeight="466.0" fitWidth="926.0" layoutX="152.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../Images/visualization.png" />
-         </image>
-      </ImageView>
+      <ScrollPane prefHeight="600.0" prefWidth="1024.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="601.0" prefWidth="1024.0">
+               <children>
+                  <BorderPane fx:id="root_container" prefHeight="600.0" prefWidth="1024.0" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
       <Pane fx:id="_bottomMenu" layoutY="510.0" prefHeight="90.0" prefWidth="1024.0">
          <children>
               <Button fx:id="_runBtn" ellipsisString="" layoutX="40.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleRunButton" prefHeight="55.0" prefWidth="60.0" style="-fx-background-radius: 50px;" text="RUN" textOverrun="CLIP">

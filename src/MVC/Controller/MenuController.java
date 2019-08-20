@@ -8,16 +8,15 @@ import MVC.Model.Task;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.stage.FileChooser;
+import javafx.scene.layout.BorderPane;
 
-import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class MenuController implements Initializable {
+
+    @FXML private BorderPane map;
 
     private FileIO fileio;
     private Scheduler scheduler;
@@ -49,6 +48,17 @@ public class MenuController implements Initializable {
         scheduler = new Scheduler();
         schedule = scheduler.createBasicSchedule(taskList, 1);
         fileio.writeFile(schedule);
+
+//        // The center panel for drawing the tree
+//        graphicsTree = new ();
+//        // Add the panels onto the border pane
+//        map.setCenter(graphicsTree);
+//
+//        // Bind canvas size to stack pane size. // .subtract(50) to get rid of spacing
+//        graphicsTree.widthProperty().bind(map.widthProperty());
+//        graphicsTree.heightProperty().bind(map.heightProperty());
+
+
     }
 
 

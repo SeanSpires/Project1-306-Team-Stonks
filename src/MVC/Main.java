@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,10 +28,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("View/FXML/menuWindow.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("View/FXML/FXMLGraphicsPanel.fxml"));
         primaryStage.setTitle("Project1-306");
         Scene mainScene = new Scene(root, 1024, 600);
-        mainScene.getStylesheets().add(getClass().getResource("View/CSS/menuWindow.css").toExternalForm());
+        mainScene.getStylesheets().add(getClass().getResource("View/CSS/graphics_controller.css").toExternalForm());
         primaryStage.setScene(mainScene);
         primaryStage.show();
     }
