@@ -329,11 +329,11 @@ public final class GraphicsTree extends Canvas {
 		// Create a new point
 		Point2D point = new Point2D((xMin + xMax) / 2, yMin + yMax / 2);
 
-		// treeNodes are flagged for highlight: Search and insertion nodes
-		if (treeNode.highlightFlag || Objects.equals(treeNode.rootCircle, insertCircle)) {
+			// treeNodes are flagged for highlight: Search and insertion nodes
+			if (treeNode.highlightFlag || Objects.equals(treeNode.rootCircle, insertCircle)) {
 			insertCircle = null;		    // Reset insert circle
 			treeNode.highlightFlag = false; // Reset highlight flag
-			treeNode.rootCircle.setHighlighter(true); // Highlight turned on
+				treeNode.rootCircle.setHighlighter(true); // Highlight turned on
 			treeNode.rootCircle.setPoint(point); 	
 
 			// default no highlight

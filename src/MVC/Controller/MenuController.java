@@ -7,13 +7,27 @@ import MVC.Model.Scheduler;
 import MVC.Model.Task;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.List;
@@ -31,13 +45,15 @@ public final class MenuController implements Initializable {
 	@FXML private BorderPane root_container;
 	@FXML private TextArea traversal_textarea;
 	@FXML private TextField input_field;
+	@FXML private Pane zoomPane;
 
 	private GraphicsTree graphicsTree;
+    final double SCALE_DELTA = 1.1;
+    private FileIO fileio;
+    private Scheduler scheduler;
+    private Schedule schedule;
+    private List<Task> taskList;
 
-	private FileIO fileio;
-	private Scheduler scheduler;
-	private Schedule schedule;
-	private List<Task> taskList;
 
 	/**
 	 * Constructs the GUI components and performs events for displaying and
@@ -50,14 +66,18 @@ public final class MenuController implements Initializable {
 
 		// The center panel for drawing the tree
 		graphicsTree = new GraphicsTree();
+
+		ZoomablePane zoomablePane = new ZoomablePane();
+		zoomablePane.content.getChildren().add((graphicsTree));
+		zoomPane.getChildren().add(zoomablePane);
+
 		// Add the panels onto the border pane
-		root_container.setCenter(graphicsTree);
 
 		// Bind canvas size to stack pane size.
 		graphicsTree.widthProperty().bind(root_container.widthProperty());
 		graphicsTree.heightProperty().bind(root_container.heightProperty().subtract(50));
 	}
-	
+
 	/**
 	 *  Performs the action when the search button is clicked.
 	 */
@@ -120,7 +140,6 @@ public final class MenuController implements Initializable {
 		}
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	@FXML
 	public void handleRunButton(javafx.event.ActionEvent actionEvent) {
 
@@ -136,5 +155,37 @@ public final class MenuController implements Initializable {
 	@FXML
 	public void handleStopButton(javafx.event.ActionEvent actionEvent) {
 		Platform.exit();
+	}
+
+
+	public void onScroll(ScrollEvent scrollEvent) {
+	}
+
+	class ZoomablePane extends AnchorPane {
+
+		final double SCALE_DELTA = 1.1;
+
+		public Group content = new Group();
+
+		public ZoomablePane() {
+			super();
+			getChildren().add(content);
+			content.setAutoSizeChildren(true);
+			setOnScroll((ScrollEvent event) -> {
+				event.consume();
+				if (event.getDeltaY() == 0) {
+					return;
+				}
+
+				double scaleFactor
+						= (event.getDeltaY() > 0)
+						? SCALE_DELTA
+						: 1 / SCALE_DELTA;
+
+				content.setScaleX(content.getScaleX() * scaleFactor);
+				content.setScaleY(content.getScaleY() * scaleFactor);
+			});
+		}
+
 	}
 }
