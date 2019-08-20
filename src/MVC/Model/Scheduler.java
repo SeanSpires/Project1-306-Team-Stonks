@@ -1,11 +1,6 @@
 package  MVC.Model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 public class Scheduler {
 
@@ -56,17 +51,22 @@ public class Scheduler {
 		boolean notFinished = true;
 		List<Task> rootTasks = getRootTasks(tasks);
 		List<Node<Schedule>> openNodes = new ArrayList<>();
+		PriorityQueue<Node<Schedule>> openNodesQueue = new PriorityQueue<>(new NodeLowerBoundComparator());
 		Schedule rootSchedule = new Schedule();
 		double bestUpperBound = Double.POSITIVE_INFINITY;
 
 		Node<Schedule> rootNode = new Node<Schedule>();
 		rootNode.setData(rootSchedule);
 		openNodes.add(rootNode);
+        openNodesQueue.add(rootNode);
 
 
 		while (notFinished) {
 
 			for (Task t : tasks) {
+                PriorityQueue<Task> unscheduledTasks = new PriorityQueue<>(new MinTaskComparator());
+                unscheduledTasks.addAll(tasks);
+                unscheduledTasks.remove(t);
 				for (int i = 0; i < numberOfProcessors; i++) {
 					Node<Schedule> childNode = rootNode;
 					Schedule  schedule = childNode.getData();
@@ -78,41 +78,47 @@ public class Scheduler {
 						schedule.addTask(t, startTime);
 
 						int makeSpan = calcMakeSpan(schedule);
-						double lowerBound = calcLowerBound(tasks, schedule,makeSpan, numberOfProcessors);
-						double upperBound = calcUpperBound(tasks, schedule, numberOfProcessors);
+						double lowerBound = calcLowerBound(unscheduledTasks, schedule,makeSpan, numberOfProcessors);
+						double upperBound = calcUpperBound(unscheduledTasks, schedule, numberOfProcessors);
 
 						childNode.setLowerBound(lowerBound);
 						childNode.setUpperBound(upperBound);
 
 						openNodes.add(childNode);
 
+
+                        if (lowerBound <= upperBound) {
+                            openNodes.remove(childNode);
+                            openNodesQueue.add(childNode);
+                        }
 						if (upperBound < bestUpperBound) {
 							bestUpperBound = upperBound;
 
-							for (Node<Schedule> node : openNodes) {
+							for (Node<Schedule> node : openNodesQueue) {
 								if (node.getLowerBound() > bestUpperBound) {
 									openNodes.remove(node);
+									//openNodesQueue.remove(node);
 								}
 							}
 						}
-						if (lowerBound > upperBound) {
-							openNodes.remove(childNode);
-						}
+
 					}
 				}
 			}
 
 
 
-			Node<Schedule> node = openNodes.get(0);
+            // Get the node with the smallest lower bound
+			// Node<Schedule> node = openNodes.get(0);
 
-			for (Node<Schedule> n : openNodes) {
-				if (n.getLowerBound() < node.getLowerBound()) {
-					node = n;
-				}
-			}
+//          Node<Schedule> node = openNodes.get(0);
+//			for (Node<Schedule> n : openNodes) {
+//				if (n.getLowerBound() < node.getLowerBound()) {
+//					node = n;
+//				}
+//			}
 
-			rootNode = node;
+			rootNode = openNodesQueue.poll();
 
 			if (rootNode.getLowerBound() == rootNode.getUpperBound() && rootNode.getData().isComplete(tasks)) {
 				return rootNode.getData();
@@ -168,14 +174,13 @@ public class Scheduler {
 
 	}
 
-	private double calcLowerBound(List<Task> tasks,Schedule schedule, int makeSpan, int numberOfProcessors) {
+	private double calcLowerBound(PriorityQueue<Task> unscheduledTasks,Schedule schedule, int makeSpan, int numberOfProcessors) {
 
 		int sum = 0;
-		List<Task> unsheduledTask = new ArrayList<>(tasks);
 
-		unsheduledTask.removeAll(schedule.getTasks().keySet());
+        //unscheduledTasks.removeAll(schedule.getTasks().keySet());
 
-		for (Task t : unsheduledTask) {
+		for (Task t : unscheduledTasks) {
 			sum += t.getWeight();
 		}
 
@@ -183,23 +188,23 @@ public class Scheduler {
 
 	}
 
-	private double calcUpperBound(List<Task> tasks, Schedule schedule, int numberOfProcessors) {
+	private double calcUpperBound(PriorityQueue<Task> unscheduledTasks, Schedule schedule, int numberOfProcessors) {
 		int makeSpan;
 		int startTime;
 		Task task;
-		
-		List<Task> unsheduledTask = new ArrayList<>(tasks);
-
-		unsheduledTask.removeAll(schedule.getTasks().keySet());
 
 
-		while (!unsheduledTask.isEmpty()) {
+        //unscheduledTasks.removeAll(schedule.getTasks().keySet());
+
+
+		while (!unscheduledTasks.isEmpty()) {
 			for (int i = 0; i < numberOfProcessors; i++) {
-				task = getMinTask(unsheduledTask, schedule);
+			    // Pick the task with the minimum weight
+				//task = getMinTask(unsheduledTask, schedule);
+                task = unscheduledTasks.poll();
 				startTime = calcStartTime(task, schedule, i);
 				schedule.addTask(task, startTime);
-				task.setStatus(startTime + task.getWeight()); 
-				unsheduledTask.remove(task);
+				task.setStatus(startTime + task.getWeight());
 			}
 
 		}
