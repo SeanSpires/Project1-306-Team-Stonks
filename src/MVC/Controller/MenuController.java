@@ -50,7 +50,7 @@ import java.util.ResourceBundle;
 public final class MenuController implements Initializable {
 
 	// Panels and other GUI components
-	@FXML private BorderPane root_container;
+	@FXML private AnchorPane root_container;
 	@FXML private TextArea traversal_textarea;
 	@FXML private TextField input_field;
 	@FXML private Pane centerPane;
@@ -187,7 +187,7 @@ public final class MenuController implements Initializable {
 
 
 		scroller.setPrefViewportWidth(1024);
-		scroller.setPrefViewportHeight(530);
+		scroller.setPrefViewportHeight(600);
 		scroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		scroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
