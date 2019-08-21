@@ -1,5 +1,7 @@
 package MVC.Controller.tree;
 
+import sun.reflect.generics.tree.Tree;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -10,8 +12,10 @@ import java.util.NoSuchElementException;
  * @version 1.0
  */
 public final class TreeIterator implements Iterator<Integer> {
-	
-	private BinaryTreeBasis binaryTree;
+
+
+
+	private Tree binaryTree;
 	private TreeNode currentNode;
 	private LinkedList<TreeNode> queue;
 	
@@ -19,7 +23,7 @@ public final class TreeIterator implements Iterator<Integer> {
 	 * Iterates through the tree using the java.util.Iterator<E> interface.
 	 * @param binaryTree the abstract binary tree class
 	 */
-	public TreeIterator(BinaryTreeBasis binaryTree) {
+	public TreeIterator(Tree binaryTree) {
 		this.binaryTree = binaryTree;
 		currentNode = null;
 		queue = new LinkedList<>();
@@ -56,10 +60,10 @@ public final class TreeIterator implements Iterator<Integer> {
 	/**
 	 * Sets the tree traversal to in-order
 	 */
-	public void setPreorder() {
-		queue.clear();
-		preorder(binaryTree.root);
-	}
+//	public void setPreorder() {
+//		queue.clear();
+//		preorder(binaryTree.root);
+//	}
 	
 	/**
 	 * Recursively traverses the tree in-order
@@ -76,11 +80,11 @@ public final class TreeIterator implements Iterator<Integer> {
 	/**
 	 * Sets the tree traversal to in-order
 	 */
-	public void setInorder() {
-		queue.clear();
-		inorder(binaryTree.root);
-	}
-	
+//	public void setInorder() {
+//		queue.clear();
+//		inorder(binaryTree.root);
+//	}
+//
 	/**
 	 * Recursively traverses the tree in-order
 	 * @param treeNode A tree with nodes
@@ -96,11 +100,11 @@ public final class TreeIterator implements Iterator<Integer> {
 	/**
 	 * Sets the tree to traverse in post-order
 	 */
-	public void setPostorder() {
-		queue.clear();
-		postorder(binaryTree.root);
-	}
-	
+//	public void setPostorder() {
+//		queue.clear();
+//		postorder(binaryTree.root);
+//	}
+//
 	/**
 	 * Recursively traverses the tree post-order
 	 * @param treeNode A tree with nodes
