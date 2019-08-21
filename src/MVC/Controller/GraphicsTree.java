@@ -24,7 +24,7 @@ public final class GraphicsTree extends Canvas {
 	/**
 	 * The initial input values for the tree.
 	 */
-	private static Integer[] NUMBERS_ARRAY = { 50 };
+	private static Integer[] NUMBERS_ARRAY = { 50, 90, 80, 70, 60, 30, 40 };
 
 	private BinarySearchTree tree;  	// The BST
 	private TreeIterator treeIterator;  // The BST Iterator
