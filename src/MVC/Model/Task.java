@@ -10,11 +10,20 @@ public class Task {
     private int nodeNumber;
     private int weight;
     private int processor;
+    private int status;
     private List<Task> parentTasks = new ArrayList<>();
     private HashMap<Task, Integer> subTasks = new HashMap<>();
 
     public Task(int nodeNumber){
         this.nodeNumber = nodeNumber;
+    }
+    
+    public int getStatus() {
+    	return this.status;
+    }
+    
+    public void setStatus(int status) {
+    	this.status = status;
     }
 
     public int getNodeNumber(){
