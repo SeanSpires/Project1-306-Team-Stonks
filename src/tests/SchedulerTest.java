@@ -130,7 +130,7 @@ public class SchedulerTest {
         tasks.add(task1);
 
 		//Schedule s = scheduler.createBasicSchedule(tasks, 1);
-        Schedule s = scheduler.createOptimalSchedule(tasks, 1);
+        Schedule s = scheduler.createOptimalSchedule(tasks, 2);
 		
 		List<Integer> scheduledTasks = new ArrayList<>();
 
@@ -147,9 +147,8 @@ public class SchedulerTest {
         List<Integer> expectedTasks = new ArrayList<Integer>() {
             {
                 add(1);
-                add(3);
                 add(2);
-                add(4);
+           
             }
         };
 
@@ -157,8 +156,6 @@ public class SchedulerTest {
             {
                 add(0);
                 add(2);
-                add(5);
-                add(8);
 
             }
         };
