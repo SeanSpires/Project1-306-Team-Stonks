@@ -1,10 +1,7 @@
 package MVC.Controller;
 
 import MVC.Main;
-import MVC.Model.FileIO;
-import MVC.Model.Schedule;
-import MVC.Model.Scheduler;
-import MVC.Model.Task;
+import MVC.Model.*;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -24,6 +21,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
@@ -64,6 +63,10 @@ public final class MenuController implements Initializable {
     private List<Task> taskList;
     private HelloWorld hello;
 
+    // Init Gantt Chart.
+	final static NumberAxis xAxis = new NumberAxis();
+	final static CategoryAxis yAxis = new CategoryAxis();
+	final static GanttChart<Number, String> chart = new GanttChart<Number, String>(xAxis, yAxis);
 
 	/**
 	 * Constructs the GUI components and performs events for displaying and
