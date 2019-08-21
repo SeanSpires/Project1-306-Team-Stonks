@@ -150,9 +150,9 @@ public class Scheduler {
 			return costOfComs;
 		}
 		else {
-		//	if (currentTask.getParentTasks().contains(prevTask)) {
+			if (currentTask.getParentTasks().contains(prevTask)) {
 				costOfComs = prevTask.getSubTasks().get(currentTask);
-	//		}
+			}
 			
 			return costOfComs;
 		}
