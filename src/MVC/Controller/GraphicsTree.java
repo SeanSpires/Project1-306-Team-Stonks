@@ -2,6 +2,8 @@ package MVC.Controller;
 
 import MVC.Controller.shape.Circle;
 import MVC.Controller.shape.Line;
+import MVC.Model.Schedule;
+import MVC.Model.Task;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -10,7 +12,10 @@ import javafx.scene.control.ButtonType;
 import MVC.Controller.shape.*;
 import MVC.Controller.tree.*;
 
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Draws the tree and updates the graphics to display according to the
@@ -25,18 +30,23 @@ public final class GraphicsTree extends Canvas {
 	 * The initial input values for the tree.
 	 */
 	private static Integer[] NUMBERS_ARRAY = { 50 };
+	private LinkedHashMap<Task, Integer> data;
+	private List<Task> taskList;
 
 	private BinarySearchTree tree;  	// The BST
 	private TreeIterator treeIterator;  // The BST Iterator
 	private Circle insertCircle;        // Insert circle
 	private int maxTreeHeight; 			// Max tree height;
 
+	private int taskNumber;
+	private Schedule schedule;
+
 	/**
 	 * Draws the tree and updates the graphics to display according to the
 	 * searching, inserting, deleting, and traversal options.
 	 */
 	public GraphicsTree() {
-
+		//initialiseSchdule();
 		widthProperty().addListener(evt -> drawTree());
 		heightProperty().addListener(evt -> drawTree());
 
@@ -52,7 +62,23 @@ public final class GraphicsTree extends Canvas {
 
 		createTree();
 	}
-	
+
+	public void initialiseSchdule() {
+		schedule = new Schedule();
+		data = schedule.getTasks();
+		for (Task t : data.keySet()) {
+			taskList.add(t);
+			int node = t.getNodeNumber();
+			int weight = t.getWeight();
+			int processor = t.getProcessor();
+			int startTime = data.get(t);
+		}
+
+		// Translate the Set of Tasks to ints
+		Set scheduleSet = schedule.getTasks().keySet();
+		System.out.println(scheduleSet);
+	}
+
 	/**
      * Changes the tree rendered by this panel.
      */
@@ -67,7 +93,8 @@ public final class GraphicsTree extends Canvas {
 		tree = new BinarySearchTree(); // Create an empty tree
 		setMaxTreeHeight(7); 		   // Set the default max tree height 
 
-		for (Integer number : NUMBERS_ARRAY) {
+		for (Task task : taskList) {
+			int number = task.getNodeNumber();
 			Circle circle = new Circle(number);
 			tree.insertItem(circle);
 		}
