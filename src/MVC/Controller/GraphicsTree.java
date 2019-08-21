@@ -37,21 +37,8 @@ public final class GraphicsTree extends Canvas {
 	 */
 	public GraphicsTree() {
 
-		widthProperty().addListener(evt -> drawTree());
-		heightProperty().addListener(evt -> drawTree());
-
-		createTree();
 	}
 
-	public GraphicsTree(Integer[] nodes) {
-
-		NUMBERS_ARRAY = nodes;
-
-		widthProperty().addListener(evt -> drawTree());
-		heightProperty().addListener(evt -> drawTree());
-
-		createTree();
-	}
 	
 	/**
      * Changes the tree rendered by this panel.
@@ -63,9 +50,12 @@ public final class GraphicsTree extends Canvas {
 	 * in the numbers array.
 	 */
 	public void createTree() {
+		widthProperty().addListener(evt -> drawTree());
+		heightProperty().addListener(evt -> drawTree());
+
 
 		tree = new BinarySearchTree(); // Create an empty tree
-		setMaxTreeHeight(7); 		   // Set the default max tree height 
+		setMaxTreeHeight(7); 		   // Set the default max tree height
 
 		for (Integer number : NUMBERS_ARRAY) {
 			Circle circle = new Circle(number);
@@ -105,23 +95,6 @@ public final class GraphicsTree extends Canvas {
 		drawTree();
 	}
 
-	/**
-	 * Prints the tree traversal order to the upper left-hand
-	 * side of the screen.
-	 * @return outputString
-	 */
-	public String printTree() {
-
-		// Traversal text output string
-		StringBuilder outputString = new StringBuilder();
-
-		// Add the next tree iterator to the output
-		while (treeIterator.hasNext()) {
-			outputString.append(treeIterator.next()).append(" ");
-		}
-
-		return outputString.toString(); // return the output string
-	}
 
 	/**
 	 * Inserts a circle into the tree. If the tree height reaches the max height
