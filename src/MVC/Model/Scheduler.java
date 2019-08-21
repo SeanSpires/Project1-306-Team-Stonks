@@ -1,11 +1,12 @@
 package  MVC.Model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 
 public class Scheduler {
-
-    // Temporary Array
-    private Integer[] taskArray;
 
     public Schedule createBasicSchedule(List<Task> tasks, int processor) {
 
@@ -33,11 +34,7 @@ public class Scheduler {
 
         	startTime = startTime + currentTask.getWeight();
         }
-
-        // Temporary
-        Integer[] taskNodeNumber = new Integer[list.size()];
-        taskNodeNumber = scheduleToIntArray(list);
-
+            
         return schedule;
 
     }
@@ -53,16 +50,6 @@ public class Scheduler {
         }
 
         return rootTasks;
-    }
-
-    // Temporary Method
-    private Integer[] scheduleToIntArray(List<Integer> list) {
-        taskArray = new Integer[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            taskArray[i] = list.get(i);
-        }
-        System.out.println(Arrays.toString(taskArray));
-        return taskArray;
     }
 
 }
