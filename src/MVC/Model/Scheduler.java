@@ -60,8 +60,7 @@ public class Scheduler {
 
 
 		while (notFinished) {
-			
-            PriorityQueue<Task> unscheduledTasks = new PriorityQueue<>(new MinTaskComparator());
+            List<Task> unscheduledTasks = new ArrayList<>();
 			unscheduledTasks.addAll(tasks);
 			
 			if (!rootNode.getData().getTasks().isEmpty()) {
@@ -187,10 +186,10 @@ public class Scheduler {
 
 	}
 
-	private double calcLowerBound(PriorityQueue<Task> unscheduledTasks,Schedule schedule, int makeSpan, int numberOfProcessors) {
+	private double calcLowerBound(List<Task> unscheduledTasks,Schedule schedule, int makeSpan, int numberOfProcessors) {
 
 		int sum = 0;
-
+		
         //unscheduledTasks.removeAll(schedule.getTasks().keySet());
 
 		for (Task t : unscheduledTasks) {
@@ -201,28 +200,59 @@ public class Scheduler {
 
 	}
 
-	private double calcUpperBound(PriorityQueue<Task> unscheduledTasks, Schedule schedule, int numberOfProcessors) {
+	private double calcUpperBound(List<Task> unscheduledTasks, Schedule schedule, int numberOfProcessors) {
 		int makeSpan;
 		int startTime;
-		Task task;
+		List<Task> tempUnscheduledTasks  = new  ArrayList<Task>(unscheduledTasks);
 
-		while (!unscheduledTasks.isEmpty()) {
+		while (!tempUnscheduledTasks.isEmpty()) {
+               
 			for (int i = 1; i < numberOfProcessors + 1; i++) {
-			    // Pick the task with the minimum weight
-				//task = getMinTask(unsheduledTask, schedule);
-                task = unscheduledTasks.poll();
+				
+				if(tempUnscheduledTasks.isEmpty()) {
+					return calcMakeSpan(schedule);
+				}
+				
+				Task task = pickGreedyTask(tempUnscheduledTasks, schedule);
 				startTime = calcStartTime(task, schedule, i);
 				schedule.addTask(task, startTime);
 				task.setStatus(startTime + task.getWeight());
+				tempUnscheduledTasks.remove(task);
 			}
-
+			
+			
 		}
-
+		
+		
 		makeSpan = calcMakeSpan(schedule);
 
 		return makeSpan;
 	}
 
+	
+	private Task pickGreedyTask(List<Task> tasks, Schedule schedule) {
+		Task minTask = null;
+		
+		for (Task t : tasks) {
+			if (schedule.getTasks().keySet().containsAll(t.getParentTasks())) {
+				minTask = t;
+				break;
+			}
+		}
+				
+		for (Task t : tasks) {
+			if (schedule.getTasks().keySet().containsAll(t.getParentTasks())) {
+				if (t.getWeight() < minTask.getWeight()) {
+					minTask = t;
+				}
+			}
+		}
+		
+		return minTask;
+		
+		
+	}
+	
 	private Task getMinTask(List<Task> unscheduledTasks, Schedule schedule) {
 		Task task = unscheduledTasks.get(0);		
 
