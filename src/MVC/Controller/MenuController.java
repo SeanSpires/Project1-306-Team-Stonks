@@ -10,6 +10,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -37,6 +38,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -60,6 +62,7 @@ public final class MenuController implements Initializable {
     private Scheduler scheduler;
     private Schedule schedule;
     private List<Task> taskList;
+    private HelloWorld hello;
 
 
 	/**
@@ -70,14 +73,16 @@ public final class MenuController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		fileio = new FileIO();
+		hello = new HelloWorld();
 
 		// The center panel for drawing the tree
 		graphicsTree = new GraphicsTree();
 		Group group = new Group((graphicsTree));
-
+		SwingNode swingNode = new SwingNode();
+		createSwingContent(swingNode);
 		Parent zoomPane = createZoomPane(group);
 
-		centerPane.getChildren().add(zoomPane);
+		centerPane.getChildren().add(swingNode);
 
 		graphicsTree.widthProperty().bind(centerPane.widthProperty());
 		graphicsTree.heightProperty().bind(centerPane.heightProperty().subtract(50));
@@ -122,6 +127,7 @@ public final class MenuController implements Initializable {
 		graphicsTree.makeEmpty();
 		traversal_textarea.setText("");
 	}
+
 	/**
 	 * Performs the action when the clear button is clicked.
 	 */
@@ -279,5 +285,21 @@ public final class MenuController implements Initializable {
 		} else {
 			scroller.setHvalue(scroller.getHmin());
 		}
+	}
+
+	private void createSwingContent(final SwingNode swingNode) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				JPanel panel = new JPanel();
+				panel.setLayout(null);
+				panel.setSize(1024, 430);
+				panel.add(hello.getGraphComponent());
+
+
+				swingNode.setContent(panel);
+
+			}
+		});
 	}
 }
