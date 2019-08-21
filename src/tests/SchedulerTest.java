@@ -130,10 +130,11 @@ public class SchedulerTest {
         tasks.add(task1);
 
 		//Schedule s = scheduler.createBasicSchedule(tasks, 1);
-        Schedule s = scheduler.createOptimalSchedule(tasks, 2);
+        Schedule s = scheduler.createOptimalSchedule(tasks, 1);
 		
 		List<Integer> scheduledTasks = new ArrayList<>();
 
+		
 		
 		for (Task t : s.getTasks().keySet()) {
 			scheduledTasks.add(t.getNodeNumber());

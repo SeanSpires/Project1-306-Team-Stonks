@@ -49,7 +49,6 @@ public class Scheduler {
 	public Schedule createOptimalSchedule (List<Task> tasks, int numberOfProcessors) {
 
 		boolean notFinished = true;
-		List<Task> rootTasks = getRootTasks(tasks);
 		PriorityQueue<Node<Schedule>> openNodesQueue = new PriorityQueue<>(new NodeLowerBoundComparator());
 		Schedule rootSchedule = new Schedule();
 		double bestUpperBound = Double.POSITIVE_INFINITY;
@@ -84,11 +83,10 @@ public class Scheduler {
 						int startTime = calcStartTime(t, childNode.getData(), i);
 						t.setStatus(t.getWeight() + startTime);
 						schedule.addTask(t, startTime);
-		                //unscheduledTasks.remove(t);
 		                
 						int makeSpan = calcMakeSpan(schedule);
-						double lowerBound = calcLowerBound(unscheduledTasks.subList(counter, unscheduledTasks.size()-1), schedule, makeSpan, numberOfProcessors);
-						double upperBound = calcUpperBound(unscheduledTasks.subList(counter, unscheduledTasks.size()-1), schedule, numberOfProcessors);
+						double lowerBound = calcLowerBound(unscheduledTasks.subList(counter, unscheduledTasks.size()), schedule, makeSpan, numberOfProcessors);
+						double upperBound = calcUpperBound(unscheduledTasks.subList(counter, unscheduledTasks.size()), schedule, numberOfProcessors);
 
 						childNode.setLowerBound(lowerBound);
 						childNode.setUpperBound(upperBound);
@@ -117,12 +115,7 @@ public class Scheduler {
 				counter++;
 			}
 			
-			if (!openNodesQueue.isEmpty()) {
-				rootNode = openNodesQueue.poll();
-			}
-			else {
-				return rootNode.getData();
-			}
+			rootNode = openNodesQueue.peek();
 
 			if (rootNode.getLowerBound() == rootNode.getUpperBound() && rootNode.getData().isComplete(tasks)) {
 				return rootNode.getData();
@@ -132,7 +125,7 @@ public class Scheduler {
 			}
 		}
 		
-		return null;
+		return rootNode.getData();
 	}
 
 
@@ -157,7 +150,10 @@ public class Scheduler {
 			return costOfComs;
 		}
 		else {
-			costOfComs = prevTask.getSubTasks().get(currentTask);
+		//	if (currentTask.getParentTasks().contains(prevTask)) {
+				costOfComs = prevTask.getSubTasks().get(currentTask);
+	//		}
+			
 			return costOfComs;
 		}
 	}
@@ -165,7 +161,7 @@ public class Scheduler {
 	private int calcStartTime(Task currentTask, Schedule schedule, int processor) {
 		int maxStartTime = 0;
 		Set<Task> predecessors = schedule.getTasks().keySet();
-		predecessors.remove(currentTask);
+		//predecessors.remove(currentTask);
 
 		for (Task t : predecessors) {
 			int comCost = calcComCost(currentTask, t, processor);
@@ -199,20 +195,21 @@ public class Scheduler {
 		Task greedyTask;
 		
 		while (!tempUnscheduledTasks.isEmpty()) {
-            greedyTask = pickGreedyTask(tempUnscheduledTasks, schedule);
 			for (int i = 1; i < numberOfProcessors + 1; i++) {
 				
-				//Task task = pickGreedyTask(tempUnscheduledTasks, schedule);
+				if (tempUnscheduledTasks.isEmpty()) {
+					return calcMakeSpan(schedule);
+				}
+				
+	            greedyTask = pickGreedyTask(tempUnscheduledTasks, schedule);
 				greedyTask.setProcessor(i);
 				startTime = calcStartTime(greedyTask, schedule, i);
 				schedule.addTask(greedyTask, startTime);
 				greedyTask.setStatus(startTime + greedyTask.getWeight());
-				//tempUnscheduledTasks.remove(task);
+				tempUnscheduledTasks.remove(greedyTask);
 			}
 			
-			tempUnscheduledTasks.remove(greedyTask);
 		}
-		
 		
 		makeSpan = calcMakeSpan(schedule);
 
