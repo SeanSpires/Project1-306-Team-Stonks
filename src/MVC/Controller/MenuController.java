@@ -79,11 +79,10 @@ public final class MenuController implements Initializable {
 
 		centerPane.getChildren().add(zoomPane);
 
-		// Add the panels onto the border pane
-
-		// Bind canvas size to stack pane size.
-		graphicsTree.widthProperty().bind(root_container.widthProperty());
-		graphicsTree.heightProperty().bind(root_container.heightProperty().subtract(50));
+		graphicsTree.widthProperty().bind(centerPane.widthProperty());
+		graphicsTree.heightProperty().bind(centerPane.heightProperty().subtract(50));
+		String style = "-fx-background-color: rgba(255, 255, 255);";
+		graphicsTree.setStyle(style);
 
 	}
 
@@ -163,7 +162,8 @@ public final class MenuController implements Initializable {
 
 	@FXML
 	public void handleStopButton(javafx.event.ActionEvent actionEvent) {
-		Platform.exit();
+		graphicsTree.createTree();
+//		Platform.exit();
 	}
 
 
@@ -171,11 +171,15 @@ public final class MenuController implements Initializable {
 		final double SCALE_DELTA = 1.1;
 		final StackPane zoomPane = new StackPane();
 
+
+
 		zoomPane.getChildren().add(group);
 
 		final ScrollPane scroller = new ScrollPane();
 		final Group scrollContent = new Group(zoomPane);
 		scroller.setContent(scrollContent);
+		String style = "-fx-background-color: rgba(255, 255, 0);";
+		zoomPane.setStyle(style);
 
 		scroller.viewportBoundsProperty().addListener(new ChangeListener<Bounds>() {
 			@Override
