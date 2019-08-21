@@ -55,8 +55,7 @@ public final class GraphicsTree extends Canvas {
 
 
 		tree = new BinarySearchTree(); // Create an empty tree
-		setMaxTreeHeight(7); 		   // Set the default max tree height
-
+		
 		for (Integer number : NUMBERS_ARRAY) {
 			Circle circle = new Circle(number);
 			tree.insertItem(circle);
