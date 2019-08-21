@@ -70,7 +70,11 @@ public class Scheduler {
 				unscheduledTasks.addAll(tasks);
 			}
 			
+			List<Task> scheduledTasks = new ArrayList<Task>();
+			int counter = 0;
 			for (Task t : unscheduledTasks) {
+				scheduledTasks.add(t);
+				
 				for (int i = 1; i < numberOfProcessors + 1; i++) {
 					Node<Schedule> childNode = rootNode;
 					Schedule schedule = childNode.getData();
@@ -80,11 +84,11 @@ public class Scheduler {
 						int startTime = calcStartTime(t, childNode.getData(), i);
 						t.setStatus(t.getWeight() + startTime);
 						schedule.addTask(t, startTime);
-		                unscheduledTasks.remove(t);
+		                //unscheduledTasks.remove(t);
 		                
 						int makeSpan = calcMakeSpan(schedule);
-						double lowerBound = calcLowerBound(unscheduledTasks, schedule,makeSpan, numberOfProcessors);
-						double upperBound = calcUpperBound(unscheduledTasks, schedule, numberOfProcessors);
+						double lowerBound = calcLowerBound(unscheduledTasks.subList(counter, unscheduledTasks.size()-1), schedule, makeSpan, numberOfProcessors);
+						double upperBound = calcUpperBound(unscheduledTasks.subList(counter, unscheduledTasks.size()-1), schedule, numberOfProcessors);
 
 						childNode.setLowerBound(lowerBound);
 						childNode.setUpperBound(upperBound);
@@ -110,19 +114,8 @@ public class Scheduler {
 
 					}
 				}
+				counter++;
 			}
-
-
-
-            // Get the node with the smallest lower bound
-			// Node<Schedule> node = openNodes.get(0);
-
-//          Node<Schedule> node = openNodes.get(0);
-//			for (Node<Schedule> n : openNodes) {
-//				if (n.getLowerBound() < node.getLowerBound()) {
-//					node = n;
-//				}
-//			}
 			
 			if (!openNodesQueue.isEmpty()) {
 				rootNode = openNodesQueue.poll();
@@ -190,8 +183,6 @@ public class Scheduler {
 
 		int sum = 0;
 		
-        //unscheduledTasks.removeAll(schedule.getTasks().keySet());
-
 		for (Task t : unscheduledTasks) {
 			sum += t.getWeight();
 		}
@@ -203,24 +194,23 @@ public class Scheduler {
 	private double calcUpperBound(List<Task> unscheduledTasks, Schedule schedule, int numberOfProcessors) {
 		int makeSpan;
 		int startTime;
-		List<Task> tempUnscheduledTasks  = new  ArrayList<Task>(unscheduledTasks);
-
+		
+		List<Task> tempUnscheduledTasks  = new ArrayList<>(unscheduledTasks);
+		Task greedyTask;
+		
 		while (!tempUnscheduledTasks.isEmpty()) {
-               
+            greedyTask = pickGreedyTask(tempUnscheduledTasks, schedule);
 			for (int i = 1; i < numberOfProcessors + 1; i++) {
 				
-				if(tempUnscheduledTasks.isEmpty()) {
-					return calcMakeSpan(schedule);
-				}
-				
-				Task task = pickGreedyTask(tempUnscheduledTasks, schedule);
-				startTime = calcStartTime(task, schedule, i);
-				schedule.addTask(task, startTime);
-				task.setStatus(startTime + task.getWeight());
-				tempUnscheduledTasks.remove(task);
+				//Task task = pickGreedyTask(tempUnscheduledTasks, schedule);
+				greedyTask.setProcessor(i);
+				startTime = calcStartTime(greedyTask, schedule, i);
+				schedule.addTask(greedyTask, startTime);
+				greedyTask.setStatus(startTime + greedyTask.getWeight());
+				//tempUnscheduledTasks.remove(task);
 			}
 			
-			
+			tempUnscheduledTasks.remove(greedyTask);
 		}
 		
 		
@@ -253,19 +243,19 @@ public class Scheduler {
 		
 	}
 	
-	private Task getMinTask(List<Task> unscheduledTasks, Schedule schedule) {
-		Task task = unscheduledTasks.get(0);		
-
-		for (Task t : unscheduledTasks) {
-			if (schedule.getTasks().keySet().containsAll(t.getParentTasks())) {
-				if (t.getWeight() < task.getWeight()) {
-					task = t;
-				}
-			}
-		}
-
-		return task;
-	}
+//	private Task getMinTask(List<Task> unscheduledTasks, Schedule schedule) {
+//		Task task = unscheduledTasks.get(0);		
+//
+//		for (Task t : unscheduledTasks) {
+//			if (schedule.getTasks().keySet().containsAll(t.getParentTasks())) {
+//				if (t.getWeight() < task.getWeight()) {
+//					task = t;
+//				}
+//			}
+//		}
+//
+//		return task;
+//	}
 
 
 
