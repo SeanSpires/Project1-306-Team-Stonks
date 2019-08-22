@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import MVC.Model.Node;
 import MVC.Model.Schedule;
 import MVC.Model.Scheduler;
 import MVC.Model.Task;
@@ -62,15 +63,15 @@ public class SchedulerTest {
 //
 //		//Schedule s = scheduler.createBasicSchedule(tasks, 1);
 //        Schedule s = scheduler.createOptimalSchedule(tasks, 1);
-//
+//		
 //		List<Integer> scheduledTasks = new ArrayList<>();
 //
-//
+//		
 //		for (Task t : s.getTasks().keySet()) {
 //			scheduledTasks.add(t.getNodeNumber());
 //			System.out.println(t.getNodeNumber());
 //		}
-//
+//		
 //		List<Integer> scheduledTimes =  new ArrayList<>();
 //
 //		scheduledTimes.addAll(s.getTasks().values());
@@ -96,10 +97,10 @@ public class SchedulerTest {
 //
 //		assertEquals(expectedTasks, scheduledTasks);
 //		assertEquals(expectedTimes, scheduledTimes);
-//
+//		
 //	}
-
-
+    
+    
     @Test
 	public void testSimpleSchedule() {
 
@@ -130,41 +131,42 @@ public class SchedulerTest {
         tasks.add(task1);
 
 		//Schedule s = scheduler.createBasicSchedule(tasks, 1);
-        Schedule s = scheduler.createOptimalSchedule(tasks,5);
-
-
+        Node s = scheduler.createOptimalSchedule(tasks,2);
+        
+        assertEquals(s.getScheduledTasks().keySet(), 3);
+        
 		List<Integer> scheduledTasks = new ArrayList<>();
 
-
-
-		for (Task t : s.getTasks().keySet()) {
-			scheduledTasks.add(t.getNodeNumber());
-			System.out.println(t.getNodeNumber());
-		}
-
-		List<Integer> scheduledTimes =  new ArrayList<>();
-
-		scheduledTimes.addAll(s.getTasks().values());
-
-        List<Integer> expectedTasks = new ArrayList<Integer>() {
-            {
-                add(1);
-                add(2);
-
-            }
-        };
-
-        List<Integer> expectedTimes = new ArrayList<Integer>() {
-            {
-                add(0);
-                add(2);
-
-            }
-        };
-
-		assertEquals(expectedTasks, scheduledTasks);
-		assertEquals(expectedTimes, scheduledTimes);
-
+//		
+//		
+//		for (Task t : s.getTasks().keySet()) {
+//			scheduledTasks.add(t.getNodeNumber());
+//			System.out.println(t.getNodeNumber());
+//		}
+//		
+//		List<Integer> scheduledTimes =  new ArrayList<>();
+//
+//		scheduledTimes.addAll(s.getTasks().values());
+//
+//        List<Integer> expectedTasks = new ArrayList<Integer>() {
+//            {
+//                add(1);
+//                add(2);
+//           
+//            }
+//        };
+//
+//        List<Integer> expectedTimes = new ArrayList<Integer>() {
+//            {
+//                add(0);
+//                add(2);
+//
+//            }
+//        };
+//
+//		assertEquals(expectedTasks, scheduledTasks);
+//		assertEquals(expectedTimes, scheduledTimes);
+//		
 	}
 
 //    @Test
@@ -487,3 +489,5 @@ public class SchedulerTest {
 //
 //    }
 }
+
+

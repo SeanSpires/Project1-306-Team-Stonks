@@ -8,8 +8,6 @@ import java.util.Set;
 public class Node {
 
 
-
-
     private List<Task> unscheduledTasks;
 
     // Map of scheduled tasks
@@ -127,9 +125,18 @@ public class Node {
 
 
     public void addScheduledTask(int proc, Task task) {
-        List<Task> tempList = this.scheduledTasks.get(proc);
-        this.scheduledTasks.remove(proc);
-        tempList.add(task);
+    	List<Task> tempList = new ArrayList<>();
+    	
+    	if (this.scheduledTasks.get(proc) == null) {
+    		tempList.add(task);
+    	}
+    	else {
+            tempList = this.scheduledTasks.get(proc);
+            this.scheduledTasks.remove(proc);
+            tempList.add(task);
+    	}
+    
+        
         this.scheduledTasks.put(proc, tempList);
     }
 
