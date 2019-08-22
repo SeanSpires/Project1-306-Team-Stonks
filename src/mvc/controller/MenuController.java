@@ -34,7 +34,7 @@ import java.util.Timer;
  * @author Eric Canull
  * @version 1.0
  */
-public final class MenuController {
+public final class MenuController implements Initializable{
 
 	// Panels and other GUI components
 	@FXML private AnchorPane root_container;
