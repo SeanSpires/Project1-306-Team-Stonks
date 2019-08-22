@@ -4,6 +4,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
+import javafx.concurrent.Service;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -143,13 +144,41 @@ public final class MenuController implements Initializable{
 		_stopBtn.setDisable(false);
 		_runBtn.setDisable(true);
 
-		fileio.readFile(Main.inputFileName);
-		fileio.processNodes();
-		fileio.processTransitions();
-		taskList = fileio.getTaskList();
-		scheduler = new Scheduler();
-		schedule = scheduler.createBasicSchedule(taskList, 1);
-		fileio.writeFile(schedule);
+        Service algService = new Service() {
+
+            @Override
+            protected javafx.concurrent.Task createTask() {
+
+                return new javafx.concurrent.Task(){
+
+                    @Override
+                    protected Object call() {
+                        fileio.readFile(Main.inputFileName);
+                        fileio.processNodes();
+                        fileio.processTransitions();
+                        taskList = fileio.getTaskList();
+                        scheduler = new Scheduler();
+                        schedule = scheduler.createBasicSchedule(taskList, 1);
+                        fileio.writeFile(schedule);
+                        return null;
+                    }
+
+                };
+            }
+
+            @Override
+            protected void succeeded() {
+                _runBtn.setDisable(false);
+                _stopBtn.setDisable(true);
+                timeline.stop();
+                System.out.println("Finished");
+
+            }
+
+        };
+        algService.start();
+
+
 	}
 
 	@FXML
