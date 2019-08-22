@@ -18,6 +18,10 @@ public class ZoomableScrollPane extends ScrollPane {
 
     public ZoomableScrollPane(Node target) {
         super();
+
+    }
+
+    public void initialise(){
         this.target = target;
         this.zoomNode = new Group(target);
         setContent(outerNode(zoomNode));
