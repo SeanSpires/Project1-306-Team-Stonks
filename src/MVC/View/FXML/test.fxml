@@ -1,54 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-        <?import javafx.geometry.Insets?>
-        <?import javafx.scene.control.Button?>
-        <?import javafx.scene.control.TextArea?>
-        <?import javafx.scene.control.TextField?>
-        <?import javafx.scene.layout.AnchorPane?>
-        <?import javafx.scene.layout.BorderPane?>
-        <?import javafx.scene.layout.ColumnConstraints?>
-        <?import javafx.scene.layout.GridPane?>
-        <?import javafx.scene.layout.HBox?>
-        <?import javafx.scene.layout.Pane?>
-        <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="root_container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.Controller.MenuController">
-<bottom>
-    <HBox alignment="CENTER" spacing="5.0" BorderPane.alignment="CENTER">
+<AnchorPane fx:id="root_container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="710.0" prefWidth="1034.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.Controller.MenuController">
+
+    <Pane fx:id="centerPane" layoutY="-8.0" prefHeight="719.0" prefWidth="1034.0" BorderPane.alignment="CENTER">
+        <opaqueInsets>
+            <Insets />
+        </opaqueInsets></Pane>
+    <AnchorPane fx:id="_topMenu" prefHeight="100.0" prefWidth="1034.0">
+        <Button fx:id="_runBtn" graphicTextGap="0.0" layoutX="810.0" layoutY="29.0" mnemonicParsing="false" onAction="#handleRunButton">
+            <graphic>
+                <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../Images/icons8-play-52.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="_stopBtn" layoutX="936.0" layoutY="29.0" mnemonicParsing="false" onAction="#handleStopButton">
+            <graphic>
+                <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../Images/icons8-stop-60.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Label graphicTextGap="0.0" layoutX="38.0" layoutY="28.0" prefHeight="53.0" prefWidth="478.0" text="V I S U A L I Z A T I O N">
+            <font>
+                <Font name="Leelawadee UI Bold" size="36.0" />
+            </font>
+        </Label>
+    </AnchorPane>
+    <AnchorPane fx:id="_bottomMenu" layoutY="517.0" prefHeight="200.0" prefWidth="1034.0">
         <children>
-            <TextField fx:id="input_field" prefColumnCount="6" prefHeight="25.0" promptText="Key" />
-            <Button layoutX="227.0" layoutY="10.0" mnemonicParsing="false"  prefHeight="35.0" prefWidth="90.0" styleClass="control-button" text="Insert" />
-            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="90.0" styleClass="control-button" text="Search" />
-            <Button layoutX="217.0" layoutY="10.0" mnemonicParsing="false"  prefHeight="35.0" prefWidth="90.0" styleClass="control-button" text="Delete" />
-            <Button layoutX="217.0" layoutY="10.0" mnemonicParsing="false"  prefHeight="35.0" prefWidth="90.0" styleClass="control-button" text="Clear" />
-            <Button fx:id="_runBtn" mnemonicParsing="false"  text="RUN" />
-            <Button fx:id="_stopBtn" layoutX="808.0" layoutY="16.0" mnemonicParsing="false" text="STOP " />
+            <Label fx:id="_time" layoutX="91.0" layoutY="64.0" text="5.23">
+                <font>
+                    <Font name="System Bold" size="34.0" />
+                </font>
+            </Label>
+            <AnchorPane fx:id="_border" prefHeight="8.0" prefWidth="1034.0" />
+            <Label fx:id="_bottomnLabels" layoutX="92.0" layoutY="139.0" text="T I M E ">
+                <font>
+                    <Font size="20.0" />
+                </font>
+            </Label>
+            <Label fx:id="_bottomnLabels" layoutX="260.0" layoutY="139.0" text="S C H E D U L E S">
+                <font>
+                    <Font size="20.0" />
+                </font>
+            </Label>
+            <Label fx:id="_time" layoutX="315.0" layoutY="64.0" text="45">
+                <font>
+                    <Font name="System Bold" size="34.0" />
+                </font>
+            </Label>
+            <Label fx:id="_bottomnLabels" layoutX="878.0" layoutY="139.0" text="I N P U T ">
+                <font>
+                    <Font size="20.0" />
+                </font>
+            </Label>
         </children>
-        <padding>
-            <Insets bottom="3.0" />
-        </padding></HBox>
-</bottom>
-<top>
-    <GridPane alignment="CENTER_LEFT">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="NEVER" />
-        </rowConstraints>
-        <children>
-            <AnchorPane GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
-                <children>
-                    <TextArea fx:id="traversal_textarea" editable="false" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="20.0" prefRowCount="1" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                </children>
-            </AnchorPane>
-        </children>
-    </GridPane>
-</top>
-<center>
-    <Pane fx:id="centerPane" prefHeight="530.0" prefWidth="1024.0" BorderPane.alignment="CENTER" />
-
-
-</center>
-</BorderPane>
-
+    </AnchorPane>
+</AnchorPane>

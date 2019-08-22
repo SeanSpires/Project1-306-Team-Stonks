@@ -2,22 +2,15 @@
     -fx-font-family: "System";
     -fx-font-size: 1em;
     -fx-base: #131313;
-    -fx-background: F5F5F5;
+
+    -fx-background-color:rgb(59,66,77);
     -fx-focus-color: #7C7C7C;
     -fx-control-inner-background: #1C1C1C;
-    -fx-text-base-color: #CBCCCB;
-    -fx-text-background-color: #F9F9F9;
-    -fx-text-inner-color: #C9C9C9;
+    -fx-text-background-color: rgba(245,245,245);
     -fx-inner-border: linear-gradient(to bottom, derive(-fx-color,50%) 0%, derive(-fx-color,-5%) 100%);
     -fx-body-color: linear-gradient( to bottom, derive(-fx-color, -2%) 0%, derive(-fx-color, 9%) 50%, derive(-fx-color, -9%) 50.5%, derive(-fx-color, -69%) 100%);
 }
 
-
-#_menuBtn{
-    -fx-font-size: 16px;
-    -fx-font-family: "Doppio One";
-    -fx-background-color: rgba(230,	230, 230, 0.0);
-}
 
 #_runBtn{
     -fx-font-size: 16px;
@@ -31,6 +24,19 @@
     -fx-background-color: rgba(210,	210, 210, 0.0);
 }
 
+#_bottomMenu{
+    -fx-background-color: rgb(31, 56, 71);
+}
 
+#_border{
+    -fx-background-color: rgb(53,147,161); /*rgb(140,208,213);*/
+}
 
+#_time{
+    -fx-text-background-color: rgb(53,147,161);
+}
+
+#_bottomnLabels{
+    -fx-text-background-color: rgb(53,147,161, 0.3);
+}
 
