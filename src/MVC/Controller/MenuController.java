@@ -62,8 +62,8 @@ public final class MenuController implements Initializable {
 		yAxis = new CategoryAxis();
 		ganttChart = new GanttChart<Number, String>(xAxis, yAxis);
 
-		initScrollPane();
-		initGanttChart();
+		//initScrollPane();
+		//initGanttChart();
 
 	}
 
