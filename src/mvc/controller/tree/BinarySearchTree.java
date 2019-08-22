@@ -1,6 +1,6 @@
-package MVC.Controller.tree;
+package mvc.controller.tree;
 
-import MVC.Controller.shape.*;
+import mvc.controller.shape.*;
 
 import java.util.Objects;
 

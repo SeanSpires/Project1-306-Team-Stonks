@@ -5,13 +5,12 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import MVC.Model.FileIO;
-import MVC.Model.Schedule;
-import MVC.Model.Task;
+import mvc.model.FileIO;
+import mvc.model.Schedule;
+import mvc.model.Task;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

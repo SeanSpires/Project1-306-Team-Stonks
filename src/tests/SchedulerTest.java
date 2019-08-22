@@ -5,12 +5,11 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import MVC.Model.Schedule;
-import MVC.Model.Scheduler;
-import MVC.Model.Task;
+import mvc.model.Schedule;
+import mvc.model.Scheduler;
+import mvc.model.Task;
 
 public class SchedulerTest {
 

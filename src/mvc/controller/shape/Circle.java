@@ -1,4 +1,4 @@
-package MVC.Controller.shape;
+package mvc.controller.shape;
 
 import com.sun.javafx.tk.FontMetrics;
 import com.sun.javafx.tk.Toolkit;

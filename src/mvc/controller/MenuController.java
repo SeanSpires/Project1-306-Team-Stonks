@@ -1,7 +1,8 @@
-package MVC.Controller;
+package mvc.controller;
 
-import MVC.Main;
-import MVC.Model.*;
+import mvc.Main;
+import mvc.model.*;
+import mvc.view.fxml.ZoomableScrollPane;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -14,11 +15,8 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
@@ -38,12 +36,11 @@ public final class MenuController implements Initializable {
 
 	// Panels and other GUI components
 	@FXML private AnchorPane root_container;
-	@FXML private TextArea traversal_textarea;
-	@FXML private TextField input_field;
-	@FXML private Pane centerPane;
+	@FXML private AnchorPane centerPane;
+	@FXML private AnchorPane fuckery;
 
 	@FXML
-    ZoomableScrollPane ganttScrollPane;
+	private ZoomableScrollPane ganttScrollPane;
 
     private FileIO fileio;
     private Scheduler scheduler;
@@ -78,8 +75,8 @@ public final class MenuController implements Initializable {
 		yAxis = new CategoryAxis();
 		ganttChart = new GanttChart<Number, String>(xAxis, yAxis);
 
-		//initScrollPane();
-		//initGanttChart();
+		initScrollPane();
+		initGanttChart();
 
 	}
 
@@ -89,29 +86,29 @@ public final class MenuController implements Initializable {
 	}
 
 	private void initGanttChart() {
-		ganttChart.setMinWidth(600);
-		ganttChart.setMinHeight(590);
+		ganttChart.setMinWidth(950);
+		ganttChart.setMinHeight(550);
 		// TODO: Change the centerPane name.
 		centerPane.getChildren().add(ganttChart);
 		xAxis.setLabel("Time");
-		xAxis.setTickLabelFill(Color.WHITE);
+		xAxis.setTickLabelFill(Color.BLACK);
 
 		yAxis.setLabel("Processor No.");
-		yAxis.setTickLabelFill(Color.WHITE);
+		yAxis.setTickLabelFill(Color.BLACK);
 		initGanttChartYAxis();
 		yAxis.setCategories(FXCollections.<String>observableArrayList(processorList));
 
 		ganttChart.setTitle("");
-		ganttChart.setLegendVisible(false);
+		ganttChart.setLegendVisible(true);
 		ganttChart.setBlockHeight(50);
-//		ganttChart.getStylesheets().add(getClass().getResource("ganttchart.css").toExternalForm());
+		//ganttChart.getStylesheets().add(getClass().getResource("ganttchart.css").toExternalForm());
 	}
 
 	private void initGanttChartYAxis(){
-		for (int i = 1; i <= Main.numberOfProcessors; i++) {
+		for (int i = 0; i <= Main.numberOfProcessors; i++) {
 			XYChart.Series series = new XYChart.Series();
 			ganttChart.getData().add(series);
-			String processor = "" + (i);
+			String processor = "" + 1;
 			processorList.add(processor);
 		}
 	}
@@ -121,11 +118,12 @@ public final class MenuController implements Initializable {
 		timeTaken = 0;
 		timer = new Timer();
 
-		timeline = new Timeline(new KeyFrame(Duration.millis( 1 ),
+		// In x seconds xx miliseconds.
+		timeline = new Timeline(new KeyFrame(Duration.millis( 10 ),
 				new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent event) {
-						timeTaken = timeTaken + 0.001;
-						timeLabel.setText(String.format("%.3f", timeTaken));
+						timeTaken = timeTaken + 0.01;
+						timeLabel.setText(String.format("%.2f", timeTaken));
 					}
 				})
 		);
@@ -178,6 +176,10 @@ public final class MenuController implements Initializable {
 
 	@FXML
 	public void handleStopButton(javafx.event.ActionEvent actionEvent) {
+		// Use this to stop the timer
+//		System.out.println("asjdsklajd l");
+		timeline.stop();
+
 //		Platform.exit();
 	}
 

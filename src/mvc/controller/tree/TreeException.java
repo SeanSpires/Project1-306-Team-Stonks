@@ -1,4 +1,4 @@
-package MVC.Controller.tree;
+package mvc.controller.tree;
 
 /**
  * Defines an exception that is thrown when tree exception occurs.

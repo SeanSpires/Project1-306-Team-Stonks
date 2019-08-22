@@ -12,7 +12,7 @@
         <?import javafx.scene.layout.Pane?>
         <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane fx:id="root_container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.Controller.MenuController">
+<BorderPane fx:id="root_container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvc.controller.MenuController">
 <bottom>
     <HBox alignment="CENTER" spacing="5.0" BorderPane.alignment="CENTER">
         <children>
