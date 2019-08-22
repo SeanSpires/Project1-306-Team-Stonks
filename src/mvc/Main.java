@@ -20,10 +20,12 @@ public class Main extends Application {
     public static String outputFileName;
     
     public static int numberOfCores;
+
+    public static int numberOfProcessors;
     
     private static List<Task> taskList;
     
-    public static int numberOfProcessors;
+
 
 
     @Override
@@ -87,6 +89,8 @@ public class Main extends Application {
         if(args.length >= 3) {
             List<String> argsList = Arrays.asList(args);
             numberOfCores = 1;
+            numberOfProcessors = Integer.parseInt(args[1]);
+            System.out.println(numberOfProcessors);
 
             if (argsList.contains("-o")) {
                 try {

@@ -98,8 +98,9 @@ public final class MenuController implements Initializable{
 		yAxis.setLabel("Processor No.");
 		yAxis.setTickLabelFill(Color.BLACK);
 		initGanttChartYAxis();
+		System.out.println(Main.numberOfProcessors);
+		System.out.println(processorList);
 		yAxis.setCategories(FXCollections.<String>observableArrayList(processorList));
-
 		ganttChart.setTitle("");
 		ganttChart.setLegendVisible(true);
 		ganttChart.setBlockHeight(50);
@@ -107,11 +108,12 @@ public final class MenuController implements Initializable{
 	}
 
 	private void initGanttChartYAxis(){
-		for (int i = 0; i <= Main.numberOfProcessors; i++) {
+		for (int i = 1; i <= Main.numberOfProcessors; i++) {
 			XYChart.Series series = new XYChart.Series();
 			ganttChart.getData().add(series);
-			String processor = "" + 1;
+			String processor = "" + i;
 			processorList.add(processor);
+			System.out.println("y");
 		}
 	}
 
