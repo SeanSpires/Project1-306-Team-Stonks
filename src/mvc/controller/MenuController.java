@@ -34,27 +34,23 @@ import java.util.Timer;
  */
 public final class MenuController implements Initializable {
 
-	// Panels and other GUI components
-	@FXML private AnchorPane root_container;
-	@FXML private AnchorPane centerPane;
 
-	@FXML
-	private ZoomableScrollPane ganttScrollPane;
+	@FXML private AnchorPane centerPane;
+	@FXML private ZoomableScrollPane ganttScrollPane;
+	@FXML private Label _timerOutput;
+	@FXML private Timer timer;
+	@FXML private Label _processors;
+	@FXML private Label _cores;
 
     private FileIO fileio;
     private Scheduler scheduler;
     private Schedule schedule;
-    private List<Task> taskList;
+	private List<Task> taskList;
 
 	private List<String> processorList = new ArrayList<String>();
 
 	private Timeline timeline;
 
-	@FXML
-	private Label _timerOutput;
-
-	@FXML
-	private Timer timer;
 
 	private double timeTaken;
 
@@ -68,6 +64,10 @@ public final class MenuController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		getInputs();
+
+
+
 		fileio = new FileIO();
 
 		xAxis = new NumberAxis();
@@ -78,6 +78,13 @@ public final class MenuController implements Initializable {
 		initGanttChart();
 
 	}
+
+	//displays cores/processors being used
+	private void getInputs(){
+		_cores.setText(Integer.toString(Main.numberOfCores));
+		_processors.setText(Integer.toString(Main.numberOfProcessors));
+	}
+
 
 	private void initScrollPane() {
 		ganttScrollPane.initialise();
