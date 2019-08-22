@@ -1,4 +1,4 @@
-package MVC.Model;
+package mvc.model;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,8 +17,8 @@ public class FileIO {
     	LinkedHashMap<Task, Integer> schedule = data.getTasks();
     	String outputFileName;
     	
-    	if (!(MVC.Main.outputFileName == null)) {
-    		outputFileName = MVC.Main.outputFileName;
+    	if (!(mvc.Main.outputFileName == null)) {
+    		outputFileName = mvc.Main.outputFileName;
     	}
     	else {
     		outputFileName = fileName + "-output.dot";

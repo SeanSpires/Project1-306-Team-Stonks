@@ -1,14 +1,13 @@
-package MVC.Controller;
+package mvc.controller;
 
-import MVC.Controller.shape.Circle;
-import MVC.Controller.shape.Line;
+import mvc.controller.shape.Circle;
+import mvc.controller.shape.Line;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import MVC.Controller.shape.*;
-import MVC.Controller.tree.*;
+import mvc.controller.tree.*;
 
 import java.util.Objects;
 

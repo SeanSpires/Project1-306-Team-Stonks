@@ -1,4 +1,4 @@
-package MVC.Controller.tree;
+package mvc.controller.tree;
 
 import sun.reflect.generics.tree.Tree;
 

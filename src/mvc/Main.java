@@ -1,9 +1,9 @@
-package MVC;
+package mvc;
 
-import MVC.Model.FileIO;
-import MVC.Model.Schedule;
-import MVC.Model.Scheduler;
-import MVC.Model.Task;
+import mvc.model.FileIO;
+import mvc.model.Schedule;
+import mvc.model.Scheduler;
+import mvc.model.Task;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -28,7 +28,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("View/FXML/menuWindow.fxml"));
+        Parent root = FXMLLoader. load(getClass().getResource("view/fxml/menuWindow.fxml"));
         primaryStage.setTitle("Project1-306");
         Scene mainScene = new Scene(root, 1024, 700);
         mainScene.getStylesheets().add(getClass().getResource("View/CSS/menuWindow.css").toExternalForm());

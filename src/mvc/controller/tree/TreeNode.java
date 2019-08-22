@@ -1,6 +1,6 @@
-package MVC.Controller.tree;
+package mvc.controller.tree;
 
-import MVC.Controller.shape.*;
+import mvc.controller.shape.*;
 
 /**
  * A binary tree using circle objects.

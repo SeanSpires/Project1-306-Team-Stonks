@@ -1,14 +1,15 @@
-package MVC.Model;
+package mvc.view.fxml;
 
-import javafx.event.EventHandler;
+
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import javafx.event.EventHandler;
 
 public class ZoomableScrollPane extends ScrollPane {
     private double scaleValue = 0.7;
@@ -16,12 +17,27 @@ public class ZoomableScrollPane extends ScrollPane {
     private Node target;
     private Node zoomNode;
 
-    public ZoomableScrollPane(Node target) {
+    public ZoomableScrollPane() {
         super();
 
     }
 
     public void initialise(){
+        this.target = getContent();
+        this.zoomNode = new Group(target);
+        setContent(outerNode(zoomNode));
+
+        setPannable(true);
+        setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        setFitToHeight(true); //center
+        setFitToWidth(true); //center
+
+        updateScale();
+    }
+
+    public ZoomableScrollPane(Node target) {
+        super();
         this.target = target;
         this.zoomNode = new Group(target);
         setContent(outerNode(zoomNode));
@@ -63,6 +79,10 @@ public class ZoomableScrollPane extends ScrollPane {
     private void updateScale() {
         target.setScaleX(scaleValue);
         target.setScaleY(scaleValue);
+    }
+
+    public Node getTarget() {
+        return target;
     }
 
     private void onScroll(double wheelDelta, Point2D mousePoint) {

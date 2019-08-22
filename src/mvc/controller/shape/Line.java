@@ -1,4 +1,4 @@
-package MVC.Controller.shape;
+package mvc.controller.shape;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;

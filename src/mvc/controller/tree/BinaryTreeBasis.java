@@ -1,6 +1,6 @@
-package MVC.Controller.tree;
+package mvc.controller.tree;
 
-import MVC.Controller.shape.*;
+import mvc.controller.shape.*;
 
 /**
  * An abstract base class for a binary tree.

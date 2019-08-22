@@ -1,4 +1,4 @@
-package MVC.Model;
+package mvc.model;
 
 import javafx.beans.NamedArg;
 import javafx.collections.FXCollections;
