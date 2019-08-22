@@ -36,13 +36,9 @@ import java.util.Timer;
  */
 public final class MenuController {
 
-    // Panels and other GUI components
-    @FXML
-    private AnchorPane root_container;
-    @FXML
-    private AnchorPane centerPane;
-    @FXML
-    private AnchorPane fuckery;
+	// Panels and other GUI components
+	@FXML private AnchorPane root_container;
+	@FXML private AnchorPane centerPane;
 
     @FXML
     private ZoomableScrollPane ganttScrollPane;
@@ -52,144 +48,138 @@ public final class MenuController {
     private Schedule schedule;
     private List<Task> taskList;
 
-    private List<String> processorList = new ArrayList<String>();
+	private List<String> processorList = new ArrayList<String>();
 
-    private Timeline timeline;
+	private Timeline timeline;
 
-    @FXML
-    private Label timeLabel;
+	@FXML
+	private Label _timerOutput;
 
-    @FXML
-    private Timer timer;
+	@FXML
+	private Timer timer;
 
-    private double timeTaken;
+	private double timeTaken;
 
-    // Init Gantt Chart.
-    private NumberAxis xAxis;
-    private CategoryAxis yAxis;
-    private GanttChart<Number, String> ganttChart;
+	// Init Gantt Chart.
+	private NumberAxis xAxis;
+	private CategoryAxis yAxis;
+	private GanttChart<Number, String> ganttChart;
+	/**
+	 * Constructs the GUI components and performs events for displaying and
+	 * changing the data in the binary tree.
+	 */
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		fileio = new FileIO();
 
-    /**
-     * Constructs the GUI components and performs events for displaying and
-     * changing the data in the binary tree.
-     */
-    @FXML
-    public void initialize() {
-        fileio = new FileIO();
+		xAxis = new NumberAxis();
+		yAxis = new CategoryAxis();
+		ganttChart = new GanttChart<Number, String>(xAxis, yAxis);
 
-        xAxis = new NumberAxis();
-        yAxis = new CategoryAxis();
-        ganttChart = new GanttChart<Number, String>(xAxis, yAxis);
+		initScrollPane();
+		initGanttChart();
 
-        initScrollPane();
-        initGanttChart();
+	}
 
-    }
+	private void initScrollPane() {
+		ganttScrollPane.initialise();
+		ganttScrollPane.setVvalue(0.75);
+	}
 
-    private void initScrollPane() {
-        ganttScrollPane.initialise();
-        ganttScrollPane.setVvalue(1.50);
-    }
+	private void initGanttChart() {
+		ganttChart.setMinWidth(1034);
+		ganttChart.setMinHeight(600);
+		// TODO: Change the centerPane name.
+		centerPane.getChildren().add(ganttChart);
+		xAxis.setLabel("Time");
+		xAxis.setTickLabelFill(Color.BLACK);
 
-    private void initGanttChart() {
-        ganttChart.setMinWidth(950);
-        ganttChart.setMinHeight(550);
-        // TODO: Change the centerPane name.
-        centerPane.getChildren().add(ganttChart);
-        xAxis.setLabel("Time");
-        xAxis.setTickLabelFill(Color.BLACK);
+		yAxis.setLabel("Processor No.");
+		yAxis.setTickLabelFill(Color.BLACK);
+		initGanttChartYAxis();
+		yAxis.setCategories(FXCollections.<String>observableArrayList(processorList));
 
-        yAxis.setLabel("Processor No.");
-        yAxis.setTickLabelFill(Color.BLACK);
-        initGanttChartYAxis();
-        yAxis.setCategories(FXCollections.<String>observableArrayList(processorList));
+		ganttChart.setTitle("");
+		ganttChart.setLegendVisible(true);
+		ganttChart.setBlockHeight(50);
+		//ganttChart.getStylesheets().add(getClass().getResource("ganttchart.css").toExternalForm());
+	}
 
-        ganttChart.setTitle("");
-        ganttChart.setLegendVisible(false);
-        ganttChart.setBlockHeight(50);
-        //ganttChart.getStylesheets().add(getClass().getResource("ganttchart.css").toExternalForm());
-    }
+	private void initGanttChartYAxis(){
+		for (int i = 0; i <= Main.numberOfProcessors; i++) {
+			XYChart.Series series = new XYChart.Series();
+			ganttChart.getData().add(series);
+			String processor = "" + 1;
+			processorList.add(processor);
+		}
+	}
 
-    private void initGanttChartYAxis() {
-        for (int i = 0; i <= Main.numberOfProcessors; i++) {
-            XYChart.Series series = new XYChart.Series();
-            ganttChart.getData().add(series);
-            String processor = "" + 1;
-            processorList.add(processor);
-        }
-    }
+	// Should be called when the start button is pressed.
+	private void runTimer() {
+		timeTaken = 0;
+		timer = new Timer();
 
-    // Should be called when the start button is pressed.
-    private void runTimer() {
-        timeTaken = 0;
-        timer = new Timer();
+		// In x seconds xx miliseconds.
+		timeline = new Timeline(new KeyFrame(Duration.millis( 10 ),
+				new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent event) {
+						timeTaken = timeTaken + 0.01;
+						_timerOutput.setText(String.format("%.2f", timeTaken));
+					}
+				})
+		);
+		timeline.setCycleCount( Animation.INDEFINITE );
+		timeline.play();
 
-        // In x seconds xx miliseconds.
-        timeline = new Timeline(new KeyFrame(Duration.millis(10),
-                new EventHandler<ActionEvent>() {
-                    public void handle(ActionEvent event) {
-                        timeTaken = timeTaken + 0.01;
-                        timeLabel.setText(String.format("%.2f", timeTaken));
-                    }
-                })
-        );
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+	}
 
-    }
+	/**
+	 *  Performs the action when the search button is clicked.
+	 */
+	@FXML private void searchOnAction(ActionEvent event) {
 
-    /**
-     * Performs the action when the search button is clicked.
-     */
-    @FXML
-    private void searchOnAction(ActionEvent event) {
+	}
 
-    }
-
-    /**
-     * Performs the action when the delete button is clicked.
-     */
-    @FXML
-    private void deleteOnAction(ActionEvent event) {
-    }
+	/**
+	 * Performs the action when the delete button is clicked.
+	 */
+	@FXML private void deleteOnAction(ActionEvent event) {
+	}
 
 
-    /**
-     * Performs the action when the clear button is clicked.
-     */
-    @FXML
-    private void clearOnAction(ActionEvent event) {
+	/**
+	 * Performs the action when the clear button is clicked.
+	 */
+	@FXML private void clearOnAction(ActionEvent event) {
 
 
-    }
+	}
 
-    /**
-     * Performs the action when the insert button is clicked.
-     */
-    @FXML
-    private void insertOnAction(ActionEvent event) {
+	/**
+	 *  Performs the action when the insert button is clicked.
+	 */
+	@FXML private void insertOnAction(ActionEvent event) {
 
-    }
+	}
 
-    @FXML
-    public void handleRunButton(javafx.event.ActionEvent actionEvent) {
-        // Starts running the timer for the app.
-        runTimer();
-        fileio.readFile(Main.inputFileName);
-        fileio.processNodes();
-        fileio.processTransitions();
-        taskList = fileio.getTaskList();
-        scheduler = new Scheduler();
-        schedule = scheduler.createBasicSchedule(taskList, 1);
-        fileio.writeFile(schedule);
+	@FXML
+	public void handleRunButton(javafx.event.ActionEvent actionEvent) {
+		// Starts running the timer for the app.
+		runTimer();
+		fileio.readFile(Main.inputFileName);
+		fileio.processNodes();
+		fileio.processTransitions();
+		taskList = fileio.getTaskList();
+		scheduler = new Scheduler();
+		schedule = scheduler.createBasicSchedule(taskList, 1);
+		fileio.writeFile(schedule);
+	}
 
-
-    }
-
-    @FXML
-    public void handleStopButton(javafx.event.ActionEvent actionEvent) {
-        // Use this to stop the timer
-        timeline.stop();
+	@FXML
+	public void handleStopButton(javafx.event.ActionEvent actionEvent) {
+		// Use this to stop the timer
+//		System.out.println("asjdsklajd l");
+		timeline.stop();
 
 //		Platform.exit();
     }
