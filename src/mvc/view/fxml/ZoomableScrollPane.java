@@ -12,8 +12,8 @@ import javafx.scene.layout.VBox;
 import javafx.event.EventHandler;
 
 public class ZoomableScrollPane extends ScrollPane {
-    private double scaleValue = 0.7;
-    private double zoomIntensity = 0.02;
+    private double scaleValue = 1;
+    private double zoomIntensity = 0.04;
     private Node target;
     private Node zoomNode;
 

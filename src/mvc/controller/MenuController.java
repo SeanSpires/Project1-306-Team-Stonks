@@ -37,7 +37,6 @@ public final class MenuController implements Initializable {
 	// Panels and other GUI components
 	@FXML private AnchorPane root_container;
 	@FXML private AnchorPane centerPane;
-	@FXML private AnchorPane fuckery;
 
 	@FXML
 	private ZoomableScrollPane ganttScrollPane;
@@ -86,8 +85,8 @@ public final class MenuController implements Initializable {
 	}
 
 	private void initGanttChart() {
-		ganttChart.setMinWidth(950);
-		ganttChart.setMinHeight(550);
+		ganttChart.setMinWidth(1034);
+		ganttChart.setMinHeight(600);
 		// TODO: Change the centerPane name.
 		centerPane.getChildren().add(ganttChart);
 		xAxis.setLabel("Time");

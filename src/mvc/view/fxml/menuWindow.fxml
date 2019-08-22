@@ -16,68 +16,46 @@
 <AnchorPane fx:id="root_container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvc.controller.MenuController">
     <AnchorPane fx:id="fuckery" prefHeight="489.0" prefWidth="570.0">
         <children>
-            <ZoomableScrollPane fx:id="ganttScrollPane" layoutY="41.0" pannable="true" prefHeight="489.0" prefWidth="570.0">
-                <content>
-                    <AnchorPane fx:id="centerPane" layoutX="0" layoutY="0" prefHeight="554.0" prefWidth="560.0" />
-                </content>
-            </ZoomableScrollPane>
+<!--            <ZoomableScrollPane fx:id="ganttScrollPane" layoutY="41.0" pannable="true" prefHeight="550.0" prefWidth="1050.0">-->
+<!--                <content>-->
+<!--                    <AnchorPane fx:id="centerPane" layoutX="0" layoutY="0" prefHeight="554.0" prefWidth="560.0" />-->
+<!--                </content>-->
+<!--            </ZoomableScrollPane>-->
         </children>
     </AnchorPane>
 
     <AnchorPane fx:id="_topMenu" prefHeight="100.0" prefWidth="1024.0" style="-fx-background-color: lightgrey;">
         <Button fx:id="_runBtn" graphicTextGap="0.0" layoutX="810.0" layoutY="29.0" mnemonicParsing="false" onAction="#handleRunButton">
-         <graphic>
-            <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../Images/icons8-play-52.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
+            <graphic>
+                <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/icons8-play-52.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
         <Button fx:id="_stopBtn" layoutX="936.0" layoutY="29.0" mnemonicParsing="false" onAction="#handleStopButton">
-         <graphic>
-            <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../Images/icons8-stop-60.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
-      <Label graphicTextGap="0.0" layoutX="38.0" layoutY="28.0" prefHeight="53.0" prefWidth="478.0" text="V I S U A L I Z A T I O N">
-         <font>
-            <Font name="Leelawadee UI Bold" size="36.0" />
-         </font>
-      </Label>
+            <graphic>
+                <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/icons8-stop-60.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Label graphicTextGap="0.0" layoutX="38.0" layoutY="28.0" prefHeight="45.0" prefWidth="335.0" text="V I S U A L I Z A T I O N">
+            <font>
+                <Font name="Leelawadee UI" size="30.0" />
+            </font>
+        </Label>
     </AnchorPane>
-   <AnchorPane fx:id="_bottomMenu" layoutY="517.0" prefHeight="200.0" prefWidth="1034.0">
-      <children>
-         <Label fx:id="_time" layoutX="91.0" layoutY="64.0" text="5.23">
-         <Label fx:id="timeLabel" layoutX="144.0" layoutY="110.0" text="TIME">
-            <font>
-               <Font name="System Bold" size="34.0" />
-            </font>
-         </Label>
-         <AnchorPane fx:id="_border" prefHeight="8.0" prefWidth="1034.0" />
-         <Label fx:id="_bottomnLabels" layoutX="92.0" layoutY="139.0" text="T I M E ">
-            <font>
-               <Font size="20.0" />
-            </font>
-         </Label>
-         <Label fx:id="_bottomnLabels" layoutX="260.0" layoutY="139.0" text="S C H E D U L E S">
-            <font>
-               <Font size="20.0" />
-            </font>
-         </Label>
-         <Label fx:id="_time" layoutX="315.0" layoutY="64.0" text="45">
-            <font>
-               <Font name="System Bold" size="34.0" />
-            </font>
-         </Label>
-         <Label fx:id="_bottomnLabels" layoutX="878.0" layoutY="139.0" text="I N P U T ">
-            <font>
-               <Font size="20.0" />
-            </font>
-         </Label>
-      </children>
-   </AnchorPane>
+    <AnchorPane fx:id="_bottomMenu" layoutY="550.0" prefHeight="250.0" prefWidth="1024.0" style="-fx-background-color: lightgrey;">
+        <children>
+            <Label fx:id="timeLabel" layoutX="144.0" layoutY="110.0" text="TIME">
+                <font>
+                    <Font size="30.0" />
+                </font>
+            </Label>
+        </children>
+    </AnchorPane>
 </AnchorPane>
