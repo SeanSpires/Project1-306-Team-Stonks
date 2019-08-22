@@ -62,15 +62,15 @@ public class SchedulerTest {
 //
 //		//Schedule s = scheduler.createBasicSchedule(tasks, 1);
 //        Schedule s = scheduler.createOptimalSchedule(tasks, 1);
-//		
+//
 //		List<Integer> scheduledTasks = new ArrayList<>();
 //
-//		
+//
 //		for (Task t : s.getTasks().keySet()) {
 //			scheduledTasks.add(t.getNodeNumber());
 //			System.out.println(t.getNodeNumber());
 //		}
-//		
+//
 //		List<Integer> scheduledTimes =  new ArrayList<>();
 //
 //		scheduledTimes.addAll(s.getTasks().values());
@@ -96,10 +96,10 @@ public class SchedulerTest {
 //
 //		assertEquals(expectedTasks, scheduledTasks);
 //		assertEquals(expectedTimes, scheduledTimes);
-//		
+//
 //	}
-    
-    
+
+
     @Test
 	public void testSimpleSchedule() {
 
@@ -130,17 +130,18 @@ public class SchedulerTest {
         tasks.add(task1);
 
 		//Schedule s = scheduler.createBasicSchedule(tasks, 1);
-        Schedule s = scheduler.createOptimalSchedule(tasks, 2);
-		
+        Schedule s = scheduler.createOptimalSchedule(tasks,5);
+
+
 		List<Integer> scheduledTasks = new ArrayList<>();
 
-		
-		
+
+
 		for (Task t : s.getTasks().keySet()) {
 			scheduledTasks.add(t.getNodeNumber());
 			System.out.println(t.getNodeNumber());
 		}
-		
+
 		List<Integer> scheduledTimes =  new ArrayList<>();
 
 		scheduledTimes.addAll(s.getTasks().values());
@@ -149,7 +150,7 @@ public class SchedulerTest {
             {
                 add(1);
                 add(2);
-           
+
             }
         };
 
@@ -163,7 +164,7 @@ public class SchedulerTest {
 
 		assertEquals(expectedTasks, scheduledTasks);
 		assertEquals(expectedTimes, scheduledTimes);
-		
+
 	}
 
 //    @Test
@@ -486,5 +487,3 @@ public class SchedulerTest {
 //
 //    }
 }
-
-
