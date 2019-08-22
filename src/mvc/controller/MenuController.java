@@ -43,6 +43,7 @@ public final class MenuController implements Initializable{
 	@FXML private Label _processors;
 	@FXML private Label _cores;
 	@FXML private Button _stopBtn;
+	@FXML private Button _runBtn;
 
     private FileIO fileio;
     private Scheduler scheduler;
@@ -140,6 +141,7 @@ public final class MenuController implements Initializable{
 		// Starts running the timer for the app.
 		runTimer();
 		_stopBtn.setDisable(false);
+		_runBtn.setDisable(true);
 
 		fileio.readFile(Main.inputFileName);
 		fileio.processNodes();
@@ -155,6 +157,7 @@ public final class MenuController implements Initializable{
 		// Use this to stop the timer
 		timeline.stop();
 		_stopBtn.setDisable(true);
+		_runBtn.setDisable(false);
     }
 
     // Replace partial schedule graph with own data structure.
