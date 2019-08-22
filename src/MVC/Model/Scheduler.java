@@ -49,10 +49,86 @@ public class Scheduler {
 	public Schedule createOptimalSchedule (List<Task> tasks, int numberOfProcessors) {
 
 		boolean notFinished = true;
-		double bestUpperBound = Double.POSITIVE_INFINITY;
+
+		double lowerBound = 0;
+
+		List<Node> openNodes = new ArrayList<>();
+
+		// Set up a root node
+		Node node = new Node();
+		node.setUnscheduledTasks(tasks);
+		node.addOpenNode(node);
+
+		Node bestNode = branchFromNode(node, numberOfProcessors);
+
+
+
+
+		// Need to convert bestNode to a schedule
 
 		return null;
 	}
+
+
+	public Node branchFromNode (Node node, int numProc){
+        double bestUpperBound = Double.POSITIVE_INFINITY;
+	    int startTime = 0;
+	    double upperBound = Double.POSITIVE_INFINITY;
+	    double lowerBound = 0;
+        for (Task t : node.getUnscheduledTasks()) {
+            for (int i = 1; i <= numProc; i++) {
+                Node childNode = new Node(node);
+                if (node.getAllScheduledTasks().containsAll(t.getParentTasks())|| t.getParentTasks().isEmpty()) {
+                    startTime = getStartTime(i, t, childNode);
+                    childNode.addScheduledTask(i, t);
+                    t.setProcessor(startTime);
+
+
+                    childNode.removeUnscheduledTask(t);
+                    childNode.addComputationTime(t, startTime + t.getWeight());
+
+
+
+                    upperBound = calcUpperBound(childNode, numProc);
+                    childNode.setUpperBound(upperBound);
+                    lowerBound = calcLowerBound(childNode, numProc);
+                    childNode.setLowerBound(lowerBound);
+
+                    if (upperBound < bestUpperBound) {
+                        bestUpperBound = upperBound;
+                        for (Node n : node.getOpenNodes()) {
+                            if (n.getUpperBound() > bestUpperBound) {
+                                node.removeOpenNode(n);
+                            }
+                        }
+                    }
+
+
+                    if (childNode.getLowerBound() > childNode.getUpperBound()) {
+                        node.removeOpenNode(childNode);
+                    } else {
+                        node.addOpenNode(childNode);
+                    }
+
+                }
+            }
+        }
+        Node minNode = new Node(node);
+        for (Node n : node.getOpenNodes()) {
+            if (n.getLowerBound() < minNode.getLowerBound()) {
+                minNode = n;
+            }
+        }
+
+        node = minNode;
+
+        if (node.getLowerBound() == node.getUpperBound() && node.getUnscheduledTasks().isEmpty()) {
+            return node;
+        } else {
+            return branchFromNode(node, numProc);
+        }
+
+    }
 
 
 
@@ -72,17 +148,18 @@ public class Scheduler {
 	}
 
 
-	private int calcStartTime() {
-		int maxStartTime = 0;
 
-		return maxStartTime;
+	private double calcLowerBound(Node node, int numProc) {
 
-	}
+		double makeSpan = 0;
+		int sum = 0;
+        List<Task> unscheduledTasks = node.getUnscheduledTasks();
+        for (Task t : unscheduledTasks) {
+            sum += t.getWeight();
+        }
 
-	private double calcLowerBound() {
-
-		int makeSpan = 0;
-
+        makeSpan = calcMakeSpan(node);
+        makeSpan += (sum / numProc);
 
 		return makeSpan;
 
@@ -134,7 +211,7 @@ public class Scheduler {
                 }
             }
             int tempStartTime = 0;
-            int bestProc = 0;
+            int bestProc = 1;
             for (int i = 1; i <= numProc; i++) {
                 tempStartTime = getStartTime(i, task, node);
 

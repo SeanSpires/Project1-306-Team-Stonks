@@ -19,9 +19,9 @@ public class Node {
     // List of nodes to be expanded
     private List<Node> openNodes;
     // Upper Bound
-    private int upperBound;
+    private double upperBound;
     // Lower Bound
-    private int lowerBound;
+    private double lowerBound;
 
     public Node(Node node) {
         this.unscheduledTasks = node.getUnscheduledTasks();
@@ -30,6 +30,15 @@ public class Node {
         this.openNodes = node.getOpenNodes();
         this.upperBound = node.getUpperBound();
         this.lowerBound = node.getLowerBound();
+    }
+
+    public Node () {
+        this.unscheduledTasks = new ArrayList<>();
+        this.scheduledTasks = new HashMap<>();
+        this.computationTimes = new HashMap<>();
+        this.openNodes = new ArrayList<>();
+        this.upperBound = Double.POSITIVE_INFINITY;
+        this.lowerBound = 0;
     }
 
 
@@ -75,7 +84,9 @@ public class Node {
 
 
     public void addOpenNode(Node node) {
-        this.openNodes.add(node);
+        if (!node.getOpenNodes().contains(node)) {
+            this.openNodes.add(node);
+        }
     }
 
     public List<Task> getScheduledTasks(int processor) {
@@ -83,20 +94,35 @@ public class Node {
     }
 
 
-    public int getUpperBound() {
+    public double getUpperBound() {
         return upperBound;
     }
 
-    public void setUpperBound(int upperBound) {
+    public void setUpperBound(double upperBound) {
         this.upperBound = upperBound;
     }
 
-    public int getLowerBound() {
+    public double getLowerBound() {
         return lowerBound;
     }
 
-    public void setLowerBound(int lowerBound) {
+    public void setLowerBound(double lowerBound) {
         this.lowerBound = lowerBound;
+    }
+
+    public void removeOpenNode(Node node) {
+        if (this.openNodes.contains(node)) {
+            this.openNodes.remove(node);
+        }
+    }
+
+    public List<Task> getAllScheduledTasks() {
+        List<Task> list = new ArrayList<>();
+        Set<Integer> keys = this.getScheduledTasks().keySet();
+        for (Integer i : keys) {
+            list.addAll(this.getScheduledTasks(i));
+        }
+        return list;
     }
 
 
