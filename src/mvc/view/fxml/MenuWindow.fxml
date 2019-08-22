@@ -73,7 +73,7 @@
                <Font size="18.0" />
             </font>
          </Label>
-         <Label fx:id="_cores" layoutX="753.0" layoutY="32.0" text="4">
+         <Label fx:id="_cores" layoutX="753.0" layoutY="32.0" text="1">
             <font>
                <Font name="Leelawadee UI" size="34.0" />
             </font>
@@ -83,7 +83,7 @@
                <Font size="18.0" />
             </font>
          </Label>
-         <Label fx:id="_processors" layoutX="913.0" layoutY="32.0" text="4">
+         <Label fx:id="_processors" layoutX="913.0" layoutY="32.0" text="1">
             <font>
                <Font name="Leelawadee UI" size="34.0" />
             </font>

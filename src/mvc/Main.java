@@ -71,6 +71,7 @@ public class Main extends Application {
                 Integer testValue = Integer.parseInt(args[1]);
             } catch (NumberFormatException | NullPointerException nfe) {
                 isValid = false;
+                System.out.println();
             }
 
             if(isValid){
@@ -83,27 +84,7 @@ public class Main extends Application {
             }
         }
 
-        if(args.length == 3){
-            if(args[2].equals("-p")) {
-                System.out.println("No valid input for number of cores (after -p).");
-                runFailed();
-
-            }
-            else if(args[2].equals("-o")) {
-                System.out.println("No valid input for file output name (after -o).");
-                runFailed();
-            }
-            else if(args[2].equals("-v")){
-                launch();
-            }
-            else {
-                runFailed();
-            }
-
-
-        }
-
-        if(args.length > 3) {
+        if(args.length >= 3) {
             List<String> argsList = Arrays.asList(args);
             numberOfCores = 1;
 

@@ -1,9 +1,5 @@
 package mvc.controller;
 
-import javafx.application.Platform;
-import mvc.Main;
-import mvc.model.*;
-import mvc.view.fxml.ZoomableScrollPane;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -16,10 +12,12 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
-
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import mvc.Main;
+import mvc.model.*;
+import mvc.view.fxml.ZoomableScrollPane;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -66,10 +64,6 @@ public final class MenuController implements Initializable{
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		getInputs();
-
-
-
 		fileio = new FileIO();
 
 		xAxis = new NumberAxis();
@@ -140,39 +134,12 @@ public final class MenuController implements Initializable{
 
 	}
 
-	/**
-	 *  Performs the action when the search button is clicked.
-	 */
-	@FXML private void searchOnAction(ActionEvent event) {
-
-	}
-
-	/**
-	 * Performs the action when the delete button is clicked.
-	 */
-	@FXML private void deleteOnAction(ActionEvent event) {
-	}
-
-
-	/**
-	 * Performs the action when the clear button is clicked.
-	 */
-	@FXML private void clearOnAction(ActionEvent event) {
-
-
-	}
-
-	/**
-	 *  Performs the action when the insert button is clicked.
-	 */
-	@FXML private void insertOnAction(ActionEvent event) {
-
-	}
-
 	@FXML
 	public void handleRunButton(javafx.event.ActionEvent actionEvent) {
 		// Starts running the timer for the app.
 		runTimer();
+		getInputs();
+
 		fileio.readFile(Main.inputFileName);
 		fileio.processNodes();
 		fileio.processTransitions();
