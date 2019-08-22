@@ -2,13 +2,23 @@
     -fx-font-family: "System";
     -fx-font-size: 1em;
     -fx-base: rgb(59,66,77);
+    -fx-text-background-color: rgb(245,245,245);
+}
 
-    -fx-background-color:rgb(59,66,77);
-    -fx-focus-color: rgb(59,66,77);
-    -fx-control-inner-background: rgb(59,66,77);
-    -fx-text-background-color: rgba(245,245,245);
-    -fx-inner-border: linear-gradient(to bottom, derive(-fx-color,50%) 0%, derive(-fx-color,-5%) 100%);
-    -fx-body-color: linear-gradient( to bottom, derive(-fx-color, -2%) 0%, derive(-fx-color, 9%) 50%, derive(-fx-color, -9%) 50.5%, derive(-fx-color, -69%) 100%);
+#_topMenu{
+    -fx-background-color: rgba(59,66,77);
+    -fx-border-color: rgba(255,255,255, 0.0);
+}
+
+#ganttScrollPane{
+    -fx-border-color: rgba(255,255,255, 0.0);
+}
+
+#centerPane{
+    -fx-border-color: rgba(255,255,255, 0.0);
+    -fx-font-size: 28px;
+    -fx-padding: 10px;
+    -fx-font-family: "Leelawadee UI";
 }
 
 
@@ -32,9 +42,14 @@
     -fx-background-color: rgb(53,147,161); /*rgb(140,208,213);*/
 }
 
-#_time{
+#_processors{
     -fx-text-background-color: rgb(53,147,161);
 }
+
+#_cores{
+    -fx-text-background-color: rgb(53,147,161);
+}
+
 
 #_timerOutput{
     -fx-text-background-color: rgb(53,147,161);

@@ -73,7 +73,6 @@ public class Main extends Application {
                 Integer testValue = Integer.parseInt(args[1]);
             } catch (NumberFormatException | NullPointerException nfe) {
                 isValid = false;
-                System.out.println();
             }
 
             if(isValid){
@@ -90,7 +89,6 @@ public class Main extends Application {
             List<String> argsList = Arrays.asList(args);
             numberOfCores = 1;
             numberOfProcessors = Integer.parseInt(args[1]);
-            System.out.println(numberOfProcessors);
 
             if (argsList.contains("-o")) {
                 try {
@@ -115,8 +113,6 @@ public class Main extends Application {
             if (argsList.contains("-v")) {
                 launch();
             }
-
-            System.out.println("\n-p: value:"+numberOfCores+"  -o value:"+outputFileName);
 
             runAlgorithm();
             System.exit(1);

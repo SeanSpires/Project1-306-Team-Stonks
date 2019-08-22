@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -41,6 +42,7 @@ public final class MenuController implements Initializable{
 	@FXML private Timer timer;
 	@FXML private Label _processors;
 	@FXML private Label _cores;
+	@FXML private Button _stopBtn;
 
     private FileIO fileio;
     private Scheduler scheduler;
@@ -69,7 +71,7 @@ public final class MenuController implements Initializable{
 		xAxis = new NumberAxis();
 		yAxis = new CategoryAxis();
 		ganttChart = new GanttChart<Number, String>(xAxis, yAxis);
-
+		getInputs();
 		initScrollPane();
 		initGanttChart();
 
@@ -92,19 +94,17 @@ public final class MenuController implements Initializable{
 		ganttChart.setMinHeight(600);
 		// TODO: Change the centerPane name.
 		centerPane.getChildren().add(ganttChart);
-		xAxis.setLabel("Time");
+		xAxis.setLabel("T I M E");
 		xAxis.setTickLabelFill(Color.BLACK);
 
-		yAxis.setLabel("Processor No.");
+		yAxis.setLabel("P R O C E S S O R S");
 		yAxis.setTickLabelFill(Color.BLACK);
 		initGanttChartYAxis();
-		System.out.println(Main.numberOfProcessors);
-		System.out.println(processorList);
 		yAxis.setCategories(FXCollections.<String>observableArrayList(processorList));
 		ganttChart.setTitle("");
 		ganttChart.setLegendVisible(true);
 		ganttChart.setBlockHeight(50);
-		//ganttChart.getStylesheets().add(getClass().getResource("ganttchart.css").toExternalForm());
+				//ganttChart.getStylesheets().add(getClass().getResource("ganttchart.css").toExternalForm());
 	}
 
 	private void initGanttChartYAxis(){
@@ -113,7 +113,6 @@ public final class MenuController implements Initializable{
 			ganttChart.getData().add(series);
 			String processor = "" + i;
 			processorList.add(processor);
-			System.out.println("y");
 		}
 	}
 
@@ -140,7 +139,7 @@ public final class MenuController implements Initializable{
 	public void handleRunButton(javafx.event.ActionEvent actionEvent) {
 		// Starts running the timer for the app.
 		runTimer();
-		getInputs();
+		_stopBtn.setDisable(false);
 
 		fileio.readFile(Main.inputFileName);
 		fileio.processNodes();
@@ -154,10 +153,8 @@ public final class MenuController implements Initializable{
 	@FXML
 	public void handleStopButton(javafx.event.ActionEvent actionEvent) {
 		// Use this to stop the timer
-//		System.out.println("asjdsklajd l");
 		timeline.stop();
-
-//		Platform.exit();
+		_stopBtn.setDisable(true);
     }
 
     // Replace partial schedule graph with own data structure.
