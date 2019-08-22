@@ -26,7 +26,7 @@ public class GUILaunch extends Application {
             // Load fxml controller
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource(
-                            "/mvc/view/fxml/test.fxml"
+                            "/mvc/view/fxml/MenuWindow.fxml"
                     )
             );
 

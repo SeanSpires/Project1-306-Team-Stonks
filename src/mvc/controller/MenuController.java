@@ -51,7 +51,7 @@ public final class MenuController implements Initializable {
 	private Timeline timeline;
 
 	@FXML
-	private Label timeLabel;
+	private Label _timerOutput;
 
 	@FXML
 	private Timer timer;
@@ -122,7 +122,7 @@ public final class MenuController implements Initializable {
 				new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent event) {
 						timeTaken = timeTaken + 0.01;
-						timeLabel.setText(String.format("%.2f", timeTaken));
+						_timerOutput.setText(String.format("%.2f", timeTaken));
 					}
 				})
 		);

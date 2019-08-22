@@ -42,9 +42,9 @@
             </font>
         </Label>
     </AnchorPane>
-    <AnchorPane fx:id="_bottomMenu" layoutY="550.0" prefHeight="150.0" prefWidth="1034.0">
+    <AnchorPane fx:id="_bottomMenu" layoutY="550.0" prefHeight="180.0" prefWidth="1034.0">
         <children>
-            <Label fx:id="_time" layoutX="91.0" layoutY="32.0" text="5.23">
+            <Label fx:id="_timerOutput" layoutX="91.0" layoutY="32.0" text="5.23">
                 <font>
                     <Font name="System Bold" size="34.0" />
                 </font>
