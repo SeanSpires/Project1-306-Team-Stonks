@@ -2,24 +2,31 @@ package MVC.Controller;
 
 import MVC.Main;
 import MVC.Model.*;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
 
 /**
  * Constructs the GUI components and performs events for displaying and
@@ -45,6 +52,15 @@ public final class MenuController implements Initializable {
 
 	private List<String> processorList = new ArrayList<String>();
 
+	private Timeline timeline;
+
+	@FXML
+	private Label timeLabel;
+
+	@FXML
+	private Timer timer;
+
+	private double timeTaken;
 
 	// Init Gantt Chart.
 	private NumberAxis xAxis;
@@ -75,6 +91,7 @@ public final class MenuController implements Initializable {
 	private void initGanttChart() {
 		ganttChart.setMinWidth(600);
 		ganttChart.setMinHeight(590);
+		// TODO: Change the centerPane name.
 		centerPane.getChildren().add(ganttChart);
 		xAxis.setLabel("Time");
 		xAxis.setTickLabelFill(Color.WHITE);
@@ -97,6 +114,24 @@ public final class MenuController implements Initializable {
 			String processor = "" + (i);
 			processorList.add(processor);
 		}
+	}
+
+	// Should be called when the start button is pressed.
+	private void runTimer() {
+		timeTaken = 0;
+		timer = new Timer();
+
+		timeline = new Timeline(new KeyFrame(Duration.millis( 1 ),
+				new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent event) {
+						timeTaken = timeTaken + 0.001;
+						timeLabel.setText(String.format("%.3f", timeTaken));
+					}
+				})
+		);
+		timeline.setCycleCount( Animation.INDEFINITE );
+		timeline.play();
+
 	}
 
 	/**
@@ -130,7 +165,8 @@ public final class MenuController implements Initializable {
 
 	@FXML
 	public void handleRunButton(javafx.event.ActionEvent actionEvent) {
-
+		// Starts running the timer for the app.
+		runTimer();
 		fileio.readFile(Main.inputFileName);
 		fileio.processNodes();
 		fileio.processTransitions();
