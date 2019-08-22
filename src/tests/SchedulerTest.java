@@ -116,24 +116,55 @@ public class SchedulerTest {
 
         Task task1 = new Task(1);
         Task task2 = new Task(2);
+        Task task3 = new Task(3);
+        Task task4 = new Task(4);
+        Task task5 = new Task(5);
 
         task1.setWeight(2);
-        task2.setWeight(3);
+        task2.setWeight(2);
+        task3.setWeight(2);
+        task4.setWeight(5);
+        task5.setWeight(1);
 
-        task1.setSubTasks(task2, 10);
-
-
-
+        task1.setSubTasks(task2, 2);
+        task1.setSubTasks(task3, 2);
+        
         task2.setParentTasks(task1);
+        task3.setParentTasks(task1);
+        
+        task2.setSubTasks(task4, 2);
+        
+        task3.setSubTasks(task5, 2);
+        
+        task4.setParentTasks(task2);
+        
+        task4.setSubTasks(task5, 2);
+        task5.setParentTasks(task4);
+        task5.setParentTasks(task3);
+        
+        
+        
+
 
 
         tasks.add(task2);
         tasks.add(task1);
+        tasks.add(task3);
+        tasks.add(task4);
+        tasks.add(task5);
 
 		//Schedule s = scheduler.createBasicSchedule(tasks, 1);
-        Node s = scheduler.createOptimalSchedule(tasks,2);
+        Node s = scheduler.createOptimalSchedule(tasks, 3);
         
-        assertEquals(s.getScheduledTasks().keySet(), 3);
+//        for (Task t : s.getAllScheduledTasks()) {
+//        	
+//        	System.out.println("Node number: " + t.getNodeNumber() + "Comp time: " + s.getComputationTimes().get(t)
+//        			+ " processor: " +  t.getProcessor());
+//        }
+        
+      
+        assertEquals(s.getComputationTimes().values(), 3);
+        
         
 		List<Integer> scheduledTasks = new ArrayList<>();
 

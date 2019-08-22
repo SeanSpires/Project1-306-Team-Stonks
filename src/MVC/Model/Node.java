@@ -2,6 +2,7 @@ package MVC.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -11,9 +12,9 @@ public class Node {
     private List<Task> unscheduledTasks;
 
     // Map of scheduled tasks
-    private HashMap<Integer, List<Task>> scheduledTasks;
+    private LinkedHashMap<Integer, List<Task>> scheduledTasks;
     // Computation time (end time) for each scheduled task
-    private HashMap<Task, Integer> computationTimes;
+    private LinkedHashMap<Task, Integer> computationTimes;
     // List of nodes to be expanded
     private List<Node> openNodes;
     // Upper Bound
@@ -32,11 +33,11 @@ public class Node {
 
     public Node () {
         this.unscheduledTasks = new ArrayList<>();
-        this.scheduledTasks = new HashMap<>();
-        this.computationTimes = new HashMap<>();
+        this.scheduledTasks = new LinkedHashMap<>();
+        this.computationTimes = new LinkedHashMap<>();
         this.openNodes = new ArrayList<>();
         this.upperBound = Double.POSITIVE_INFINITY;
-        this.lowerBound = 0;
+        this.lowerBound = Double.POSITIVE_INFINITY;
     }
 
 
@@ -52,11 +53,11 @@ public class Node {
         this.unscheduledTasks.remove(task);
     }
 
-    public HashMap<Task, Integer> getComputationTimes() {
+    public LinkedHashMap<Task, Integer> getComputationTimes() {
         return computationTimes;
     }
 
-    public void setComputationTimes(HashMap<Task, Integer> computationTimes) {
+    public void setComputationTimes(LinkedHashMap<Task, Integer> computationTimes) {
         this.computationTimes = computationTimes;
     }
 
@@ -64,11 +65,11 @@ public class Node {
         this.computationTimes.put(task,time);
     }
 
-    public HashMap<Integer, List<Task>> getScheduledTasks() {
+    public LinkedHashMap<Integer, List<Task>> getScheduledTasks() {
         return scheduledTasks;
     }
 
-    public void setScheduledTasks(HashMap<Integer, List<Task>> scheduledTasks) {
+    public void setScheduledTasks(LinkedHashMap<Integer, List<Task>> scheduledTasks) {
         this.scheduledTasks = scheduledTasks;
     }
 
@@ -129,15 +130,15 @@ public class Node {
     	
     	if (this.scheduledTasks.get(proc) == null) {
     		tempList.add(task);
+            this.scheduledTasks.put(proc, tempList);
     	}
     	else {
             tempList = this.scheduledTasks.get(proc);
-            this.scheduledTasks.remove(proc);
             tempList.add(task);
+            this.scheduledTasks.put(proc, tempList);
     	}
     
         
-        this.scheduledTasks.put(proc, tempList);
     }
 
 }
