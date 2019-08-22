@@ -50,7 +50,7 @@ public class Scheduler {
 
 
 		int numProc = numberOfProcessors;
-
+		
 		Node node = new Node();
 		node.setUnscheduledTasks(tasks);
 		node.addOpenNode(node);
@@ -64,14 +64,13 @@ public class Scheduler {
 			double lowerBound;
 
 			for (Task t : new ArrayList<>(node.getUnscheduledTasks())) {		
-				boolean isScheduled = false;
 				for (int i = 1; i < numProc + 1; i++) {
 					Node childNode = new Node();
 					childNode = node;
 					if (node.getScheduledTasks().containsAll(t.getParentTasks()) || t.getParentTasks().isEmpty()) {
-						isScheduled = true;
 						startTime = getStartTime(i, t, childNode);
 						t.setProcessor(i);
+						t.setStatus(startTime + t.getWeight());
 						childNode.addScheduledTask(t);
 						childNode.removeUnscheduledTask(t);
 						childNode.addComputationTime(t, startTime + t.getWeight());
@@ -98,17 +97,14 @@ public class Scheduler {
 						}	
 						
 						if (childNode.getLowerBound() > childNode.getUpperBound()) {
-							continue;
+							break;
 						}
 						else {
 							node.addOpenNode(childNode);
 						}
 					}
 				}
-				
-				if (isScheduled) {
-					node.removeUnscheduledTask(t);
-				}
+
 			}
 			
 			Node minNode = new Node();
@@ -124,6 +120,7 @@ public class Scheduler {
 			if (node.getLowerBound() == node.getUpperBound() && node.getUnscheduledTasks().isEmpty()) {
 				return node;
 			}
+			
 		}
 
 		return null;
@@ -135,10 +132,10 @@ public class Scheduler {
 	private int calcMakeSpan(Node node) {
 		int makeSpan = 0;
 		int temptCompTime = 0;
-		Set<Task> tasks = node.getComputationTimes().keySet();
+		List<Task> tasks = node.getScheduledTasks();
 
 		for (Task t : tasks) {
-			temptCompTime = node.getComputationTimes().get(t);
+			temptCompTime = t.getStatus();
 			if (temptCompTime > makeSpan) {
 				makeSpan = temptCompTime;
 			}
@@ -197,8 +194,10 @@ public class Scheduler {
 					bestProc = i;
 				}
 			}
+		
 
 			task.setProcessor(bestProc);
+			task.setStatus((int) minStartTime + task.getWeight());
 			node.addScheduledTask(task);
 			node.removeUnscheduledTask(task);
 			node.addComputationTime(task, (int) minStartTime + task.getWeight());
@@ -219,12 +218,12 @@ public class Scheduler {
 		for (Task t : task.getParentTasks()) {
 			if (node.getScheduledTasks().contains(t)) {
 				comCost = 0;
-				endTime = node.getComputationTimes().get(t);
+				endTime = t.getStatus();
 				allStartTimes.add(comCost + endTime);
 			} 
 			else {
 				comCost = t.getSubTasks().get(task);
-				endTime = node.getComputationTimes().get(t);
+				endTime = t.getStatus();
 				allStartTimes.add(comCost + endTime);		
 			}
 		}
