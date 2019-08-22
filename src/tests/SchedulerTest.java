@@ -154,13 +154,14 @@ public class SchedulerTest {
         tasks.add(task5);
 
 		//Schedule s = scheduler.createBasicSchedule(tasks, 1);
-        Node s = scheduler.createOptimalSchedule(tasks, 3);
+        Node s = scheduler.createOptimalSchedule(tasks, 2);
         
-//        for (Task t : s.getAllScheduledTasks()) {
-//        	
-//        	System.out.println("Node number: " + t.getNodeNumber() + "Comp time: " + s.getComputationTimes().get(t)
-//        			+ " processor: " +  t.getProcessor());
-//        }
+        System.out.println(s.getScheduledTasks().size());
+        for (Task t : s.getScheduledTasks()) {
+        	
+        	System.out.println("Node number: " + t.getNodeNumber() + "Comp time: " + s.getComputationTimes().get(t)
+        			+ " processor: " +  t.getProcessor());
+        }
         
       
         assertEquals(s.getComputationTimes().values(), 3);

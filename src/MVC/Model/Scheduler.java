@@ -50,11 +50,10 @@ public class Scheduler {
 
 
 		int numProc = numberOfProcessors;
-		List<Node> openNodes = new ArrayList<>();
 
 		Node node = new Node();
 		node.setUnscheduledTasks(tasks);
-		openNodes.add(node);
+		node.addOpenNode(node);
 		
 		boolean algoNotFinished = true;
 
@@ -64,13 +63,16 @@ public class Scheduler {
 			double upperBound;
 			double lowerBound;
 
-			for (Task t: new ArrayList<>(node.getUnscheduledTasks())) {
+			for (Task t : new ArrayList<>(node.getUnscheduledTasks())) {		
+				boolean isScheduled = false;
 				for (int i = 1; i < numProc + 1; i++) {
-					Node childNode = new Node(node);
-					if (node.getAllScheduledTasks().containsAll(t.getParentTasks()) || t.getParentTasks().isEmpty()) {
+					Node childNode = new Node();
+					childNode = node;
+					if (node.getScheduledTasks().containsAll(t.getParentTasks()) || t.getParentTasks().isEmpty()) {
+						isScheduled = true;
 						startTime = getStartTime(i, t, childNode);
 						t.setProcessor(i);
-						childNode.addScheduledTask(i, t);
+						childNode.addScheduledTask(t);
 						childNode.removeUnscheduledTask(t);
 						childNode.addComputationTime(t, startTime + t.getWeight());
 
@@ -84,31 +86,34 @@ public class Scheduler {
 						if (upperBound < bestUpperBound) {
 							List<Node> nodesToRemove = new ArrayList<>();
 							bestUpperBound = upperBound;
-							for (Node n : openNodes) {
+							for (Node n : node.getOpenNodes()) {
 								if (n.getLowerBound() > bestUpperBound) {
 									nodesToRemove.add(n);
 								}
 							}
 							
 							for (Node n : nodesToRemove) {
-								openNodes.remove(n);
+								n.removeOpenNode(n);
 							}
-						}
+						}	
 						
-						
-							
 						if (childNode.getLowerBound() > childNode.getUpperBound()) {
-							//openNodes.remove(childNode);
+							continue;
 						}
 						else {
-							openNodes.add(childNode);
+							node.addOpenNode(childNode);
 						}
 					}
 				}
+				
+				if (isScheduled) {
+					node.removeUnscheduledTask(t);
+				}
 			}
 			
-			Node minNode = new Node(node);
-			for (Node n : openNodes) {
+			Node minNode = new Node();
+			minNode = node;
+			for (Node n : node.getOpenNodes()) {
 				if (n.getLowerBound() < minNode.getLowerBound()) {
 					minNode = n;
 				}
@@ -116,10 +121,6 @@ public class Scheduler {
 			
 			node = minNode;
 			
-			for (Task t : node.getAllScheduledTasks()) {
-				System.out.println(t.getNodeNumber());
-			}
-
 			if (node.getLowerBound() == node.getUpperBound() && node.getUnscheduledTasks().isEmpty()) {
 				return node;
 			}
@@ -176,7 +177,7 @@ public class Scheduler {
 
 			
 			for (Task t : unscheduledTasks) {
-				if (node.getAllScheduledTasks().contains(t.getParentTasks()) || t.getParentTasks().isEmpty()) {
+				if (node.getScheduledTasks().contains(t.getParentTasks()) || t.getParentTasks().isEmpty()) {
 					task = t;
 					break;
 				}
@@ -198,7 +199,7 @@ public class Scheduler {
 			}
 
 			task.setProcessor(bestProc);
-			node.addScheduledTask(bestProc, task);
+			node.addScheduledTask(task);
 			node.removeUnscheduledTask(task);
 			node.addComputationTime(task, (int) minStartTime + task.getWeight());
 			unscheduledTasks.remove(task);
@@ -216,7 +217,7 @@ public class Scheduler {
 		allStartTimes.add(0);
 		
 		for (Task t : task.getParentTasks()) {
-			if (node.getScheduledTasks().get(proc).contains(t)) {
+			if (node.getScheduledTasks().contains(t)) {
 				comCost = 0;
 				endTime = node.getComputationTimes().get(t);
 				allStartTimes.add(comCost + endTime);
@@ -232,30 +233,30 @@ public class Scheduler {
 	}
 
 
-	private Task pickGreedyTask(Node node) {
-		double minWeight = Double.POSITIVE_INFINITY;
-		List<Task> readyTaskList = new ArrayList<>();
-		Task minTask = null;
-
-		// Find those tasks that all their predecessors are already scheduled
-		for (Task t : node.getUnscheduledTasks()) {
-			if (node.getScheduledTasks().keySet().contains(t.getParentTasks())) {
-				readyTaskList.add(t);
-			}
-		}
-
-		for (Task t : readyTaskList) {
-			if (t.getWeight() < minWeight) {
-				minTask = t;
-				minWeight = t.getWeight();
-			}
-
-		}
-
-		return minTask;
-
-
-	}
+//	private Task pickGreedyTask(Node node) {
+//		double minWeight = Double.POSITIVE_INFINITY;
+//		List<Task> readyTaskList = new ArrayList<>();
+//		Task minTask = null;
+//
+//		// Find those tasks that all their predecessors are already scheduled
+//		for (Task t : node.getUnscheduledTasks()) {
+//			if (node.getScheduledTasks().keySet().contains(t.getParentTasks())) {
+//				readyTaskList.add(t);
+//			}
+//		}
+//
+//		for (Task t : readyTaskList) {
+//			if (t.getWeight() < minWeight) {
+//				minTask = t;
+//				minWeight = t.getWeight();
+//			}
+//
+//		}
+//
+//		return minTask;
+//
+//
+//	}
 
 
 

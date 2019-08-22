@@ -10,9 +10,10 @@ public class Node {
 
 
     private List<Task> unscheduledTasks;
+    
 
     // Map of scheduled tasks
-    private LinkedHashMap<Integer, List<Task>> scheduledTasks;
+    private List<Task>  scheduledTasks;
     // Computation time (end time) for each scheduled task
     private LinkedHashMap<Task, Integer> computationTimes;
     // List of nodes to be expanded
@@ -31,9 +32,11 @@ public class Node {
         this.lowerBound = node.getLowerBound();
     }
 
-    public Node () {
+    
+    
+    public Node() {
         this.unscheduledTasks = new ArrayList<>();
-        this.scheduledTasks = new LinkedHashMap<>();
+        this.scheduledTasks = new ArrayList<Task> ();
         this.computationTimes = new LinkedHashMap<>();
         this.openNodes = new ArrayList<>();
         this.upperBound = Double.POSITIVE_INFINITY;
@@ -65,11 +68,11 @@ public class Node {
         this.computationTimes.put(task,time);
     }
 
-    public LinkedHashMap<Integer, List<Task>> getScheduledTasks() {
+    public List<Task>  getScheduledTasks() {
         return scheduledTasks;
     }
 
-    public void setScheduledTasks(LinkedHashMap<Integer, List<Task>> scheduledTasks) {
+    public void setScheduledTasks(List<Task> scheduledTasks) {
         this.scheduledTasks = scheduledTasks;
     }
 
@@ -88,9 +91,9 @@ public class Node {
         }
     }
 
-    public List<Task> getScheduledTasks(int processor) {
-        return scheduledTasks.get(processor);
-    }
+//    public List<Task> getScheduledTasks(int processor) {
+//        return scheduledTasks;
+//    }
 
 
     public double getUpperBound() {
@@ -115,29 +118,30 @@ public class Node {
         }
     }
 
-    public List<Task> getAllScheduledTasks() {
-        List<Task> list = new ArrayList<>();
-        Set<Integer> keys = this.getScheduledTasks().keySet();
-        for (Integer i : keys) {
-            list.addAll(this.getScheduledTasks(i));
-        }
-        return list;
-    }
+//    public List<Task> getAllScheduledTasks() {
+//        List<Task> list = new ArrayList<>();
+//        Set<Integer> keys = this.getScheduledTasks().keySet();
+//        for (Integer i : keys) {
+//            list.addAll(this.getScheduledTasks(i));
+//        }
+//        return list;
+//    }
 
 
-    public void addScheduledTask(int proc, Task task) {
-    	List<Task> tempList = new ArrayList<>();
-    	
-    	if (this.scheduledTasks.get(proc) == null) {
-    		tempList.add(task);
-            this.scheduledTasks.put(proc, tempList);
-    	}
-    	else {
-            tempList = this.scheduledTasks.get(proc);
-            tempList.add(task);
-            this.scheduledTasks.put(proc, tempList);
-    	}
-    
+    public void addScheduledTask(Task task) {
+//    	List<Task> tempList = new ArrayList<>();
+//    	
+//    	if (this.scheduledTasks.get(proc) == null) {
+//    		tempList.add(task);
+//            this.scheduledTasks.put(proc, tempList);
+//    	}
+//    	else {
+//            tempList = this.scheduledTasks.get(proc);
+//            tempList.add(task);
+//            this.scheduledTasks.put(proc, tempList);
+//    	}
+    	this.scheduledTasks.add(task);
+//    
         
     }
 
