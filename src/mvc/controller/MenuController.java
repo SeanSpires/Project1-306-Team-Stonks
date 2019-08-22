@@ -1,5 +1,6 @@
 package mvc.controller;
 
+import javafx.application.Platform;
 import mvc.Main;
 import mvc.model.*;
 import mvc.view.fxml.ZoomableScrollPane;
@@ -29,10 +30,11 @@ import java.util.Timer;
 /**
  * Constructs the GUI components and performs events for displaying and
  * manipulating the binary tree.
+ *
  * @author Eric Canull
  * @version 1.0
  */
-public final class MenuController implements Initializable {
+public final class MenuController {
 
 
 	@FXML private AnchorPane centerPane;
@@ -187,7 +189,17 @@ public final class MenuController implements Initializable {
 		timeline.stop();
 
 //		Platform.exit();
-	}
+    }
 
+    // Replace partial schedule graph with own data structure.
+//    public void updateGraph(Current Best Schedule) {
+//
+//        // Clear gantt chart
+//        // Add nodes to gantt chart
+//        for (all Tasks in Schedule){
+//            // Iterate through the schedule and sort it out in the appropriate data structure.
+//        }
+////
+//    }
 
 }
