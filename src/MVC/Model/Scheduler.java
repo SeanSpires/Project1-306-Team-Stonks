@@ -71,7 +71,6 @@ public class Scheduler {
 					childNode = node;
 					if (node.getScheduledTasks().containsAll(t.getParentTasks()) || t.getParentTasks().isEmpty()) {
 						t.setProcessor(i);
-						System.out.println(t.getNodeNumber());
 						startTime = getStartTime(i, t, childNode);
 						t.setStatus(startTime + t.getWeight());
 						t.setStartTime(startTime);
@@ -103,7 +102,6 @@ public class Scheduler {
 						}
 					}
 				}
-
 			}
 
 			Node minNode = new Node();
@@ -149,7 +147,7 @@ public class Scheduler {
 
 		double makeSpan = 0;
 		int sum = 0;
-		List<Task> unscheduledTasks = new ArrayList<>(node.getUnscheduledTasks());
+		List<Task> unscheduledTasks = node.getUnscheduledTasks();
 		for (Task t : unscheduledTasks) {
 			sum += t.getWeight();
 		}
@@ -164,7 +162,7 @@ public class Scheduler {
 
 	private double calcUpperBound(Node node, int numProc) {
 		int makeSpan = 0;
-		List<Task> unscheduledTasks = new ArrayList<>(node.getUnscheduledTasks());
+		List<Task> unscheduledTasks =node.getUnscheduledTasks();
 
 
 		while (!unscheduledTasks.isEmpty()) {
