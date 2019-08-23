@@ -159,12 +159,12 @@ public class SchedulerTest {
         System.out.println(s.getScheduledTasks().size());
         for (Task t : s.getScheduledTasks()) {
         	
-        	System.out.println("Node number: " + t.getNodeNumber() + "Comp time: " + s.getComputationTimes().get(t)
+        	System.out.println("Node number: " + t.getNodeNumber() + "Comp time: " + t.getStatus()
         			+ " processor: " +  t.getProcessor());
         }
         
       
-        assertEquals(s.getComputationTimes().values(), 3);
+    //    assertEquals(s.getScheduledTasks().get(0).getStatus(), 3);
         
         
 		List<Integer> scheduledTasks = new ArrayList<>();

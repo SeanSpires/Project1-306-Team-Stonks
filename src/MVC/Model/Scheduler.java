@@ -50,11 +50,13 @@ public class Scheduler {
 
 
 		int numProc = numberOfProcessors;
-		
+
+		List<Node> openNodes = new ArrayList<>();
 		Node node = new Node();
 		node.setUnscheduledTasks(tasks);
 		node.addOpenNode(node);
-		
+		openNodes.add(node);
+
 		boolean algoNotFinished = true;
 
 		while (algoNotFinished) {
@@ -68,59 +70,56 @@ public class Scheduler {
 					Node childNode = new Node();
 					childNode = node;
 					if (node.getScheduledTasks().containsAll(t.getParentTasks()) || t.getParentTasks().isEmpty()) {
-						startTime = getStartTime(i, t, childNode);
 						t.setProcessor(i);
+						System.out.println(t.getNodeNumber());
+						startTime = getStartTime(i, t, childNode);
 						t.setStatus(startTime + t.getWeight());
+						t.setStartTime(startTime);
 						childNode.addScheduledTask(t);
 						childNode.removeUnscheduledTask(t);
-						childNode.addComputationTime(t, startTime + t.getWeight());
 
 						upperBound = calcUpperBound(childNode, numProc);
 						childNode.setUpperBound(upperBound);
-						
+
 						lowerBound = calcLowerBound(childNode, numProc);
 						childNode.setLowerBound(lowerBound);
 
 
 						if (upperBound < bestUpperBound) {
-							List<Node> nodesToRemove = new ArrayList<>();
 							bestUpperBound = upperBound;
-							for (Node n : node.getOpenNodes()) {
+							for (Node n : new ArrayList<>(openNodes)) {
 								if (n.getLowerBound() > bestUpperBound) {
-									nodesToRemove.add(n);
+									openNodes.remove(n);
 								}
-							}
-							
-							for (Node n : nodesToRemove) {
-								n.removeOpenNode(n);
-							}
+							}			
 						}	
-						
+
 						if (childNode.getLowerBound() > childNode.getUpperBound()) {
+							//openNodes.remove(childNode);
 							break;
 						}
 						else {
-							node.addOpenNode(childNode);
+							openNodes.add(childNode);
 						}
 					}
 				}
 
 			}
-			
+
 			Node minNode = new Node();
 			minNode = node;
-			for (Node n : node.getOpenNodes()) {
+			for (Node n : openNodes) {
 				if (n.getLowerBound() < minNode.getLowerBound()) {
 					minNode = n;
 				}
 			}
-			
+
 			node = minNode;
-			
+
 			if (node.getLowerBound() == node.getUpperBound() && node.getUnscheduledTasks().isEmpty()) {
 				return node;
 			}
-			
+
 		}
 
 		return null;
@@ -172,7 +171,7 @@ public class Scheduler {
 			Task task = null;
 			double minStartTime = Double.POSITIVE_INFINITY;
 
-			
+
 			for (Task t : unscheduledTasks) {
 				if (node.getScheduledTasks().contains(t.getParentTasks()) || t.getParentTasks().isEmpty()) {
 					task = t;
@@ -183,7 +182,7 @@ public class Scheduler {
 			if (task == null) {
 				return calcMakeSpan(node);
 			}
-			
+
 			int tempStartTime = 0;
 			int bestProc = 1;
 			for (int i = 1; i <= numProc; i++) {
@@ -194,13 +193,12 @@ public class Scheduler {
 					bestProc = i;
 				}
 			}
-		
+
 
 			task.setProcessor(bestProc);
 			task.setStatus((int) minStartTime + task.getWeight());
 			node.addScheduledTask(task);
 			node.removeUnscheduledTask(task);
-			node.addComputationTime(task, (int) minStartTime + task.getWeight());
 			unscheduledTasks.remove(task);
 		}
 
@@ -213,49 +211,53 @@ public class Scheduler {
 		int comCost = 0;
 		int endTime = 0;
 		List<Integer> allStartTimes = new ArrayList<> ();
-		allStartTimes.add(0);
-		
-		for (Task t : task.getParentTasks()) {
-			if (node.getScheduledTasks().contains(t)) {
-				comCost = 0;
-				endTime = t.getStatus();
+		allStartTimes.add(0);			
+
+		for (Task t : node.getScheduledTasks()) {
+			if(task.getParentTasks().contains(t)) {
+				if (t.getProcessor() == proc) {
+					comCost = 0;
+					endTime = t.getStatus();
+				}
+				else {
+					comCost = t.getSubTasks().get(task);
+					endTime = t.getStatus();				
+				}
 				allStartTimes.add(comCost + endTime);
-			} 
+			}
 			else {
-				comCost = t.getSubTasks().get(task);
-				endTime = t.getStatus();
-				allStartTimes.add(comCost + endTime);		
+				allStartTimes.add(t.getStatus());
 			}
 		}
-		
+
 		return Collections.max(allStartTimes);
 	}
 
 
-//	private Task pickGreedyTask(Node node) {
-//		double minWeight = Double.POSITIVE_INFINITY;
-//		List<Task> readyTaskList = new ArrayList<>();
-//		Task minTask = null;
-//
-//		// Find those tasks that all their predecessors are already scheduled
-//		for (Task t : node.getUnscheduledTasks()) {
-//			if (node.getScheduledTasks().keySet().contains(t.getParentTasks())) {
-//				readyTaskList.add(t);
-//			}
-//		}
-//
-//		for (Task t : readyTaskList) {
-//			if (t.getWeight() < minWeight) {
-//				minTask = t;
-//				minWeight = t.getWeight();
-//			}
-//
-//		}
-//
-//		return minTask;
-//
-//
-//	}
+	//	private Task pickGreedyTask(Node node) {
+	//		double minWeight = Double.POSITIVE_INFINITY;
+	//		List<Task> readyTaskList = new ArrayList<>();
+	//		Task minTask = null;
+	//
+	//		// Find those tasks that all their predecessors are already scheduled
+	//		for (Task t : node.getUnscheduledTasks()) {
+	//			if (node.getScheduledTasks().keySet().contains(t.getParentTasks())) {
+	//				readyTaskList.add(t);
+	//			}
+	//		}
+	//
+	//		for (Task t : readyTaskList) {
+	//			if (t.getWeight() < minWeight) {
+	//				minTask = t;
+	//				minWeight = t.getWeight();
+	//			}
+	//
+	//		}
+	//
+	//		return minTask;
+	//
+	//
+	//	}
 
 
 

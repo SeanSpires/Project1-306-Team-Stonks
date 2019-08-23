@@ -11,11 +11,11 @@ public class Node {
 
     private List<Task> unscheduledTasks;
     
-
+    private HashMap<Integer, List<Task>> scheduledTasksByProcessor;
     // Map of scheduled tasks
     private List<Task>  scheduledTasks;
     // Computation time (end time) for each scheduled task
-    private LinkedHashMap<Task, Integer> computationTimes;
+//    private LinkedHashMap<Task, Integer> computationTimes;
     // List of nodes to be expanded
     private List<Node> openNodes;
     // Upper Bound
@@ -26,10 +26,11 @@ public class Node {
     public Node(Node node) {
         this.unscheduledTasks = node.getUnscheduledTasks();
         this.scheduledTasks = node.getScheduledTasks();
-        this.computationTimes = node.getComputationTimes();
+    //    this.computationTimes = node.getComputationTimes();
         this.openNodes = node.getOpenNodes();
         this.upperBound = node.getUpperBound();
         this.lowerBound = node.getLowerBound();
+        this.scheduledTasksByProcessor = node.getScheduledTasksByProcessor();
     }
 
     
@@ -37,7 +38,8 @@ public class Node {
     public Node() {
         this.unscheduledTasks = new ArrayList<>();
         this.scheduledTasks = new ArrayList<Task> ();
-        this.computationTimes = new LinkedHashMap<>();
+        this.scheduledTasksByProcessor = new HashMap<>();
+   //     this.computationTimes = new LinkedHashMap<>();
         this.openNodes = new ArrayList<>();
         this.upperBound = Double.POSITIVE_INFINITY;
         this.lowerBound = Double.POSITIVE_INFINITY;
@@ -56,17 +58,17 @@ public class Node {
         this.unscheduledTasks.remove(task);
     }
 
-    public LinkedHashMap<Task, Integer> getComputationTimes() {
-        return computationTimes;
-    }
-
-    public void setComputationTimes(LinkedHashMap<Task, Integer> computationTimes) {
-        this.computationTimes = computationTimes;
-    }
-
-    public void addComputationTime(Task task, int time) {
-        this.computationTimes.put(task,time);
-    }
+//    public LinkedHashMap<Task, Integer> getComputationTimes() {
+//        return computationTimes;
+//    }
+//
+//    public void setComputationTimes(LinkedHashMap<Task, Integer> computationTimes) {
+//        this.computationTimes = computationTimes;
+//    }
+//
+//    public void addComputationTime(Task task, int time) {
+//        this.computationTimes.put(task,time);
+//    }
 
     public List<Task>  getScheduledTasks() {
         return scheduledTasks;
@@ -91,9 +93,9 @@ public class Node {
         }
     }
 
-//    public List<Task> getScheduledTasks(int processor) {
-//        return scheduledTasks;
-//    }
+    public void addTasksToProcessor(List<Task> tasks,int proc) {
+    	this.scheduledTasksByProcessor.put(proc, tasks);
+    }
 
 
     public double getUpperBound() {
@@ -144,5 +146,17 @@ public class Node {
 //    
         
     }
+
+
+
+	public HashMap<Integer, List<Task>> getScheduledTasksByProcessor() {
+		return scheduledTasksByProcessor;
+	}
+
+
+
+	public void setScheduledTasksByProcessor(HashMap<Integer, List<Task>> scheduledTasksByProcessor) {
+		this.scheduledTasksByProcessor = scheduledTasksByProcessor;
+	}
 
 }

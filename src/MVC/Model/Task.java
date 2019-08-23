@@ -10,7 +10,8 @@ public class Task {
     private int nodeNumber;
     private int weight;
     private int processor;
-    private int status;
+    private int status = -1;
+    private int startTime;
     private List<Task> parentTasks = new ArrayList<>();
     private HashMap<Task, Integer> subTasks = new HashMap<>();
 
@@ -62,6 +63,16 @@ public class Task {
     public void setSubTasks(Task task, Integer weight) {
         subTasks.put(task, weight);
     }
+
+	public int getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(int startTime) {
+		this.startTime = startTime;
+	}
+    
+    
 
 
 
