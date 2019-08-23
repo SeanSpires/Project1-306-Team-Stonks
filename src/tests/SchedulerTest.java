@@ -5,12 +5,11 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import MVC.Model.Schedule;
-import MVC.Model.Scheduler;
-import MVC.Model.Task;
+import mvc.model.Schedule;
+import mvc.model.Scheduler;
+import mvc.model.Task;
 
 public class SchedulerTest {
 
@@ -100,70 +99,70 @@ public class SchedulerTest {
 //	}
     
     
-    @Test
-	public void testSimpleSchedule() {
-
-    /*
-    * simpleSchedulerTest tests the basic scheduling algorithm
-    * with the simple example input from the project specification.
-    *
-    * Only one root task and one leaf task.
-    *
-    * */
-        tasks = new ArrayList<>();
-        scheduler = new Scheduler();
-
-        Task task1 = new Task(1);
-        Task task2 = new Task(2);
-
-        task1.setWeight(2);
-        task2.setWeight(3);
-
-        task1.setSubTasks(task2, 10);
-
-
-
-        task2.setParentTasks(task1);
-
-
-        tasks.add(task2);
-        tasks.add(task1);
-
-		//Schedule s = scheduler.createBasicSchedule(tasks, 1);
-        Schedule s = scheduler.createOptimalSchedule(tasks, 2);
-		
-		List<Integer> scheduledTasks = new ArrayList<>();
-
-		
-		for (Task t : s.getTasks().keySet()) {
-			scheduledTasks.add(t.getNodeNumber());
-			System.out.println(t.getNodeNumber());
-		}
-		
-		List<Integer> scheduledTimes =  new ArrayList<>();
-
-		scheduledTimes.addAll(s.getTasks().values());
-
-        List<Integer> expectedTasks = new ArrayList<Integer>() {
-            {
-                add(1);
-                add(2);
-           
-            }
-        };
-
-        List<Integer> expectedTimes = new ArrayList<Integer>() {
-            {
-                add(0);
-                add(2);
-
-            }
-        };
-
-		assertEquals(expectedTasks, scheduledTasks);
-		assertEquals(expectedTimes, scheduledTimes);
-		
-	}
+//    @Test
+//	public void testSimpleSchedule() {
+//
+//    /*
+//    * simpleSchedulerTest tests the basic scheduling algorithm
+//    * with the simple example input from the project specification.
+//    *
+//    * Only one root task and one leaf task.
+//    *
+//    * */
+//        tasks = new ArrayList<>();
+//        scheduler = new Scheduler();
+//
+//        Task task1 = new Task(1);
+//        Task task2 = new Task(2);
+//
+//        task1.setWeight(2);
+//        task2.setWeight(3);
+//
+//        task1.setSubTasks(task2, 10);
+//
+//
+//
+//        task2.setParentTasks(task1);
+//
+//
+//        tasks.add(task2);
+//        tasks.add(task1);
+//
+//		//Schedule s = scheduler.createBasicSchedule(tasks, 1);
+//        Schedule s = scheduler.createOptimalSchedule(tasks, 2);
+//
+//		List<Integer> scheduledTasks = new ArrayList<>();
+//
+//
+//		for (Task t : s.getTasks().keySet()) {
+//			scheduledTasks.add(t.getNodeNumber());
+//			System.out.println(t.getNodeNumber());
+//		}
+//
+//		List<Integer> scheduledTimes =  new ArrayList<>();
+//
+//		scheduledTimes.addAll(s.getTasks().values());
+//
+//        List<Integer> expectedTasks = new ArrayList<Integer>() {
+//            {
+//                add(1);
+//                add(2);
+//
+//            }
+//        };
+//
+//        List<Integer> expectedTimes = new ArrayList<Integer>() {
+//            {
+//                add(0);
+//                add(2);
+//
+//            }
+//        };
+//
+//		assertEquals(expectedTasks, scheduledTasks);
+//		assertEquals(expectedTimes, scheduledTimes);
+//
+//	}
 
 //    @Test
 //    public void testMultiRootSchedule() {
