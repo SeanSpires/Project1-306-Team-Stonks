@@ -181,10 +181,10 @@ public final class MenuController implements Initializable{
 					int startTime = finishedScheduleTasks.get(t);
 					long weight = t.getWeight();
 					int processor = t.getProcessor();
-//					String label = Integer.toString(t.getNodeNumber());
+					String nodeNumber = Integer.toString(t.getNodeNumber());
 					String style = "status-red";
 
-					XYChart.Data newData = new XYChart.Data(startTime, Integer.toString(processor), new GanttChart.ExtraData(weight, style));
+					XYChart.Data newData = new XYChart.Data(startTime, Integer.toString(processor), new GanttChart.ExtraData(weight, style, nodeNumber));
 					series.getData().add(newData);
 
 				}
