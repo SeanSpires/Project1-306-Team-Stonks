@@ -20,7 +20,8 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import mvc.Main;
 import mvc.model.*;
-import mvc.view.fxml.ZoomableScrollPane;
+import mvc.view.components.GanttChart;
+import mvc.view.components.ZoomableScrollPane;
 
 import java.net.URL;
 import java.util.*;
@@ -99,7 +100,7 @@ public final class MenuController implements Initializable{
 		xAxis.setLabel("T I M E");
 		xAxis.setTickLabelFill(Color.BLACK);
 
-		yAxis.setLabel("P R O C E S S O R S");
+		yAxis.setLabel("P R O C E S S E S");
 		yAxis.setTickLabelFill(Color.BLACK);
 		initGanttChartYAxis();
 		yAxis.setCategories(FXCollections.<String>observableArrayList(processorList));
@@ -171,8 +172,8 @@ public final class MenuController implements Initializable{
             @Override
             protected void succeeded() {
                 _runBtn.setDisable(false);
-                _stopBtn.setDisable(true);
-                timeline.stop();
+                //_stopBtn.setDisable(true);
+                //timeline.stop();
                 System.out.println("Finished");
             }
         };
