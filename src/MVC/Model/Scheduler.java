@@ -76,6 +76,7 @@ public class Scheduler {
 						t.setStatus(startTime + t.getWeight());
 						t.setStartTime(startTime);
 						childNode.addScheduledTask(t);
+						childNode.addTasksToProcessor(t, i);
 						childNode.removeUnscheduledTask(t);
 
 						upperBound = calcUpperBound(childNode, numProc);
@@ -95,7 +96,6 @@ public class Scheduler {
 						}	
 
 						if (childNode.getLowerBound() > childNode.getUpperBound()) {
-							//openNodes.remove(childNode);
 							break;
 						}
 						else {
@@ -197,6 +197,7 @@ public class Scheduler {
 
 			task.setProcessor(bestProc);
 			task.setStatus((int) minStartTime + task.getWeight());
+			node.addTasksToProcessor(task, bestProc);
 			node.addScheduledTask(task);
 			node.removeUnscheduledTask(task);
 			unscheduledTasks.remove(task);
@@ -213,52 +214,26 @@ public class Scheduler {
 		List<Integer> allStartTimes = new ArrayList<> ();
 		allStartTimes.add(0);			
 
-		for (Task t : node.getScheduledTasks()) {
-			if(task.getParentTasks().contains(t)) {
-				if (t.getProcessor() == proc) {
-					comCost = 0;
-					endTime = t.getStatus();
-				}
-				else {
-					comCost = t.getSubTasks().get(task);
-					endTime = t.getStatus();				
-				}
-				allStartTimes.add(comCost + endTime);
+		for (Task t : task.getParentTasks()) {
+			if (t.getProcessor() == proc) {
+				comCost = 0;
+				endTime = t.getStatus();
 			}
 			else {
-				allStartTimes.add(t.getStatus());
+				comCost = t.getSubTasks().get(task);
+				endTime = t.getStatus();				
 			}
+			allStartTimes.add(comCost + endTime);
 		}
 
+		for (Task t : node.getTasksForProcessor(proc)) {
+			comCost = 0;
+			endTime = t.getStatus();
+			allStartTimes.add(comCost + endTime);
+		}
+
+		System.out.println("Processor " +  proc + " Node number:" + task.getNodeNumber() + " max "  + Collections.max(allStartTimes));
 		return Collections.max(allStartTimes);
 	}
-
-
-	//	private Task pickGreedyTask(Node node) {
-	//		double minWeight = Double.POSITIVE_INFINITY;
-	//		List<Task> readyTaskList = new ArrayList<>();
-	//		Task minTask = null;
-	//
-	//		// Find those tasks that all their predecessors are already scheduled
-	//		for (Task t : node.getUnscheduledTasks()) {
-	//			if (node.getScheduledTasks().keySet().contains(t.getParentTasks())) {
-	//				readyTaskList.add(t);
-	//			}
-	//		}
-	//
-	//		for (Task t : readyTaskList) {
-	//			if (t.getWeight() < minWeight) {
-	//				minTask = t;
-	//				minWeight = t.getWeight();
-	//			}
-	//
-	//		}
-	//
-	//		return minTask;
-	//
-	//
-	//	}
-
-
 
 }

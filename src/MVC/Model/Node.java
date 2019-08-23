@@ -93,8 +93,27 @@ public class Node {
         }
     }
 
-    public void addTasksToProcessor(List<Task> tasks,int proc) {
-    	this.scheduledTasksByProcessor.put(proc, tasks);
+    public void addTasksToProcessor(Task task,int proc) {
+    	List<Task> tempList = this.scheduledTasksByProcessor.get(proc);
+    	
+    	if (this.scheduledTasksByProcessor.get(proc) == null) {
+    		tempList = new ArrayList<>();
+    		tempList.add(task);
+            this.scheduledTasksByProcessor.put(proc, tempList);
+    	}
+    	else {
+            tempList = this.scheduledTasksByProcessor.get(proc);
+            tempList.add(task);
+            this.scheduledTasksByProcessor.put(proc, tempList);
+    	}
+    }
+    
+    public List<Task> getTasksForProcessor(int proc) {
+    	if (this.scheduledTasksByProcessor.get(proc) == null) {
+    		return new ArrayList<>();
+    	}
+    	
+    	return this.scheduledTasksByProcessor.get(proc);
     }
 
 
