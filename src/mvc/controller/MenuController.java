@@ -135,6 +135,7 @@ public final class MenuController implements Initializable{
 
 	}
 
+	// Creates a new thread to run the algorithm.
 	@FXML
 	public void handleRunButton(javafx.event.ActionEvent actionEvent) {
 		// Starts running the timer for the app.
@@ -142,7 +143,7 @@ public final class MenuController implements Initializable{
 		_stopBtn.setDisable(false);
 		_runBtn.setDisable(true);
 
-        Service algService = new Service() {
+        Service algorithmService = new Service() {
 
             @Override
             protected javafx.concurrent.Task createTask() {
@@ -192,7 +193,7 @@ public final class MenuController implements Initializable{
             }
 
         };
-        algService.start();
+        algorithmService.start();
 
 	}
 

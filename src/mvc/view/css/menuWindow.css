@@ -55,8 +55,24 @@
     -fx-text-background-color: rgb(53,147,161);
 }
 
-#_bottomnLabels{
-    -fx-text-background-color: rgb(53,147,161,0.3);
+#_scheduleOutput{
+    -fx-text-background-color: rgb(53,147,161);
+}
+
+#_bottomTimeLabel{
+    -fx-text-background-color: rgb(255, 163, 79);
+}
+
+#_bottomScheduleLabel{
+    -fx-text-background-color: rgb(255, 163, 79);
+}
+
+#_bottomCoresLabel{
+    -fx-text-background-color: rgb(64, 181, 199);
+}
+
+#_bottomProcessorLabel{
+    -fx-text-background-color: rgb(64, 181, 199);
 }
 
 

@@ -34,3 +34,4 @@ out/
 #Output
 *.dot
 MANIFEST.MF
+*.iml
