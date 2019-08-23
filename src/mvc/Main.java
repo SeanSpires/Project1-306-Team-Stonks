@@ -33,7 +33,7 @@ public class Main extends Application {
         Parent root = FXMLLoader. load(getClass().getResource("view/fxml/MenuWindow.fxml"));
         primaryStage.setTitle("Project1-306");
         Scene mainScene = new Scene(root, 1024, 700);
-        mainScene.getStylesheets().add(getClass().getResource("View/CSS/menuWindow.css").toExternalForm());
+        mainScene.getStylesheets().add(getClass().getResource("view/css/menuWindow.css").toExternalForm());
         primaryStage.setResizable(false);
         primaryStage.setScene(mainScene);
         primaryStage.show();

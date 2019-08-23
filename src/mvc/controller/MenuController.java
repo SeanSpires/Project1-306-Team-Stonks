@@ -22,10 +22,7 @@ import mvc.model.*;
 import mvc.view.fxml.ZoomableScrollPane;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Timer;
+import java.util.*;
 
 /**
  * Constructs the GUI components and performs events for displaying and
@@ -62,6 +59,7 @@ public final class MenuController implements Initializable{
 	private NumberAxis xAxis;
 	private CategoryAxis yAxis;
 	private GanttChart<Number, String> ganttChart;
+	private LinkedHashMap<Task, Integer> finishedScheduleTasks;
 	/**
 	 * Constructs the GUI components and performs events for displaying and
 	 * changing the data in the binary tree.
@@ -106,7 +104,7 @@ public final class MenuController implements Initializable{
 		ganttChart.setTitle("");
 		ganttChart.setLegendVisible(true);
 		ganttChart.setBlockHeight(50);
-				//ganttChart.getStylesheets().add(getClass().getResource("ganttchart.css").toExternalForm());
+		ganttChart.getStylesheets().add(getClass().getResource("ganttChart.css").toExternalForm());
 	}
 
 	private void initGanttChartYAxis(){
@@ -159,6 +157,7 @@ public final class MenuController implements Initializable{
                         taskList = fileio.getTaskList();
                         scheduler = new Scheduler();
                         schedule = scheduler.createBasicSchedule(taskList, 1);
+                        finishedScheduleTasks = schedule.getTasks();
                         fileio.writeFile(schedule);
                         return null;
                     }
@@ -173,11 +172,27 @@ public final class MenuController implements Initializable{
                 timeline.stop();
                 System.out.println("Finished");
 
+                ganttChart.getData().clear();
+                initGanttChartYAxis();
+
+                for(Task t : finishedScheduleTasks.keySet()){
+					XYChart.Series series = ganttChart.getData().get(t.getProcessor()-1);
+					int startTime = finishedScheduleTasks.get(t);
+					long weight = t.getWeight();
+					int processor = t.getProcessor();
+//					String label = Integer.toString(t.getNodeNumber());
+					String style = "status-red";
+
+					XYChart.Data newData = new XYChart.Data(startTime, Integer.toString(processor), new GanttChart.ExtraData(weight, style));
+					series.getData().add(newData);
+
+				}
+
+
             }
 
         };
         algService.start();
-
 
 	}
 
