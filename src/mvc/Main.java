@@ -120,14 +120,14 @@ public class Main extends Application {
     }
 
     private static void runAlgorithm(){
-        FileIO fileio = new FileIO();
-        fileio.readFile(inputFileName);
-        fileio.processNodes();
-        fileio.processTransitions();
-        taskList = fileio.getTaskList();
-        Scheduler scheduler = new Scheduler();
-        Schedule schedule = scheduler.createBasicSchedule(taskList, 1);
-        fileio.writeFile(schedule);
+//        FileIO fileio = new FileIO();
+//        fileio.readFile(inputFileName);
+//        fileio.processNodes();
+//        fileio.processTransitions();
+//        taskList = fileio.getTaskList();
+//        Scheduler scheduler = new Scheduler();
+//        Schedule schedule = scheduler.createBasicSchedule(taskList, 1);
+//        fileio.writeFile(schedule);
     }
 
     private  static void runFailed() {

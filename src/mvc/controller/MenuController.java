@@ -3,6 +3,7 @@ package mvc.controller;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Service;
 import javafx.event.ActionEvent;
@@ -54,6 +55,7 @@ public final class MenuController implements Initializable{
 
 
 	private double timeTaken;
+	private MenuController thisController = this;
 
 	// Init Gantt Chart.
 	private NumberAxis xAxis;
@@ -157,7 +159,7 @@ public final class MenuController implements Initializable{
                         fileio.processTransitions();
                         taskList = fileio.getTaskList();
                         scheduler = new Scheduler();
-                        schedule = scheduler.createBasicSchedule(taskList, 1);
+                        schedule = scheduler.createBasicSchedule(taskList, 1, thisController);
                         finishedScheduleTasks = schedule.getTasks();
                         fileio.writeFile(schedule);
                         return null;
@@ -172,29 +174,9 @@ public final class MenuController implements Initializable{
                 _stopBtn.setDisable(true);
                 timeline.stop();
                 System.out.println("Finished");
-
-                ganttChart.getData().clear();
-                initGanttChartYAxis();
-
-                for(Task t : finishedScheduleTasks.keySet()){
-					XYChart.Series series = ganttChart.getData().get(t.getProcessor()-1);
-					int startTime = finishedScheduleTasks.get(t);
-					long weight = t.getWeight();
-					int processor = t.getProcessor();
-					String nodeNumber = Integer.toString(t.getNodeNumber());
-					String style = "status-red";
-
-					XYChart.Data newData = new XYChart.Data(startTime, Integer.toString(processor), new GanttChart.ExtraData(weight, style, nodeNumber));
-					series.getData().add(newData);
-
-				}
-
-
             }
-
         };
         algorithmService.start();
-
 	}
 
 	@FXML
@@ -206,14 +188,32 @@ public final class MenuController implements Initializable{
     }
 
     // Replace partial schedule graph with own data structure.
-//    public void updateGraph(Current Best Schedule) {
+    public void updateGraph(LinkedHashMap<Task, Integer> scheduledTasks) {
+
+		Platform.runLater(new Runnable() {
+
+			@SuppressWarnings({ "rawtypes", "unchecked" })
+			public void run() {
+				ganttChart.getData().clear();
+				initGanttChartYAxis();
+
+				for(Task t : scheduledTasks.keySet()){
+					XYChart.Series series = ganttChart.getData().get(t.getProcessor()-1);
+					int startTime = scheduledTasks.get(t);
+					long weight = t.getWeight();
+					int processor = t.getProcessor();
+					String nodeNumber = Integer.toString(t.getNodeNumber());
+					String style = "status-red";
+
+					XYChart.Data newData = new XYChart.Data(startTime, Integer.toString(processor), new GanttChart.ExtraData(weight, style, nodeNumber));
+					series.getData().add(newData);
+
+				}
+
+			}
+		});
+
 //
-//        // Clear gantt chart
-//        // Add nodes to gantt chart
-//        for (all Tasks in Schedule){
-//            // Iterate through the schedule and sort it out in the appropriate data structure.
-//        }
-////
-//    }
+    }
 
 }
