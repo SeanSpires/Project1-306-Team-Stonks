@@ -15,6 +15,7 @@ public class Task {
     private List<Task> parentTasks = new ArrayList<>();
     private HashMap<Integer, Integer> subTasks = new HashMap<>();
 
+
     public Task(int nodeNumber){
         this.nodeNumber = nodeNumber;
     }
@@ -32,6 +33,7 @@ public class Task {
     	this.subTasks = new HashMap<>(t.subTasks);
     }
     
+
     public int getStatus() {
     	return this.status;
     }
@@ -70,6 +72,7 @@ public class Task {
     }
 
     public HashMap<Integer, Integer> getSubTasks() {
+
         return subTasks;
     }
 
@@ -86,6 +89,7 @@ public class Task {
 	}
     
     
+
 
 
 

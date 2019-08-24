@@ -19,18 +19,20 @@ public class Main extends Application {
     public static String outputFileName;
     
     public static int numberOfCores;
+
+    public static int numberOfProcessors;
     
     private static List<Task> taskList;
     
-    public static int numberOfProcessors;
 
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("view/FXML/menuWindow.fxml"));
+        Parent root = FXMLLoader. load(getClass().getResource("view/fxml/MenuWindow.fxml"));
         primaryStage.setTitle("Project1-306");
-        Scene mainScene = new Scene(root, 1024, 600);
-        mainScene.getStylesheets().add(getClass().getResource("view/CSS/menuWindow.css").toExternalForm());
+        Scene mainScene = new Scene(root, 1024, 700);
+        mainScene.getStylesheets().add(getClass().getResource("view/css/menuWindow.css").toExternalForm());
+        primaryStage.setResizable(false);
         primaryStage.setScene(mainScene);
         primaryStage.show();
     }
@@ -81,29 +83,11 @@ public class Main extends Application {
             }
         }
 
-        if(args.length == 3){
-            if(args[2].equals("-p")) {
-                System.out.println("No valid input for number of cores (after -p).");
-                runFailed();
 
-            }
-            else if(args[2].equals("-o")) {
-                System.out.println("No valid input for file output name (after -o).");
-                runFailed();
-            }
-            else if(args[2].equals("-v")){
-                launch();
-            }
-            else {
-                runFailed();
-            }
-
-
-        }
-
-        if(args.length > 3) {
+        if(args.length >= 3) {
             List<String> argsList = Arrays.asList(args);
             numberOfCores = 1;
+            numberOfProcessors = Integer.parseInt(args[1]);
 
             if (argsList.contains("-o")) {
                 try {
@@ -128,7 +112,6 @@ public class Main extends Application {
             if (argsList.contains("-v")) {
                 launch();
             }
-
             System.out.println("\n-p: value:"+numberOfCores+"  -o value:"+outputFileName);
 
             runAlgorithm();

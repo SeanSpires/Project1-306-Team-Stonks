@@ -10,6 +10,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import mvc.model.Node;
+
 import mvc.model.Scheduler;
 import mvc.model.Task;
 
@@ -100,6 +101,7 @@ public class SchedulerTest {
 //		
 //	}
     
+
     @Ignore
     @Test
 	public void testSimpleSchedule() {

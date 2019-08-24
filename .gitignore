@@ -11,7 +11,7 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
+#*.jar
 *.war
 *.nar
 *.ear
@@ -30,3 +30,8 @@ out/
 
 *.DS_Store
 /bin/
+
+#Output
+*.dot
+MANIFEST.MF
+*.iml

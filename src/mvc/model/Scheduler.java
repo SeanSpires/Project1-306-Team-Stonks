@@ -1,5 +1,6 @@
 package  mvc.model;
 
+
 import java.util.*;
 
 public class Scheduler {
@@ -7,6 +8,7 @@ public class Scheduler {
 	public Schedule createBasicSchedule(List<Task> tasks, int processor) {
 
 		Schedule schedule = new Schedule();
+
 		Queue<Task> taskQueue = new LinkedList<>();
 		List<Task> rootTasks = getRootTasks(tasks);
 
@@ -32,7 +34,9 @@ public class Scheduler {
 		return schedule;
 
 	}
+
 */
+
 	private List<Task> getRootTasks(List<Task> tasks) {
 		List<Task> rootTasks = new ArrayList<>();
 
@@ -157,11 +161,13 @@ public class Scheduler {
 			temptCompTime = t.getStatus();
 			if (temptCompTime > makeSpan) {
 				makeSpan = temptCompTime;
+
 			}
 		}
 
 		return makeSpan;
 	}
+
 
 
 
@@ -269,6 +275,7 @@ public class Scheduler {
 		for (Task t: tasks) {
 			if (t.getWeight() < minTask.getWeight()) {
 				minTask = t;
+
 			}
 		}
 		
