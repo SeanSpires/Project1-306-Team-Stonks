@@ -141,10 +141,6 @@ public class SchedulerTest {
         task4.setSubTasks(task5, 2);
         task5.setParentTasks(task4);
         task5.setParentTasks(task3);
-        
-        
-        
-
 
 
         tasks.add(task2);

@@ -10,13 +10,26 @@ public class Task {
     private int nodeNumber;
     private int weight;
     private int processor;
-    private int status = -1;
+    private int status;
     private int startTime;
     private List<Task> parentTasks = new ArrayList<>();
-    private HashMap<Task, Integer> subTasks = new HashMap<>();
+    private HashMap<Integer, Integer> subTasks = new HashMap<>();
 
     public Task(int nodeNumber){
         this.nodeNumber = nodeNumber;
+    }
+    
+    public Task(Task t) {
+    	this.nodeNumber = t.nodeNumber;
+    	this.weight = t.weight;
+    	this.processor = t.processor;
+    	this.status = t.status;
+    	this.startTime = t.startTime;
+    	//this.parentTasks = new ArrayList<>(t.parentTasks);
+    	for(Task task : t.parentTasks) {
+    		this.parentTasks.add(new Task(task));
+    	}
+    	this.subTasks = new HashMap<>(t.subTasks);
     }
     
     public int getStatus() {
@@ -56,12 +69,12 @@ public class Task {
         this.parentTasks.add(task);
     }
 
-    public HashMap<Task, Integer> getSubTasks() {
+    public HashMap<Integer, Integer> getSubTasks() {
         return subTasks;
     }
 
     public void setSubTasks(Task task, Integer weight) {
-        subTasks.put(task, weight);
+        subTasks.put(task.getNodeNumber(), weight);
     }
 
 	public int getStartTime() {

@@ -4,33 +4,49 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Node {
 
 
-    private List<Task> unscheduledTasks;
+    private List<Task> unscheduledTasks = new ArrayList<>();
     
-    private HashMap<Integer, List<Task>> scheduledTasksByProcessor;
+    private HashMap<Integer, List<Task>> scheduledTasksByProcessor = new HashMap<>();
     // Map of scheduled tasks
-    private List<Task>  scheduledTasks;
+    private List<Task>  scheduledTasks = new ArrayList<>();
     // Computation time (end time) for each scheduled task
 //    private LinkedHashMap<Task, Integer> computationTimes;
     // List of nodes to be expanded
-    private List<Node> openNodes;
     // Upper Bound
     private double upperBound;
     // Lower Bound
     private double lowerBound;
 
     public Node(Node node) {
-        this.unscheduledTasks = node.getUnscheduledTasks();
-        this.scheduledTasks = node.getScheduledTasks();
+        //this.unscheduledTasks = new ArrayList<>(node.getUnscheduledTasks());
+        for(Task task : node.getUnscheduledTasks()) {
+    		this.unscheduledTasks.add(new Task(task));
+    	}
+       // this.scheduledTasks = new ArrayList<>(node.getScheduledTasks());
+        for(Task task : node.getScheduledTasks()) {
+    		this.scheduledTasks.add(new Task(task));
+    	}
     //    this.computationTimes = node.getComputationTimes();
-        this.openNodes = node.getOpenNodes();
+        //this.openNodes = node.getOpenNodes();
         this.upperBound = node.getUpperBound();
         this.lowerBound = node.getLowerBound();
-        this.scheduledTasksByProcessor = node.getScheduledTasksByProcessor();
+        
+        //this.scheduledTasksByProcessor = new HashMap<>(node.getScheduledTasksByProcessor());
+        //this.scheduledTasksByProcessor = new ArrayList<>(node.getScheduledTasks());
+        Map<Integer, List<Task>> procTasks = node.getScheduledTasksByProcessor();
+        for(Integer task : procTasks.keySet()) {
+        	List<Task> taskList = new ArrayList<>();
+        	for(Task t : procTasks.get(task)) {
+        		taskList.add(new Task(t));
+        	}
+        	this.scheduledTasksByProcessor.put(task, taskList );
+    	}
     }
 
     
@@ -40,22 +56,35 @@ public class Node {
         this.scheduledTasks = new ArrayList<Task> ();
         this.scheduledTasksByProcessor = new HashMap<>();
    //     this.computationTimes = new LinkedHashMap<>();
-        this.openNodes = new ArrayList<>();
         this.upperBound = Double.POSITIVE_INFINITY;
         this.lowerBound = Double.POSITIVE_INFINITY;
     }
 
-
+    public Task getTaskByNumber(Integer i) {
+    	for(Task t : scheduledTasks) {
+    		if(t.getNodeNumber() == i) {
+    			return t;
+    		}
+    	}
+    	return null;
+    	
+    }
+    
     public List<Task> getUnscheduledTasks() {
         return unscheduledTasks;
     }
 
     public void setUnscheduledTasks(List<Task> unscheduledTasks) {
+    	
         this.unscheduledTasks = unscheduledTasks;
     }
 
     public void removeUnscheduledTask(Task task) {
-        this.unscheduledTasks.remove(task);
+    	for(Task t : new ArrayList<>(this.unscheduledTasks)) {
+    		if(t.getNodeNumber() == task.getNodeNumber()) {
+    			unscheduledTasks.remove(t);
+    		}
+    	}
     }
 
 //    public LinkedHashMap<Task, Integer> getComputationTimes() {
@@ -78,20 +107,6 @@ public class Node {
         this.scheduledTasks = scheduledTasks;
     }
 
-    public List<Node> getOpenNodes() {
-        return openNodes;
-    }
-
-    public void setOpenNodes(List<Node> openNodes) {
-        this.openNodes = openNodes;
-    }
-
-
-    public void addOpenNode(Node node) {
-        if (!node.getOpenNodes().contains(node)) {
-            this.openNodes.add(node);
-        }
-    }
 
     public void addTasksToProcessor(Task task,int proc) {
     	List<Task> tempList = this.scheduledTasksByProcessor.get(proc);
@@ -131,12 +146,6 @@ public class Node {
 
     public void setLowerBound(double lowerBound) {
         this.lowerBound = lowerBound;
-    }
-
-    public void removeOpenNode(Node node) {
-        if (this.openNodes.contains(node)) {
-            this.openNodes.remove(node);
-        }
     }
 
 //    public List<Task> getAllScheduledTasks() {
