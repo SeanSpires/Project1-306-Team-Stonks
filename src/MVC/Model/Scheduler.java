@@ -63,42 +63,52 @@ public class Scheduler {
 		
 		while (algoNotFinished) {
 			System.out.println("=====================");
-			for(Task t : node.getUnscheduledTasks()) {
-				System.out.println("unscheduled: " + t.getNodeNumber());
-			}
-			for(Task sch : node.getScheduledTasks()) {
-				System.out.println("scheduled: " + sch.getNodeNumber());
-			}
+			
 			System.out.println("=====================");
 			
 			for (Task t : new ArrayList<>(node.getUnscheduledTasks())) {
 				
-				System.out.println("task number: " + t.getNodeNumber());
+				//System.out.println("task number: " + t.getNodeNumber());
 				for(Task parent : t.getParentTasks()) {
-					System.out.println("parent number: " + parent.getNodeNumber());
+					//System.out.println("parent number: " + parent.getNodeNumber());
 				}
 				
-				System.out.println(node.getScheduledTasks().containsAll(t.getParentTasks()));
+				//System.out.println(node.getScheduledTasks().containsAll(t.getParentTasks()));
 				
 				for (int i = 1; i < numProc + 1; i++) {
 					Node childNode = new Node(node);
 					if (containsParents(node, t) || t.getParentTasks().isEmpty()) {
 						childNode.removeUnscheduledTask(t);
 						t = new Task(t);
-						System.out.println("task number predicate 1: " + t.getNodeNumber());
+						//System.out.println("task number predicate 1: " + t.getNodeNumber());
 						t.setProcessor(i);
+						if(t.getNodeNumber() == 5)
+						{
+							//System.out.println("ok");
+						}
 						startTime = getStartTime(i, t, childNode);
 						t.setStatus(startTime + t.getWeight());
 						t.setStartTime(startTime);
 						childNode.addScheduledTask(t);
 						childNode.addTasksToProcessor(t, i);
 
-						upperBound = calcUpperBound(new Node(childNode), numProc);
+						upperBound = calcUpperBound(new Node(childNode), numProc);						
 
-						childNode.setUpperBound(upperBound);
-
+						childNode.setUpperBound(upperBound);						
+						
 						lowerBound = calcLowerBound(childNode, numProc);
+						
 						childNode.setLowerBound(lowerBound);
+						
+						for(Task ts : childNode.getUnscheduledTasks()) {
+							System.out.println("unscheduled: " + ts.getNodeNumber() + " proc num: " + ts.getProcessor());
+						}
+						for(Task sch : childNode.getScheduledTasks()) {
+							System.out.println("scheduled: " + sch.getNodeNumber() + " proc num: " + sch.getProcessor());
+						}
+						System.out.println("upper bound = " + upperBound);
+						System.out.println("lower bound = " + lowerBound);
+						
 
 						if (upperBound < bestUpperBound) {
 							System.out.println("task number predicate 2: " + t.getNodeNumber());
@@ -109,40 +119,45 @@ public class Scheduler {
 								}
 							}			
 						}
-						System.out.println("node lower: " + childNode.getLowerBound());
-						System.out.println("node upper: " + childNode.getUpperBound());
+						//System.out.println("node lower: " + childNode.getLowerBound());
+						///System.out.println("node upper: " + childNode.getUpperBound());
 						if (childNode.getLowerBound() > childNode.getUpperBound()) {
-							System.out.println("task number predicate 3: " + t.getNodeNumber());
+						//	System.out.println("task number predicate 3: " + t.getNodeNumber());
 							continue;
 						}
 						else {
-							System.out.println("task number added to list: " + t.getNodeNumber());
+							
+							//System.out.println("task number added to list: " + t.getNodeNumber());
 							openNodes.add(childNode);
 						}
+						
+						
 					}
 				}
 			}
 			
-			System.out.println(openNodes.size());
+		//	System.out.println(openNodes.size());
 			
 			Node minNode = openNodes.get(0);
 			double bestLowerBound = minNode.getLowerBound();
-			System.out.println("best bound:" + bestLowerBound);
+			//System.out.println("best bound:" + bestLowerBound);
 			for (Node n : openNodes) {
 				if (n.getLowerBound() < bestLowerBound) {
 					if(n.getScheduledTasks().size() > 0) {
-						System.out.println("min node selected: " + n.getScheduledTasks().get(0).getNodeNumber());
+				//		System.out.println("min node selected: " + n.getScheduledTasks().get(0).getNodeNumber());
 					}
 					minNode = n;
 					bestLowerBound = n.getLowerBound();
 				}
 			}
 
-			node = minNode;
 			openNodes.remove(node);
+			node = minNode;
 			if (node.getLowerBound() == node.getUpperBound() && node.getUnscheduledTasks().isEmpty()) {
 				return node;
 			}
+
+
 		}
 		return null;
 	}
@@ -227,9 +242,9 @@ public class Scheduler {
 
 			int tempStartTime = 0;
 			int bestProc = 1;
+			
 			for (int i = 1; i <= numProc; i++) {
 				tempStartTime = getStartTime(i, task, node);
-
 				if (minStartTime > tempStartTime) {
 					minStartTime = tempStartTime;
 					bestProc = i;
@@ -243,6 +258,10 @@ public class Scheduler {
 			node.addScheduledTask(task);
 			node.removeUnscheduledTask(task);
 			unscheduledTasks.remove(task);
+			
+		}
+		for(Task sch : node.getScheduledTasks()) {
+			System.out.println("scheduled upper bound: " + sch.getNodeNumber() + " proc num: " + sch.getProcessor());
 		}
 
 		makeSpan = calcMakeSpan(node);
@@ -253,28 +272,24 @@ public class Scheduler {
 	private int getStartTime(int proc, Task task, Node node) {
 		int comCost = 0;
 		int endTime = 0;
-		List<Integer> allStartTimes = new ArrayList<> ();
-		allStartTimes.add(0);			
 		
+		List<Integer> allStartTimes = new ArrayList<> ();
+		
+		allStartTimes.add(0);
 		for (Task t : task.getParentTasks()) {
-			//System.out.println("task parent get start:" + t.getNodeNumber());
 			t = node.getTaskByNumber(t.getNodeNumber());
-			if (t.getProcessor() == proc) {
-				comCost = 0;
-				endTime = t.getStatus();
-			}
-			else {
-				//System.out.println("key:" + t.getSubTasks().containsKey(task.getNodeNumber()));
+			
+			if (t.getProcessor() != proc) {
 				comCost = t.getSubTasks().get(task.getNodeNumber());
-				endTime = t.getStatus();				
+				endTime = t.getStatus();	
 			}
+			
 			allStartTimes.add(comCost + endTime);
 		}
-
+		
 		for (Task t : node.getTasksForProcessor(proc)) {
-			comCost = 0;
 			endTime = t.getStatus();
-			allStartTimes.add(comCost + endTime);
+			allStartTimes.add(endTime);
 		}
 
 		//System.out.println("Processor " +  proc + " Node number:" + task.getNodeNumber() + " max "  + Collections.max(allStartTimes));

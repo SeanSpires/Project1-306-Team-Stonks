@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Node {
+public class Node implements Comparable{
 
 
     private List<Task> unscheduledTasks = new ArrayList<>();
@@ -185,6 +185,21 @@ public class Node {
 
 	public void setScheduledTasksByProcessor(HashMap<Integer, List<Task>> scheduledTasksByProcessor) {
 		this.scheduledTasksByProcessor = scheduledTasksByProcessor;
+	}
+
+
+
+	@Override
+	public int compareTo(Object node) {
+		if(node instanceof Node) {
+			if(((Node) node).getLowerBound() < this.getLowerBound()) {
+				return 1;
+			}else {
+				return -1;
+			}
+		}
+		return 0;
+		
 	}
 
 }
