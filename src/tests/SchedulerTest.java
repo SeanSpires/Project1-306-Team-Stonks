@@ -9,11 +9,9 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import MVC.Model.Node;
-import MVC.Model.Schedule;
-import MVC.Model.Scheduler;
-import MVC.Model.SchedulerParallel;
-import MVC.Model.Task;
+import mvc.model.Node;
+import mvc.model.Scheduler;
+import mvc.model.Task;
 
 public class SchedulerTest {
 

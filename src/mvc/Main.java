@@ -1,16 +1,14 @@
-package MVC;
+package mvc;
 
-import MVC.Model.FileIO;
-import MVC.Model.Schedule;
-import MVC.Model.Scheduler;
-import MVC.Model.Task;
+import mvc.model.FileIO;
+import mvc.model.Scheduler;
+import mvc.model.Task;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,10 +27,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("View/FXML/menuWindow.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("view/FXML/menuWindow.fxml"));
         primaryStage.setTitle("Project1-306");
         Scene mainScene = new Scene(root, 1024, 600);
-        mainScene.getStylesheets().add(getClass().getResource("View/CSS/menuWindow.css").toExternalForm());
+        mainScene.getStylesheets().add(getClass().getResource("view/CSS/menuWindow.css").toExternalForm());
         primaryStage.setScene(mainScene);
         primaryStage.show();
     }

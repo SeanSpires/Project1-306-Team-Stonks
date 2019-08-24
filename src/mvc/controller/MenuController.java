@@ -1,10 +1,10 @@
-package MVC.Controller;
+package mvc.controller;
 
-import MVC.Main;
-import MVC.Model.FileIO;
-import MVC.Model.Schedule;
-import MVC.Model.Scheduler;
-import MVC.Model.Task;
+import mvc.Main;
+import mvc.model.FileIO;
+import mvc.model.Schedule;
+import mvc.model.Scheduler;
+import mvc.model.Task;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,7 +12,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 
-import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
