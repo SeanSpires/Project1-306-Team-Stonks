@@ -47,7 +47,7 @@ public class MenuController implements Initializable {
         fileio.processTransitions();
         taskList = fileio.getTaskList();
         scheduler = new Scheduler();
-        schedule = scheduler.createBasicSchedule(taskList, 1);
+     //   schedule = scheduler.createBasicSchedule(taskList, 1);
         fileio.writeFile(schedule);
     }
 

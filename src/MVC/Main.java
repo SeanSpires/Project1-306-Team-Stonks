@@ -145,8 +145,8 @@ public class Main extends Application {
         fileio.processTransitions();
         taskList = fileio.getTaskList();
         Scheduler scheduler = new Scheduler();
-        Schedule schedule = scheduler.createBasicSchedule(taskList, 1);
-        fileio.writeFile(schedule);
+     //   Schedule schedule = scheduler.createBasicSchedule(taskList, 1);
+     //   fileio.writeFile(schedule);
     }
 
     private  static void runFailed() {

@@ -101,6 +101,7 @@ public class SchedulerTest {
 //		assertEquals(expectedTimes, scheduledTimes);
 //		
 //	}
+    
     @Ignore
     @Test
 	public void testSimpleSchedule() {
@@ -161,6 +162,7 @@ public class SchedulerTest {
         }
     }
     
+   
     @Test
 	public void testSevenSchedule() {
 
@@ -216,7 +218,7 @@ public class SchedulerTest {
         tasks.add(task7);
 
 		//Schedule s = scheduler.createBasicSchedule(tasks, 1);
-        Node s = new Scheduler().createOptimalSchedule(tasks, 4);
+        Node s = new Scheduler().createOptimalSchedule(tasks, 2);
         
         System.out.println(s.getScheduledTasks().size());
         for (Task t : s.getScheduledTasks()) {
