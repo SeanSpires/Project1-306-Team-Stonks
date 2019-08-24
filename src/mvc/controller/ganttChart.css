@@ -1,9 +1,9 @@
 .status-red {
-    -fx-background-color:rgba(128,0,0,0.7);
+    -fx-background-color:rgba(53,147,161);
     -fx-border-color: rgb(255,255,255);
 }
 .status-green {
-    -fx-background-color:rgba(0,128,0,0.7);
+    -fx-background-color:rgba(255, 165, 81);
 }
 .status-blue {
     -fx-background-color:rgba(0,0,128,0.7);

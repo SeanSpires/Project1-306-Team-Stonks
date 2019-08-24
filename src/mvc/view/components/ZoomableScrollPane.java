@@ -1,4 +1,4 @@
-package mvc.view.fxml;
+package mvc.view.components;
 
 
 import javafx.geometry.Bounds;
