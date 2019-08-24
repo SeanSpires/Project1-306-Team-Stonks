@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvc.controller.menuController">
+    <children>
+      <ImageView fitHeight="466.0" fitWidth="926.0" layoutX="152.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/visualization.png" />
+         </image>
+      </ImageView>
+      <Pane fx:id="_bottomMenu" layoutY="510.0" prefHeight="90.0" prefWidth="1024.0">
+         <children>
+              <Button fx:id="_runBtn" ellipsisString="" layoutX="40.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleRunButton" prefHeight="55.0" prefWidth="60.0" style="-fx-background-radius: 50px;" text="RUN" textOverrun="CLIP">
+                  <font>
+                      <Font size="15.0" />
+                  </font>
+              </Button>
+              <Button fx:id="_stopBtn" ellipsisString="" layoutX="924.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleStopButton" prefHeight="55.0" prefWidth="60.0" style="-fx-background-radius: 50px;" text="STOP" textOverrun="CLIP">
+                  <font>
+                      <Font size="15.0" />
+                  </font>
+              </Button>
+         </children></Pane>
+      <Button fx:id="_menuBtn" layoutX="33.0" layoutY="19.0" mnemonicParsing="false" onAction="#handleMenuButton" prefHeight="29.0" prefWidth="68.0" style="-fx-background-radius: 10px;" text="MENU">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+
+    </children>
+</AnchorPane>

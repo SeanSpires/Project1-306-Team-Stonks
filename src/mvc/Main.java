@@ -1,7 +1,6 @@
 package mvc;
 
 import mvc.model.FileIO;
-import mvc.model.Schedule;
 import mvc.model.Scheduler;
 import mvc.model.Task;
 import javafx.application.Application;
@@ -25,7 +24,6 @@ public class Main extends Application {
     
     private static List<Task> taskList;
     
-
 
 
     @Override
@@ -85,6 +83,7 @@ public class Main extends Application {
             }
         }
 
+
         if(args.length >= 3) {
             List<String> argsList = Arrays.asList(args);
             numberOfCores = 1;
@@ -113,6 +112,7 @@ public class Main extends Application {
             if (argsList.contains("-v")) {
                 launch();
             }
+            System.out.println("\n-p: value:"+numberOfCores+"  -o value:"+outputFileName);
 
             runAlgorithm();
             System.exit(1);
@@ -120,14 +120,14 @@ public class Main extends Application {
     }
 
     private static void runAlgorithm(){
-//        FileIO fileio = new FileIO();
-//        fileio.readFile(inputFileName);
-//        fileio.processNodes();
-//        fileio.processTransitions();
-//        taskList = fileio.getTaskList();
-//        Scheduler scheduler = new Scheduler();
-//        Schedule schedule = scheduler.createBasicSchedule(taskList, 1);
-//        fileio.writeFile(schedule);
+        FileIO fileio = new FileIO();
+        fileio.readFile(inputFileName);
+        fileio.processNodes();
+        fileio.processTransitions();
+        taskList = fileio.getTaskList();
+        Scheduler scheduler = new Scheduler();
+     //   Schedule schedule = scheduler.createBasicSchedule(taskList, 1);
+     //   fileio.writeFile(schedule);
     }
 
     private  static void runFailed() {
