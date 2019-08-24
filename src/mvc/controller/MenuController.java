@@ -26,13 +26,6 @@ import mvc.view.components.ZoomableScrollPane;
 import java.net.URL;
 import java.util.*;
 
-/**
- * Constructs the GUI components and performs events for displaying and
- * manipulating the binary tree.
- *
- * @author Eric Canull
- * @version 1.0
- */
 public final class MenuController implements Initializable{
 
 
@@ -64,9 +57,9 @@ public final class MenuController implements Initializable{
 	private GanttChart<Number, String> ganttChart;
 	private LinkedHashMap<Task, Integer> finishedScheduleTasks;
 	private List<String> colour;
+
 	/**
-	 * Constructs the GUI components and performs events for displaying and
-	 * changing the data in the binary tree.
+	 * Initialise of the Menu controller when the FXML boots up.
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -82,23 +75,33 @@ public final class MenuController implements Initializable{
 
 	}
 
+	/**
+	 * Adds the Strings to the Array list = Colour.
+	 */
 	public void initColours() {
 		this.colour.add("status-red");
 		this.colour.add("status-green");
 	}
 
-	//displays cores/processors being used
+	/**
+	 * Displays cores/processors being used
+	 */
 	private void getInputs(){
 		_cores.setText(Integer.toString(Main.numberOfCores));
 		_processors.setText(Integer.toString(Main.numberOfProcessors));
 	}
 
-
+	/**
+	 * initialise the scroll pane.
+	 */
 	private void initScrollPane() {
 		ganttScrollPane.initialise();
 		ganttScrollPane.setVvalue(0.75);
 	}
 
+	/**
+	 * Initialises the Gantt chart with the appropriate labels & height + width.
+	 */
 	private void initGanttChart() {
 		ganttChart.setMinWidth(1034);
 		ganttChart.setMinHeight(600);
@@ -117,6 +120,9 @@ public final class MenuController implements Initializable{
 		ganttChart.getStylesheets().add(getClass().getResource("ganttChart.css").toExternalForm());
 	}
 
+	/**
+	 * Sets up the Gantt Chart Y axis.
+	 */
 	private void initGanttChartYAxis(){
 		for (int i = 1; i <= Main.numberOfProcessors; i++) {
 			XYChart.Series series = new XYChart.Series();
@@ -126,7 +132,9 @@ public final class MenuController implements Initializable{
 		}
 	}
 
-	// Should be called when the start button is pressed.
+	/**
+	 * To be called when the start button is pressed.
+	 */
 	private void runTimer() {
 		timeTaken = 0;
 		timer = new Timer();
@@ -145,7 +153,10 @@ public final class MenuController implements Initializable{
 
 	}
 
-	// Creates a new thread to run the algorithm.
+	/**
+	 * Creates a new thread to run the algorithm.
+	 * @param actionEvent
+	 */
 	@FXML
 	public void handleRunButton(javafx.event.ActionEvent actionEvent) {
 
@@ -157,6 +168,7 @@ public final class MenuController implements Initializable{
 
         Service algorithmService = new Service() {
 
+        	// Create a new worker thread to run in the background, when visualisation is happening.
             @Override
             protected javafx.concurrent.Task createTask() {
 
@@ -178,6 +190,7 @@ public final class MenuController implements Initializable{
                 };
             }
 
+            // When the thread has finished
             @Override
             protected void succeeded() {
                 _runBtn.setDisable(false);
@@ -189,6 +202,10 @@ public final class MenuController implements Initializable{
         algorithmService.start();
 	}
 
+	/**
+	 * Run when the stop button is pressed.
+	 * @param actionEvent
+	 */
 	@FXML
 	public void handleStopButton(javafx.event.ActionEvent actionEvent) {
 		// Use this to stop the timer
@@ -197,7 +214,10 @@ public final class MenuController implements Initializable{
 		_runBtn.setDisable(false);
     }
 
-    // Replace partial schedule graph with own data structure.
+	/**
+	 * Update the graph iteratively
+	 * @param scheduledTasks
+	 */
     public void updateGraph(LinkedHashMap<Task, Integer> scheduledTasks) {
 
 		Platform.runLater(new Runnable() {
@@ -215,6 +235,7 @@ public final class MenuController implements Initializable{
 					String nodeNumber = Integer.toString(t.getNodeNumber());
 					String style = getColor(t.getNodeNumber());
 
+					// Plots the task on the Schedule
 					XYChart.Data newData = new XYChart.Data(startTime, Integer.toString(processor), new GanttChart.ExtraData(weight, style, nodeNumber));
 					series.getData().add(newData);
 
@@ -222,10 +243,13 @@ public final class MenuController implements Initializable{
 
 			}
 		});
-
-//
     }
 
+	/**
+	 * Gets the String for the odd and even tasks
+	 * @param x - Node number
+	 * @return - String for CSS colour.
+	 */
     public String getColor(int x) {
 		if(x % 2 == 0) {
 			return this.colour.get(0);

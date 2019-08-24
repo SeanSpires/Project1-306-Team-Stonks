@@ -12,6 +12,10 @@ public class FileIO {
     private List<String> transitionList = new ArrayList<>();
     private String fileName;
 
+    /**
+     * Writes the right inputs into the file.
+     * @param data - A completed Schedule.
+     */
     public void writeFile(Schedule data) {
     	
     	LinkedHashMap<Task, Integer> schedule = data.getTasks();
@@ -54,6 +58,10 @@ public class FileIO {
         }
     }
 
+    /**
+     * Reads the file and places the inputs in the right data structure.
+     * @param fileName - Input file name of the .dot file
+     */
     public void readFile(String fileName) {
         File currentFile = new File(fileName);
         int dot = fileName.indexOf('.');
@@ -82,6 +90,9 @@ public class FileIO {
         }
     }
 
+    /**
+     * For each node from the file input, create a new Task object for it.
+     */
     public void processNodes() {
         for (String node : nodeList) {
             int weight = getWeightValue(node);
@@ -93,7 +104,9 @@ public class FileIO {
         }
     }
 
-
+    /**
+     * This processes all the transitions of the input from the -> , this sets the parent and child task of each.
+     */
     public void processTransitions() {
 
         for (String transition : transitionList) {
@@ -124,12 +137,22 @@ public class FileIO {
 
     }
 
+    /**
+     * This method creates the task
+     * @param nodeNumber - Nodes ID
+     * @param weight - Time taken for the node to finish
+     */
     private void createTask(int nodeNumber, int weight) {
         Task newTask = new Task(nodeNumber);
         newTask.setWeight(weight);
         taskList.add(newTask);
     }
 
+    /**
+     * Parses through a line and gets the weight of each task.
+     * @param input - A line from the input file
+     * @return - The weight of the node.
+     */
     private int getWeightValue(String input) {
         int equals = input.indexOf('=') + 1;
         int bracket = input.indexOf(']');
@@ -137,17 +160,23 @@ public class FileIO {
         return Integer.valueOf(weightStr);
     }
 
+    /**
+     * Checks if the input line is a Transition
+     * @param s - A line from the input file.
+     * @return - True if line reflects a transition, false if line is not a transition.
+     */
     private boolean isTransition(String s) {
-
         String sub = s.substring(2, 4);
         if (sub.equals("->")) {
             return true;
         }
-
         return false;
-
     }
 
+    /**
+     * Gets the list of tasks
+     * @return - taskList
+     */
     public List<Task> getTaskList() {
         return taskList;
     }
