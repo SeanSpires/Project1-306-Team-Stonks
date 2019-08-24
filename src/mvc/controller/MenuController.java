@@ -63,21 +63,28 @@ public final class MenuController implements Initializable{
 	private CategoryAxis yAxis;
 	private GanttChart<Number, String> ganttChart;
 	private LinkedHashMap<Task, Integer> finishedScheduleTasks;
+	private List<String> colour;
 	/**
 	 * Constructs the GUI components and performs events for displaying and
 	 * changing the data in the binary tree.
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		fileio = new FileIO();
 
+		colour = new ArrayList<String>();
 		xAxis = new NumberAxis();
 		yAxis = new CategoryAxis();
 		ganttChart = new GanttChart<Number, String>(xAxis, yAxis);
 		getInputs();
 		initScrollPane();
 		initGanttChart();
+		initColours();
 
+	}
+
+	public void initColours() {
+		this.colour.add("status-red");
+		this.colour.add("status-green");
 	}
 
 	//displays cores/processors being used
@@ -141,7 +148,9 @@ public final class MenuController implements Initializable{
 	// Creates a new thread to run the algorithm.
 	@FXML
 	public void handleRunButton(javafx.event.ActionEvent actionEvent) {
+
 		// Starts running the timer for the app.
+		fileio = new FileIO();
 		runTimer();
 		_stopBtn.setDisable(false);
 		_runBtn.setDisable(true);
@@ -172,8 +181,8 @@ public final class MenuController implements Initializable{
             @Override
             protected void succeeded() {
                 _runBtn.setDisable(false);
-                //_stopBtn.setDisable(true);
-                //timeline.stop();
+                _stopBtn.setDisable(true);
+                timeline.stop();
                 System.out.println("Finished");
             }
         };
@@ -204,7 +213,7 @@ public final class MenuController implements Initializable{
 					long weight = t.getWeight();
 					int processor = t.getProcessor();
 					String nodeNumber = Integer.toString(t.getNodeNumber());
-					String style = "status-red";
+					String style = getColor(t.getNodeNumber());
 
 					XYChart.Data newData = new XYChart.Data(startTime, Integer.toString(processor), new GanttChart.ExtraData(weight, style, nodeNumber));
 					series.getData().add(newData);
@@ -216,5 +225,13 @@ public final class MenuController implements Initializable{
 
 //
     }
+
+    public String getColor(int x) {
+		if(x % 2 == 0) {
+			return this.colour.get(0);
+		} else {
+			return this.colour.get(1);
+		}
+	}
 
 }
