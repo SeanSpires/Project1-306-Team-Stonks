@@ -21,7 +21,7 @@ public class SchedulerParallel {
 	private AtomicLong bestUpperBound;
 	private HashSet<Integer> closed;
 	
-	public Node createOptimalSchedule(List<Task> tasks, int numProc, int numCores) {
+	public Node createOptimalSchedule(List<Task> tasks, int numProc, int numCores, MenuController controller) {
 
 		this.closed = new HashSet<>();
 		
@@ -40,7 +40,7 @@ public class SchedulerParallel {
 		done.set(false);
 		
 		for(int i = 0 ; i < numCores; i++) {
-			SchedulerParallelTask t = new SchedulerParallelTask(openNodes, numProc, bestLowerBound, bestUpperBound, closed, done);
+			SchedulerParallelTask t = new SchedulerParallelTask(openNodes, numProc, bestLowerBound, bestUpperBound, closed, done, controller);
 			schedulerTasks.add(t);
 			forkJoinPool.invoke(t);
 		}
@@ -52,7 +52,13 @@ public class SchedulerParallel {
 				continue;
 			}
 			if(out == null || joined.getUpperBound() < out.getUpperBound()) {
-				out = joined;		
+				out = joined;
+
+				if(controller == null){
+					//Do nothing
+				} else {
+					controller.updateGraph(out.getScheduledTasks());
+				}
 			}
 		}
 				

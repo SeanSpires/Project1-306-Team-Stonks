@@ -114,14 +114,6 @@ public class Node implements Comparable{
     }
 
     /**
-     * Standard setter for scheduledTasks.
-     * @param scheduledTasks - List of Scheduled Tasks.
-     */
-    public void setScheduledTasks(List<Task> scheduledTasks) {
-        this.scheduledTasks = scheduledTasks;
-    }
-
-    /**
      * Method to add the input task, into the input process
      * @param task
      * @param proc
@@ -180,14 +172,6 @@ public class Node implements Comparable{
     }
 
     /**
-     * Standard setter for the lowerBound field.
-     * @param lowerBound - double lowerBound for the node.
-     */
-    public void setLowerBound(double lowerBound) {
-        this.lowerBound = lowerBound;
-    }
-
-    /**
      * Method to add a task into the scheduledTask list of the node.
      * @param task - input task user wants to add into the list.
      */
@@ -203,13 +187,6 @@ public class Node implements Comparable{
 		return scheduledTasksByProcessor;
 	}
 
-    /**
-     * Standard setter for scheduledTasksByProcessor.
-     * @param scheduledTasksByProcessor
-     */
-	public void setScheduledTasksByProcessor(HashMap<Integer, List<Task>> scheduledTasksByProcessor) {
-		this.scheduledTasksByProcessor = scheduledTasksByProcessor;
-	}
 
     /**
      * Essential for the priority queue. This allows the priority queue know which node to place.
@@ -232,29 +209,15 @@ public class Node implements Comparable{
     @Override
     public int hashCode(){
         int out = 1;
-        Node new1 = new Node(this).normalize();
-        for(Integer proc : new1 .scheduledTasksByProcessor.keySet()){
-            for(Task t : new1 .scheduledTasksByProcessor.get(proc)) {
+        Node new1 = new Node(this);
+        for(Integer proc : new1.scheduledTasksByProcessor.keySet()){
+            for(Task t : new1.scheduledTasksByProcessor.get(proc)) {
                 out = out + t.hashCode();
             }
         }
         return out;
     }
-    
-    public Node normalize(){
-        for(Integer procVertices : this.scheduledTasksByProcessor.keySet()){
-            int start = this.scheduledTasksByProcessor.get(procVertices).get(0).getNodeNumber();
-            for (Task t : this.scheduledTasksByProcessor.get(procVertices)) {
-                if (this.getTaskByNumber(start).getStartTime() > this.getTaskByNumber(t.getNodeNumber()).getStartTime()) {
-                    start = t.getNodeNumber();
-                }
-            }
-            for (Task t : this.scheduledTasksByProcessor.get(procVertices)) {
-                this.getTaskByNumber(t.getNodeNumber()).setProcessor(start);
-            }
-        }
-        return this;
-    }
+
 
     public void setLastBL(double bl){
         this.lastBL = bl;

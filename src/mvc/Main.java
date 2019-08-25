@@ -133,7 +133,17 @@ public class Main extends Application {
             if (argsList.contains("-v")) {
                 launch();
             } else{
+                System.out.println("Scheduling on " + numberOfProcessors +" Processes. Running on "+ numberOfCores+" Cores");
+                System.out.println("Starting algorithm...");
                 runAlgorithm();
+
+                String s;
+                if(outputFileName == null){
+                    s = inputFileName + "-output.dot";
+                } else {
+                    s = outputFileName + ".dot";
+                }
+                System.out.println("Algorithm finished. Output: "+ s);
                 System.exit(1);
             }
         }
@@ -147,7 +157,7 @@ public class Main extends Application {
         Node schedule;
         if(numberOfCores > 1){ //Multiple Cores
             SchedulerParallel scheduler = new SchedulerParallel();
-            schedule = scheduler.createOptimalSchedule(taskList, numberOfProcessors, numberOfCores);
+            schedule = scheduler.createOptimalSchedule(taskList, numberOfProcessors, numberOfCores, null);
 
         } else { //Single Core
             Scheduler scheduler = new Scheduler();

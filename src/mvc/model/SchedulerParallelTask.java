@@ -25,16 +25,19 @@ public class SchedulerParallelTask extends RecursiveTask {
 	private HashSet<Integer> closed;
 
 	private static AtomicBoolean done;
+	private MenuController controller;
 
 
 	public SchedulerParallelTask(PriorityBlockingQueue<Node> openNodes, int numProc,
-			AtomicLong bestLowerBound, AtomicLong bestUpperBound, HashSet<Integer> closed, AtomicBoolean done) {
+			AtomicLong bestLowerBound, AtomicLong bestUpperBound, HashSet<Integer> closed, AtomicBoolean done, MenuController controller) {
 		this.done = done;
 		this.closed = closed;
 		this.numProc = numProc;
 		this.openNodes = openNodes;
 
 		this.bestUpperBound = bestUpperBound;
+		this.controller = controller;
+
 
 	}
 
@@ -46,6 +49,13 @@ public class SchedulerParallelTask extends RecursiveTask {
 		while (true) {
 
 			Node node = openNodes.poll();
+
+			if(controller == null){
+				//Do nothing
+			} else {
+				controller.updateGraph(node.getScheduledTasks());
+			}
+
 			if(node == null){
 				return null;
 			}

@@ -6,49 +6,7 @@ import mvc.controller.MenuController;
 import java.util.*;
 
 public class Scheduler {
-	/*
-	public Schedule createBasicSchedule(List<Task> tasks, int processor, MenuController controller) {
 
-		Schedule schedule = new Schedule(controller);
-		Queue<Task> taskQueue = new LinkedList<>();
-		List<Task> rootTasks = getRootTasks(tasks);
-
-		Task currentTask;
-		Set<Task> subTasks;
-
-		taskQueue.addAll(rootTasks);
-		int startTime = 0;
-
-		while (!(taskQueue.isEmpty())) {
-			currentTask = taskQueue.element();
-			subTasks = currentTask.getSubTasks().keySet();
-			taskQueue.removeAll(subTasks);   //remove duplicate subtasks
-			taskQueue.addAll(subTasks);
-			taskQueue.remove(currentTask);
-
-			currentTask.setProcessor(processor);
-			schedule.addTask(currentTask, startTime);
-
-			startTime = startTime + currentTask.getWeight();
-		}
-
-		return schedule;
-
-	}
-	 */
-
-	private List<Task> getRootTasks(List<Task> tasks) {
-		List<Task> rootTasks = new ArrayList<>();
-
-		// if a task has no parent it must be a root
-		for (Task t : tasks) {
-			if (t.getParentTasks().isEmpty()) {
-				rootTasks.add(t);
-			}
-		}
-
-		return rootTasks;
-	}
 	
 	
 	public Node createOptimalSchedule(List<Task> tasks, int numProc, MenuController controller) {
@@ -104,6 +62,11 @@ public class Scheduler {
 			}
 			
 			Node minNode = openNodes.poll();
+			if(controller == null){
+				//Do nothing
+			} else {
+				controller.updateGraph(node.getScheduledTasks());
+			}
 			
 			if (minNode.getUnscheduledTasks().isEmpty()){
 				return minNode;
@@ -155,21 +118,6 @@ public class Scheduler {
 	}
 
 
-//	private int calcMakeSpan(Node node) {
-//		int makeSpan = 0;
-//		int temptCompTime = 0;
-//		List<Task> tasks = node.getScheduledTasks();
-//
-//		for (Task t : tasks) {
-//			temptCompTime = t.getStatus();
-//			if (temptCompTime > makeSpan) {
-//				makeSpan = temptCompTime;
-//
-//			}
-//		}
-//
-//		return makeSpan;
-//	}
 
 	private int getStartTime(int proc, Task task, Node node) {
 		int comCost = 0;
