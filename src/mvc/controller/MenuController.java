@@ -40,7 +40,7 @@ public final class MenuController implements Initializable{
 
     private FileIO fileio;
     private Scheduler scheduler;
-    private Schedule schedule;
+    private Node schedule;
 	private List<Task> taskList;
 
 	private List<String> processorList = new ArrayList<String>();
@@ -181,8 +181,7 @@ public final class MenuController implements Initializable{
                         fileio.processTransitions();
                         taskList = fileio.getTaskList();
                         scheduler = new Scheduler();
-                        schedule = scheduler.createBasicSchedule(taskList, 1, thisController);
-                        finishedScheduleTasks = schedule.getTasks();
+                        schedule = scheduler.createOptimalScheduleVisualised(taskList, Main.numberOfProcessors, thisController);
                         fileio.writeFile(schedule);
                         return null;
                     }
@@ -218,7 +217,7 @@ public final class MenuController implements Initializable{
 	 * Update the graph iteratively
 	 * @param scheduledTasks
 	 */
-    public void updateGraph(LinkedHashMap<Task, Integer> scheduledTasks) {
+    public void updateGraph(List<Task> scheduledTasks) {
 
 		Platform.runLater(new Runnable() {
 
@@ -227,14 +226,13 @@ public final class MenuController implements Initializable{
 				ganttChart.getData().clear();
 				initGanttChartYAxis();
 
-				for(Task t : scheduledTasks.keySet()){
+				for(Task t : scheduledTasks){
 					XYChart.Series series = ganttChart.getData().get(t.getProcessor()-1);
-					int startTime = scheduledTasks.get(t);
+					int startTime = t.getStartTime();
 					long weight = t.getWeight();
 					int processor = t.getProcessor();
 					String nodeNumber = Integer.toString(t.getNodeNumber());
 					String style = getColor(t.getNodeNumber());
-
 					// Plots the task on the Schedule
 					XYChart.Data newData = new XYChart.Data(startTime, Integer.toString(processor), new GanttChart.ExtraData(weight, style, nodeNumber));
 					series.getData().add(newData);

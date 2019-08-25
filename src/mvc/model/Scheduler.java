@@ -1,14 +1,15 @@
 package  mvc.model;
 
 
+import mvc.controller.MenuController;
+
 import java.util.*;
 
 public class Scheduler {
 /*
-	public Schedule createBasicSchedule(List<Task> tasks, int processor) {
+	public Schedule createBasicSchedule(List<Task> tasks, int processor, MenuController controller) {
 
-		Schedule schedule = new Schedule();
-
+		Schedule schedule = new Schedule(controller);
 		Queue<Task> taskQueue = new LinkedList<>();
 		List<Task> rootTasks = getRootTasks(tasks);
 
@@ -34,7 +35,6 @@ public class Scheduler {
 		return schedule;
 
 	}
-
 */
 
 	private List<Task> getRootTasks(List<Task> tasks) {
@@ -50,13 +50,11 @@ public class Scheduler {
 		return rootTasks;
 	}
 
-	public Node createOptimalSchedule (List<Task> tasks, int numProc) {
+	public Node createOptimalScheduleVisualised (List<Task> tasks, int numProc, MenuController controller) {
 
 		PriorityQueue<Node> openNodes = new PriorityQueue<>();
 		Node node = new Node();
 		node.setUnscheduledTasks(tasks);
-		//node.setUpperBound(calcUpperBound(new Node(node), numProc));
-		//node.setLowerBound(calcLowerBound(node, numProc));
 
 		boolean algoNotFinished = true;
 		double bestUpperBound = node.getUpperBound();
@@ -91,6 +89,7 @@ public class Scheduler {
 							bestUpperBound = upperBound;
 							for (Node n : new ArrayList<>(openNodes)) {
 								if (n.getLowerBound() > bestUpperBound) {
+									// REmove bad nodes from list
 									openNodes.remove(n);
 								}
 							}			
@@ -99,37 +98,96 @@ public class Scheduler {
 						if (childNode.getLowerBound() > childNode.getUpperBound()) {
 							continue;
 						}
-						else {			
+						else {
+							// Current node is worth exploring
 							openNodes.add(childNode);
 						}			
 					}
 				}
 			}
 			
-			
 			Node minNode = openNodes.poll();
 
 			node = new Node(minNode);
+			// node is current best node.
+			controller.updateGraph(node.getScheduledTasks());
+
 			if (node.getLowerBound() == node.getUpperBound() && node.getUnscheduledTasks().isEmpty()) {
 				return node;
 			}
-			
-//			double bestLowerBound = minNode.getLowerBound();
-//			for (Node n : openNodes) {
-//				if (n.getLowerBound() < bestLowerBound) {
-//					minNode = n;
-//					bestLowerBound = n.getLowerBound();
-//				}
-//			}
-//
-//			openNodes.remove(node);
-
-
 		}
 		return null;
 	}
 
-	
+	public Node createOptimalSchedule (List<Task> tasks, int numProc) {
+
+		PriorityQueue<Node> openNodes = new PriorityQueue<>();
+		Node node = new Node();
+		node.setUnscheduledTasks(tasks);
+
+		boolean algoNotFinished = true;
+		double bestUpperBound = node.getUpperBound();
+
+		int startTime = 0;
+		double upperBound;
+		double lowerBound;
+
+		while (algoNotFinished) {
+			for (Task t : new ArrayList<>(node.getUnscheduledTasks())) {
+				for (int i = 1; i < numProc + 1; i++) {
+					Node childNode = new Node(node);
+					if (containsParents(node, t) || t.getParentTasks().isEmpty()) {
+						childNode.removeUnscheduledTask(t);
+						t = new Task(t);
+						t.setProcessor(i);
+						startTime = getStartTime(i, t, childNode);
+						t.setStatus(startTime + t.getWeight());
+						t.setStartTime(startTime);
+						childNode.addScheduledTask(t);
+						childNode.addTasksToProcessor(t, i);
+
+						upperBound = calcUpperBound(new Node(childNode), numProc);
+
+						childNode.setUpperBound(upperBound);
+
+						lowerBound = calcLowerBound(childNode, numProc);
+
+						childNode.setLowerBound(lowerBound);
+
+						if (upperBound < bestUpperBound) {
+							bestUpperBound = upperBound;
+							for (Node n : new ArrayList<>(openNodes)) {
+								if (n.getLowerBound() > bestUpperBound) {
+									// REmove bad nodes from list
+									openNodes.remove(n);
+								}
+							}
+						}
+						//System.out.println("node lower: " + childNode.getLowerBound());
+						///System.out.println("node upper: " + childNode.getUpperBound());
+						if (childNode.getLowerBound() > childNode.getUpperBound()) {
+							continue;
+						}
+						else {
+							// Current node is worth exploring
+							openNodes.add(childNode);
+						}
+					}
+				}
+			}
+
+			Node minNode = openNodes.poll();
+
+			node = new Node(minNode);
+			// node is current best node.
+			if (node.getLowerBound() == node.getUpperBound() && node.getUnscheduledTasks().isEmpty()) {
+				return node;
+			}
+		}
+		return null;
+	}
+
+
 	private boolean containsParents(Node node, Task t) {
 		
 		List<Task> scheduled = node.getScheduledTasks();		
@@ -213,9 +271,6 @@ public class Scheduler {
 		
 		makeSpan = calcMakeSpan(node);
 		return makeSpan;
-		
-		
-		
 
 	}
 
@@ -235,10 +290,8 @@ public class Scheduler {
 		for (Task t: tasks) {
 			if (t.getWeight() < minTask.getWeight()) {
 				minTask = t;
-
 			}
 		}
-		
 		return minTask;
 	}
 
