@@ -5,10 +5,9 @@ import java.util.*;
 
 public class Scheduler {
 /*
-	public Schedule createBasicSchedule(List<Task> tasks, int processor) {
+	public Schedule createBasicSchedule(List<Task> tasks, int processor, MenuController controller) {
 
-		Schedule schedule = new Schedule();
-
+		Schedule schedule = new Schedule(controller);
 		Queue<Task> taskQueue = new LinkedList<>();
 		List<Task> rootTasks = getRootTasks(tasks);
 
@@ -34,7 +33,6 @@ public class Scheduler {
 		return schedule;
 
 	}
-
 */
 
 	private List<Task> getRootTasks(List<Task> tasks) {
@@ -55,8 +53,6 @@ public class Scheduler {
 		PriorityQueue<Node> openNodes = new PriorityQueue<>();
 		Node node = new Node();
 		node.setUnscheduledTasks(tasks);
-		//node.setUpperBound(calcUpperBound(new Node(node), numProc));
-		//node.setLowerBound(calcLowerBound(node, numProc));
 
 		boolean algoNotFinished = true;
 		double bestUpperBound = node.getUpperBound();
@@ -107,25 +103,12 @@ public class Scheduler {
 				}
 			}
 			
-			
 			Node minNode = openNodes.poll();
 
 			node = new Node(minNode);
 			if (node.getLowerBound() == node.getUpperBound() && node.getUnscheduledTasks().isEmpty()) {
 				return node;
 			}
-			
-//			double bestLowerBound = minNode.getLowerBound();
-//			for (Node n : openNodes) {
-//				if (n.getLowerBound() < bestLowerBound) {
-//					minNode = n;
-//					bestLowerBound = n.getLowerBound();
-//				}
-//			}
-//
-//			openNodes.remove(node);
-
-
 		}
 		return null;
 	}
@@ -214,49 +197,6 @@ public class Scheduler {
 		
 		makeSpan = calcMakeSpan(node);
 		return makeSpan;
-		
-		
-		
-//		while (!unscheduledTasks.isEmpty()) {
-//			Task task = null;
-//			double minStartTime = Double.POSITIVE_INFINITY;
-//
-//
-//			for (Task t : unscheduledTasks) {
-//				if (containsParents(node, t) || t.getParentTasks().isEmpty()) {
-//					task = t;
-//					break;
-//				}
-//			}
-//
-//			if (task == null) {
-//				return calcMakeSpan(node);
-//			}
-//
-//			int tempStartTime = 0;
-//			int bestProc = 1;
-//			
-//			for (int i = 1; i <= numProc; i++) {
-//				tempStartTime = getStartTime(i, task, node);
-//				if (minStartTime > tempStartTime) {
-//					minStartTime = tempStartTime;
-//					bestProc = i;
-//				}
-//			}
-//
-//
-//			task.setProcessor(bestProc);
-//			task.setStatus((int) minStartTime + task.getWeight());
-//			node.addTasksToProcessor(task, bestProc);
-//			node.addScheduledTask(task);
-//			node.removeUnscheduledTask(task);
-//			unscheduledTasks.remove(task);
-//			
-//		}
-//
-//		makeSpan = calcMakeSpan(node);
-//
-//		return makeSpan;
 	}
 
 	private Task PickGreedyTask(Node node) {
@@ -275,10 +215,8 @@ public class Scheduler {
 		for (Task t: tasks) {
 			if (t.getWeight() < minTask.getWeight()) {
 				minTask = t;
-
 			}
 		}
-		
 		return minTask;
 	}
 

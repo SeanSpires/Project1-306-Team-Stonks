@@ -181,7 +181,7 @@ public final class MenuController implements Initializable{
                         fileio.processTransitions();
                         taskList = fileio.getTaskList();
                         scheduler = new Scheduler();
-                        schedule = scheduler.createBasicSchedule(taskList, 1, thisController);
+                        schedule = scheduler.createOptimalSchedule(taskList, 1, thisController);
                         finishedScheduleTasks = schedule.getTasks();
                         fileio.writeFile(schedule);
                         return null;
