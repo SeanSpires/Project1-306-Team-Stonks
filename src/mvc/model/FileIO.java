@@ -113,10 +113,13 @@ public class FileIO {
 
             int weight = getWeightValue(transition);
 
-            //Parent node
-            int parentNode = Character.getNumericValue(transition.charAt(0));
+            String parentString = transition.substring(0, transition.indexOf(' '));
+            int parentNode = Integer.valueOf(parentString);
             //Child node
-            int childNode = Character.getNumericValue(transition.charAt(5));
+            int arrow = transition.indexOf('>');
+            int tab = transition.indexOf('\t');
+            String childString = transition.substring(arrow + 2, tab);
+            int childNode = Integer.valueOf(childString);
 
             Task parentTask = null;
             Task childTask = null;
@@ -185,4 +188,14 @@ public class FileIO {
         processNodes();
         processTransitions();
     }
+
+    /**
+     *             String parentString = transition.substring(0, transition.indexOf(' '));
+     *             int parentNode = Integer.valueOf(parentString);
+     *             //Child node
+     *             int arrow = transition.indexOf('>');
+     *             int tab = transition.indexOf('\t');
+     *             String childString = transition.substring(arrow + 2, tab);
+     *             int childNode = Integer.valueOf(childString);
+     */
 }
