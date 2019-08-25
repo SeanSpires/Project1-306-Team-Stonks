@@ -14,6 +14,7 @@ public class SchedulerParallel {
 	private AtomicLong bestLowerBound;
 	private AtomicLong bestUpperBound;	
 	
+	
 	public Node createOptimalSchedule(List<Task> tasks, int numProc, int numCores) {
 		
 		this.openNodes = new PriorityBlockingQueue<>();
@@ -26,12 +27,12 @@ public class SchedulerParallel {
 		openNodes.add(n);
 		ArrayList<SchedulerParallelTask> schedulerTasks = new ArrayList<SchedulerParallelTask>();
 		
-		
 		for(int i = 0 ; i < numCores; i++) {
 			SchedulerParallelTask t = new SchedulerParallelTask(openNodes, numProc, bestLowerBound, bestUpperBound);
 			schedulerTasks.add(t);
 			forkJoinPool.invoke(t);
 		}
+		
 		Node out = null;
 		for (SchedulerParallelTask t : schedulerTasks) {
 			Node joined = (Node) t.join();

@@ -26,7 +26,7 @@ public class Task {
     	this.processor = t.processor;
     	this.status = t.status;
     	this.startTime = t.startTime;
-    	//this.parentTasks = new ArrayList<>(t.parentTasks);
+    	
     	for(Task task : t.parentTasks) {
     		this.parentTasks.add(new Task(task));
     	}
