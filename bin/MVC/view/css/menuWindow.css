@@ -1,0 +1,79 @@
+.root {
+    -fx-font-family: "System";
+    -fx-font-size: 1em;
+    -fx-base: rgb(59,66,77);
+    -fx-text-background-color: rgb(245,245,245);
+}
+
+#_topMenu{
+    -fx-background-color: rgba(59,66,77);
+    -fx-border-color: rgba(255,255,255, 0.0);
+}
+
+#ganttScrollPane{
+    -fx-border-color: rgba(255,255,255, 0.0);
+}
+
+#centerPane{
+    -fx-border-color: rgba(255,255,255, 0.0);
+    -fx-font-size: 28px;
+    -fx-padding: 10px;
+    -fx-font-family: "Leelawadee UI";
+}
+
+
+#_runBtn{
+    -fx-font-size: 16px;
+    -fx-font-family: "Doppio One";
+    -fx-background-color: rgba(210,	210, 210 ,0.0);
+}
+
+#_stopBtn{
+    -fx-font-size: 16px;
+    -fx-font-family: "Doppio One";
+    -fx-background-color: rgba(210,	210, 210, 0.0);
+}
+
+#_bottomMenu{
+    -fx-background-color: rgb(31, 56, 71);
+}
+
+#_border{
+    -fx-background-color: rgb(53,147,161); /*rgb(140,208,213);*/
+}
+
+#_processors{
+    -fx-text-background-color: rgb(53,147,161);
+}
+
+#_cores{
+    -fx-text-background-color: rgb(53,147,161);
+}
+
+
+#_timerOutput{
+    -fx-text-background-color: rgb(53,147,161);
+}
+
+#_scheduleOutput{
+    -fx-text-background-color: rgb(53,147,161);
+}
+
+#_bottomTimeLabel{
+    -fx-text-background-color: rgb(255, 163, 79);
+}
+
+#_bottomScheduleLabel{
+    -fx-text-background-color: rgb(255, 163, 79);
+}
+
+#_bottomCoresLabel{
+    -fx-text-background-color: rgb(64, 181, 199);
+}
+
+#_bottomProcessorLabel{
+    -fx-text-background-color: rgb(64, 181, 199);
+}
+
+
+

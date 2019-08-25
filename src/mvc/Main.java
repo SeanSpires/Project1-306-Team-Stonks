@@ -26,10 +26,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader. load(getClass().getResource("view/FXML/MenuWindow.fxml"));
+        Parent root = FXMLLoader. load(getClass().getResource("controller/MenuWindow.fxml"));
         primaryStage.setTitle("Project1-306");
         Scene mainScene = new Scene(root, 1024, 700);
-        mainScene.getStylesheets().add(getClass().getResource("view/CSS/menuWindow.css").toExternalForm());
+        mainScene.getStylesheets().add(getClass().getResource("view/css/menuWindow.css").toExternalForm());
         primaryStage.setResizable(false);
         primaryStage.setScene(mainScene);
         primaryStage.show();
