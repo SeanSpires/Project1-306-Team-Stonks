@@ -94,8 +94,7 @@ public class Scheduler {
 								}
 							}			
 						}
-						//System.out.println("node lower: " + childNode.getLowerBound());
-						///System.out.println("node upper: " + childNode.getUpperBound());
+						
 						if (childNode.getLowerBound() > childNode.getUpperBound()) {
 							continue;
 						}
@@ -229,7 +228,7 @@ public class Scheduler {
 
 
 
-	private double calcLowerBound(Node node, int numProc) {
+	private long calcLowerBound(Node node, int numProc) {
 
 		double makeSpan = 0;
 		int sum = 0;
@@ -241,12 +240,12 @@ public class Scheduler {
 		makeSpan = calcMakeSpan(node);
 		makeSpan += (sum / numProc);
 
-		return makeSpan;
+		return (long) makeSpan;
 
 	}
 
 
-	private double calcUpperBound(Node node, int numProc) {
+	private long calcUpperBound(Node node, int numProc) {
 		
 		int makeSpan = 0;
 		List<Task> unscheduledTasks = new ArrayList<>(node.getUnscheduledTasks());
@@ -272,6 +271,7 @@ public class Scheduler {
 		
 		makeSpan = calcMakeSpan(node);
 		return makeSpan;
+
 	}
 
 	private Task PickGreedyTask(Node node) {

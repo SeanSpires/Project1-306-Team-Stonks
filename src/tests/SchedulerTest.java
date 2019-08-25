@@ -104,6 +104,7 @@
 //
 //    @Ignore
 //    @Test
+
 //	public void testSimpleSchedule() {
 //
 //    /*
@@ -152,6 +153,7 @@
 //        tasks.add(task5);
 //
 //		//Schedule s = scheduler.createBasicSchedule(tasks, 1);
+
 //        Node s = scheduler.createOptimalSchedule(tasks, 2);
 //
 //        System.out.println(s.getScheduledTasks().size());
