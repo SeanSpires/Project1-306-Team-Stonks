@@ -2,7 +2,6 @@ package mvc.model;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 public class FileIO {
@@ -12,9 +11,13 @@ public class FileIO {
     private List<String> transitionList = new ArrayList<>();
     private String fileName;
 
-    public void writeFile(Schedule data) {
+    /**
+     * Writes the right inputs into the file.
+     * @param data - A completed Schedule.
+     */
+    public void writeFile(Node data) {
     	
-    	LinkedHashMap<Task, Integer> schedule = data.getTasks();
+    	List<Task> schedule = data.getScheduledTasks();
     	String outputFileName;
     	
     	if (!(mvc.Main.outputFileName == null)) {
@@ -34,12 +37,13 @@ public class FileIO {
 
             fw.write("digraph \"" + outputFileName +"\" {\n");
 
-            for (Task t : schedule.keySet()) {
+            for (Task t : schedule) {
                 int node = t.getNodeNumber();
                 int weight = t.getWeight();
                 int processor = t.getProcessor();
-                int startTime = schedule.get(t);
-                fw.write("\t"+ node + "\t[Weight=" + weight + ",Start=" + startTime + ",Processor=" + processor + "];\n");
+                int startTime = t.getStartTime();
+                int endTime = t.getStatus();
+                fw.write("\t"+ node + "\t[Weight=" + weight + ",Start=" + startTime + ",End=" + endTime + ",Processor=" + processor + "];\n");
             }
 
             for(String s : transitionList){
@@ -54,6 +58,10 @@ public class FileIO {
         }
     }
 
+    /**
+     * Reads the file and places the inputs in the right data structure.
+     * @param fileName - Input file name of the .dot file
+     */
     public void readFile(String fileName) {
         File currentFile = new File(fileName);
         int dot = fileName.indexOf('.');
@@ -82,6 +90,9 @@ public class FileIO {
         }
     }
 
+    /**
+     * For each node from the file input, create a new Task object for it.
+     */
     public void processNodes() {
         for (String node : nodeList) {
             int weight = getWeightValue(node);
@@ -93,17 +104,22 @@ public class FileIO {
         }
     }
 
-
+    /**
+     * This processes all the transitions of the input from the -> , this sets the parent and child task of each.
+     */
     public void processTransitions() {
 
         for (String transition : transitionList) {
 
             int weight = getWeightValue(transition);
 
-            //Parent node
-            int parentNode = Character.getNumericValue(transition.charAt(0));
+            String parentString = transition.substring(0, transition.indexOf(' '));
+            int parentNode = Integer.valueOf(parentString);
             //Child node
-            int childNode = Character.getNumericValue(transition.charAt(5));
+            int arrow = transition.indexOf('>');
+            int tab = transition.indexOf('\t');
+            String childString = transition.substring(arrow + 2, tab);
+            int childNode = Integer.valueOf(childString);
 
             Task parentTask = null;
             Task childTask = null;
@@ -124,12 +140,22 @@ public class FileIO {
 
     }
 
+    /**
+     * This method creates the task
+     * @param nodeNumber - Nodes ID
+     * @param weight - Time taken for the node to finish
+     */
     private void createTask(int nodeNumber, int weight) {
         Task newTask = new Task(nodeNumber);
         newTask.setWeight(weight);
         taskList.add(newTask);
     }
 
+    /**
+     * Parses through a line and gets the weight of each task.
+     * @param input - A line from the input file
+     * @return - The weight of the node.
+     */
     private int getWeightValue(String input) {
         int equals = input.indexOf('=') + 1;
         int bracket = input.indexOf(']');
@@ -137,18 +163,39 @@ public class FileIO {
         return Integer.valueOf(weightStr);
     }
 
+    /**
+     * Checks if the input line is a Transition
+     * @param s - A line from the input file.
+     * @return - True if line reflects a transition, false if line is not a transition.
+     */
     private boolean isTransition(String s) {
-
         String sub = s.substring(2, 4);
         if (sub.equals("->")) {
             return true;
         }
-
         return false;
-
     }
 
+    /**
+     * Gets the list of tasks
+     * @return - taskList
+     */
     public List<Task> getTaskList() {
         return taskList;
     }
+
+    public void processInput(){
+        processNodes();
+        processTransitions();
+    }
+
+    /**
+     *             String parentString = transition.substring(0, transition.indexOf(' '));
+     *             int parentNode = Integer.valueOf(parentString);
+     *             //Child node
+     *             int arrow = transition.indexOf('>');
+     *             int tab = transition.indexOf('\t');
+     *             String childString = transition.substring(arrow + 2, tab);
+     *             int childNode = Integer.valueOf(childString);
+     */
 }

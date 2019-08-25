@@ -7,13 +7,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<?import mvc.view.fxml.ZoomableScrollPane?>
 
+<?import mvc.view.components.ZoomableScrollPane?>
 <AnchorPane fx:id="root_container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvc.controller.MenuController">
 
     <AnchorPane layoutX="-15" layoutY="0" prefHeight="600.0" prefWidth="1044.0">
         <children>
-            <ZoomableScrollPane fx:id="ganttScrollPane" layoutY="0.0" layoutX="0"  pannable="true" prefHeight="700.0" prefWidth="1050.0">
+            <ZoomableScrollPane fx:id="ganttScrollPane" layoutY="0.0" layoutX="0" pannable="true" prefHeight="700.0" prefWidth="1050.0">
+
                 <content>
                     <AnchorPane fx:id="centerPane" layoutX="0" layoutY="0" prefHeight="700.0" prefWidth="600.0" />
                     </content>
@@ -45,27 +46,18 @@
             </font>
         </Label>
     </AnchorPane>
-    <AnchorPane fx:id="_bottomMenu" layoutY="550.0" prefHeight="180.0" prefWidth="1034.0">
+    <AnchorPane fx:id="_bottomMenu" layoutX="-5.0" layoutY="552.0" prefHeight="180.0" prefWidth="1034.0">
         <children>
-            <Label fx:id="_timerOutput" layoutX="78.0" layoutY="32.0" text="0.00" textAlignment="CENTER">
+            <Label fx:id="_timerOutput" alignment="CENTER" layoutX="242.0" layoutY="57.0" text="0.00" textAlignment="CENTER" wrapText="true">
                 <font>
-                    <Font name="Leelawadee UI" size="34.0" />
+                    <Font name="Leelawadee UI" size="35.0" />
                 </font>
             </Label>
             <AnchorPane fx:id="_border" prefHeight="8.0" prefWidth="1034.0" />
-            <Label fx:id="_bottomTimeLabel" layoutX="76.0" layoutY="99.0" text="T I M E ">
+            <Label fx:id="_bottomTimeLabel" graphicTextGap="3.0" layoutX="128.0" layoutY="60.0" text="T I M E ">
                 <font>
-                    <Font size="20.0" />
-                </font>
-            </Label>
-            <Label fx:id="_bottomScheduleLabel" layoutX="226.0" layoutY="99.0" text="S C H E D U L E S">
-                <font>
-                    <Font size="20.0" />
-                </font>
-            </Label>
-            <Label fx:id="_scheduleOutput" layoutX="283.0" layoutY="32.0" text="45" textAlignment="CENTER">
-                <font>
-                    <Font name="Leelawadee UI" size="34.0" />
+                    <Font size="30.0" />
+
                 </font>
             </Label>
          <Label fx:id="_bottomCoresLabel" layoutX="725.0" layoutY="101.0" text="C O R E S">
@@ -78,7 +70,9 @@
                <Font name="Leelawadee UI" size="34.0" />
             </font>
          </Label>
-         <Label fx:id="_bottomProcessorLabel" layoutX="846.0" layoutY="101.0" text="P R O C E S S O R S">
+
+         <Label fx:id="_bottomProcessorLabel" layoutX="846.0" layoutY="101.0" text="P R O C E S S E S">
+
             <font>
                <Font size="18.0" />
             </font>

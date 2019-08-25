@@ -1,6 +1,7 @@
 package mvc;
 
 import mvc.model.FileIO;
+import mvc.model.Node;
 import mvc.model.Scheduler;
 import mvc.model.Task;
 import javafx.application.Application;
@@ -122,12 +123,11 @@ public class Main extends Application {
     private static void runAlgorithm(){
         FileIO fileio = new FileIO();
         fileio.readFile(inputFileName);
-        fileio.processNodes();
-        fileio.processTransitions();
+        fileio.processInput();
         taskList = fileio.getTaskList();
         Scheduler scheduler = new Scheduler();
-     //   Schedule schedule = scheduler.createBasicSchedule(taskList, 1);
-     //   fileio.writeFile(schedule);
+        Node schedule = scheduler.createOptimalSchedule(taskList, numberOfProcessors);
+        fileio.writeFile(schedule);
     }
 
     private  static void runFailed() {

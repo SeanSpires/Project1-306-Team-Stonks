@@ -1,14 +1,15 @@
-package  mvc.model;
+package mvc.model;
 
+
+import mvc.controller.MenuController;
 
 import java.util.*;
 
 public class Scheduler {
-/*
-	public Schedule createBasicSchedule(List<Task> tasks, int processor) {
+	/*
+	public Schedule createBasicSchedule(List<Task> tasks, int processor, MenuController controller) {
 
-		Schedule schedule = new Schedule();
-
+		Schedule schedule = new Schedule(controller);
 		Queue<Task> taskQueue = new LinkedList<>();
 		List<Task> rootTasks = getRootTasks(tasks);
 
@@ -34,13 +35,12 @@ public class Scheduler {
 		return schedule;
 
 	}
-
-*/
+	 */
 
 	private List<Task> getRootTasks(List<Task> tasks) {
 		List<Task> rootTasks = new ArrayList<>();
 
-		// if a task has no parent it must be a root 
+		// if a task has no parent it must be a root
 		for (Task t : tasks) {
 			if (t.getParentTasks().isEmpty()) {
 				rootTasks.add(t);
@@ -50,23 +50,23 @@ public class Scheduler {
 		return rootTasks;
 	}
 
-	public Node createOptimalSchedule (List<Task> tasks, int numProc) {
+	public Node createOptimalScheduleVisualised(List<Task> tasks, int numProc, MenuController controller) {
 
 		PriorityQueue<Node> openNodes = new PriorityQueue<>();
 		Node node = new Node();
 		node.setUnscheduledTasks(tasks);
-		//node.setUpperBound(calcUpperBound(new Node(node), numProc));
-		//node.setLowerBound(calcLowerBound(node, numProc));
+		node.setUpperBound(calcUpperBound(new Node(node), numProc));
+		node.setLowerBound(calcLowerBound(node, numProc));
 
 		boolean algoNotFinished = true;
 		double bestUpperBound = node.getUpperBound();
-		
+
 		int startTime = 0;
 		double upperBound;
 		double lowerBound;
-		
+
 		while (algoNotFinished) {
-			for (Task t : new ArrayList<>(node.getUnscheduledTasks())) {			
+			for (Task t : new ArrayList<>(node.getUnscheduledTasks())) {
 				for (int i = 1; i < numProc + 1; i++) {
 					Node childNode = new Node(node);
 					if (containsParents(node, t) || t.getParentTasks().isEmpty()) {
@@ -79,75 +79,120 @@ public class Scheduler {
 						childNode.addScheduledTask(t);
 						childNode.addTasksToProcessor(t, i);
 
-						upperBound = calcUpperBound(new Node(childNode), numProc);						
+						upperBound = calcUpperBound(new Node(childNode), numProc);
 
-						childNode.setUpperBound(upperBound);						
-						
+						childNode.setUpperBound(upperBound);
+
 						lowerBound = calcLowerBound(childNode, numProc);
-						
-						childNode.setLowerBound(lowerBound);                                                                   				
+
+						childNode.setLowerBound(lowerBound);
 
 						if (upperBound < bestUpperBound) {
 							bestUpperBound = upperBound;
-							for (Node n : new ArrayList<>(openNodes)) {
-								if (n.getLowerBound() > bestUpperBound) {
-									openNodes.remove(n);
-								}
-							}			
 						}
-						//System.out.println("node lower: " + childNode.getLowerBound());
-						///System.out.println("node upper: " + childNode.getUpperBound());
+
 						if (childNode.getLowerBound() > childNode.getUpperBound()) {
 							continue;
 						}
-						else {			
+						else {
 							openNodes.add(childNode);
-						}			
+						}
 					}
 				}
 			}
-			
-			
-			Node minNode = openNodes.poll();
 
+			Node minNode = openNodes.poll();
 			node = new Node(minNode);
-			if (node.getLowerBound() == node.getUpperBound() && node.getUnscheduledTasks().isEmpty()) {
+
+			controller.updateGraph(node.getScheduledTasks());
+
+			if (node.getLowerBound() == bestUpperBound && node.getUnscheduledTasks().isEmpty()) {
 				return node;
 			}
-			
-//			double bestLowerBound = minNode.getLowerBound();
-//			for (Node n : openNodes) {
-//				if (n.getLowerBound() < bestLowerBound) {
-//					minNode = n;
-//					bestLowerBound = n.getLowerBound();
-//				}
-//			}
-//
-//			openNodes.remove(node);
-
-
 		}
 		return null;
 	}
 
-	
+	public Node createOptimalSchedule(List<Task> tasks, int numProc) {
+
+		PriorityQueue<Node> openNodes = new PriorityQueue<>();
+		Node node = new Node();
+		node.setUnscheduledTasks(tasks);
+		node.setUpperBound(calcUpperBound(new Node(node), numProc));
+		node.setLowerBound(calcLowerBound(node, numProc));
+
+		boolean algoNotFinished = true;
+		double bestUpperBound = node.getUpperBound();
+
+		int startTime = 0;
+		double upperBound;
+		double lowerBound;
+
+		while (algoNotFinished) {
+			for (Task t : new ArrayList<>(node.getUnscheduledTasks())) {
+				for (int i = 1; i < numProc + 1; i++) {
+					Node childNode = new Node(node);
+					if (containsParents(node, t) || t.getParentTasks().isEmpty()) {
+						childNode.removeUnscheduledTask(t);
+						t = new Task(t);
+						t.setProcessor(i);
+						startTime = getStartTime(i, t, childNode);
+						t.setStatus(startTime + t.getWeight());
+						t.setStartTime(startTime);
+						childNode.addScheduledTask(t);
+						childNode.addTasksToProcessor(t, i);
+
+						upperBound = calcUpperBound(new Node(childNode), numProc);
+						childNode.setUpperBound(upperBound);
+
+						lowerBound = calcLowerBound(childNode, numProc);
+
+						childNode.setLowerBound(lowerBound);
+
+						if (upperBound < bestUpperBound) {
+							bestUpperBound = upperBound;
+						}
+
+						if (childNode.getLowerBound() > childNode.getUpperBound()) {
+							continue;
+						} else {
+							openNodes.add(childNode);
+
+						}
+					}
+				}
+
+				Node minNode = openNodes.poll();
+
+				node = new Node(minNode);
+
+				if (bestUpperBound == node.getLowerBound() && node.getUnscheduledTasks().isEmpty()) {
+					return node;
+				}
+			}
+		}
+		return null;
+	}
+
+
+
 	private boolean containsParents(Node node, Task t) {
-		
-		List<Task> scheduled = node.getScheduledTasks();		
-		
-		for(Task parent : t.getParentTasks()) {
+
+		List<Task> scheduled = node.getScheduledTasks();
+
+		for (Task parent : t.getParentTasks()) {
 			boolean found = false;
-			for(Task tScheduled : scheduled) {
-				if(tScheduled.getNodeNumber() == parent.getNodeNumber()) {
+			for (Task tScheduled : scheduled) {
+				if (tScheduled.getNodeNumber() == parent.getNodeNumber()) {
 					found = true;
 					break;
 				}
 			}
-			
-			if(!found) {
+
+			if (!found) {
 				return false;
 			}
-		}		
+		}
 		return true;
 	}
 
@@ -169,12 +214,11 @@ public class Scheduler {
 	}
 
 
-
-
-	private double calcLowerBound(Node node, int numProc) {
+	private long calcLowerBound(Node node, int numProc) {
 
 		double makeSpan = 0;
-		int sum = 0;
+		long sum = 0;
+
 		List<Task> unscheduledTasks = node.getUnscheduledTasks();
 		for (Task t : unscheduledTasks) {
 			sum += t.getWeight();
@@ -183,85 +227,45 @@ public class Scheduler {
 		makeSpan = calcMakeSpan(node);
 		makeSpan += (sum / numProc);
 
-		return makeSpan;
+		return (long) makeSpan;
 
 	}
 
 
-	private double calcUpperBound(Node node, int numProc) {
-		
-		int makeSpan = 0;
-		List<Task> unscheduledTasks = new ArrayList<>(node.getUnscheduledTasks());
+	private long calcUpperBound(Node node, int numProc) {
 
+		List<Task> unscheduledTasks = new ArrayList<>(node.getUnscheduledTasks());
+		int makeSpan = 0;
 
 		while (!unscheduledTasks.isEmpty()) {
 			Task t = null;
 			for (int i = 1; i < numProc + 1; i++) {
 				t = PickGreedyTask(node);
-				
+
 				if (t == null) {
 					return calcMakeSpan(node);
 				}
-				
+
 				int startTime = getStartTime(i, t, node);
 				t.setStatus(startTime + t.getWeight());
+				t.setProcessor(i);
 				node.addScheduledTask(t);
 				node.addTasksToProcessor(t, i);
 				node.removeUnscheduledTask(t);
 				unscheduledTasks.remove(t);
 			}
 		}
-		
+
 		makeSpan = calcMakeSpan(node);
 		return makeSpan;
-		
-		
-		
-//		while (!unscheduledTasks.isEmpty()) {
-//			Task task = null;
-//			double minStartTime = Double.POSITIVE_INFINITY;
-//
-//
-//			for (Task t : unscheduledTasks) {
-//				if (containsParents(node, t) || t.getParentTasks().isEmpty()) {
-//					task = t;
-//					break;
-//				}
-//			}
-//
-//			if (task == null) {
-//				return calcMakeSpan(node);
-//			}
-//
-//			int tempStartTime = 0;
-//			int bestProc = 1;
-//			
-//			for (int i = 1; i <= numProc; i++) {
-//				tempStartTime = getStartTime(i, task, node);
-//				if (minStartTime > tempStartTime) {
-//					minStartTime = tempStartTime;
-//					bestProc = i;
-//				}
-//			}
-//
-//
-//			task.setProcessor(bestProc);
-//			task.setStatus((int) minStartTime + task.getWeight());
-//			node.addTasksToProcessor(task, bestProc);
-//			node.addScheduledTask(task);
-//			node.removeUnscheduledTask(task);
-//			unscheduledTasks.remove(task);
-//			
-//		}
-//
-//		makeSpan = calcMakeSpan(node);
-//
-//		return makeSpan;
+
+
+
 	}
 
 	private Task PickGreedyTask(Node node) {
 		List<Task> tasks = new ArrayList<>();
-		
+
 		for (Task t : node.getUnscheduledTasks()) {
 			if (containsParents(node, t) || t.getParentTasks().isEmpty()) {
 				tasks.add(t);
@@ -271,35 +275,34 @@ public class Scheduler {
 			return null;
 		}
 		Task minTask = tasks.get(0);
- 
-		for (Task t: tasks) {
+
+		for (Task t : tasks) {
 			if (t.getWeight() < minTask.getWeight()) {
 				minTask = t;
-
 			}
 		}
-		
 		return minTask;
 	}
 
 	private int getStartTime(int proc, Task task, Node node) {
 		int comCost = 0;
 		int endTime = 0;
-		
-		List<Integer> allStartTimes = new ArrayList<> ();
-		
+
+		List<Integer> allStartTimes = new ArrayList<>();
+
 		allStartTimes.add(0);
+
 		for (Task t : task.getParentTasks()) {
 			t = node.getTaskByNumber(t.getNodeNumber());
-			
+
 			if (t.getProcessor() != proc) {
 				comCost = t.getSubTasks().get(task.getNodeNumber());
-				endTime = t.getStatus();	
+				endTime = t.getStatus();
 			}
-			
+
 			allStartTimes.add(comCost + endTime);
 		}
-		
+
 		for (Task t : node.getTasksForProcessor(proc)) {
 			endTime = t.getStatus();
 			allStartTimes.add(endTime);
