@@ -35,7 +35,6 @@ public final class MenuController implements Initializable{
 	@FXML private Timer timer;
 	@FXML private Label _processors;
 	@FXML private Label _cores;
-	@FXML private Button _stopBtn;
 	@FXML private Button _runBtn;
 
     private FileIO fileio;
@@ -81,7 +80,7 @@ public final class MenuController implements Initializable{
 	 */
 	public void initColours() {
 		this.colour.add("status-red");
-		this.colour.add("status-green");
+		this.colour.add("status-orange");
 	}
 
 	/**
@@ -164,7 +163,6 @@ public final class MenuController implements Initializable{
 		// Starts running the timer for the app.
 		fileio = new FileIO();
 		runTimer();
-		_stopBtn.setDisable(false);
 		_runBtn.setDisable(true);
 
         Service algorithmService = new Service() {
@@ -200,7 +198,6 @@ public final class MenuController implements Initializable{
             @Override
             protected void succeeded() {
                 _runBtn.setDisable(false);
-                _stopBtn.setDisable(true);
                 timeline.stop();
                 System.out.println("Finished");
             }
@@ -208,17 +205,6 @@ public final class MenuController implements Initializable{
         algorithmService.start();
 	}
 
-	/**
-	 * Run when the stop button is pressed.
-	 * @param actionEvent
-	 */
-	@FXML
-	public void handleStopButton(javafx.event.ActionEvent actionEvent) {
-		// Use this to stop the timer
-		timeline.stop();
-		_stopBtn.setDisable(true);
-		_runBtn.setDisable(false);
-    }
 
 	/**
 	 * Update the graph iteratively
