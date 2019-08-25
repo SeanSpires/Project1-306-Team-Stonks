@@ -40,6 +40,7 @@ public final class MenuController implements Initializable{
 
     private FileIO fileio;
     private Scheduler scheduler;
+    private SchedulerParallel schedulerParallel;
     private Node schedule;
 	private List<Task> taskList;
 
@@ -180,8 +181,14 @@ public final class MenuController implements Initializable{
                         fileio.processNodes();
                         fileio.processTransitions();
                         taskList = fileio.getTaskList();
-                        scheduler = new Scheduler();
-                        schedule = scheduler.createOptimalScheduleVisualised(taskList, Main.numberOfProcessors, thisController);
+
+                        if(Main.numberOfCores>1) {
+                        	schedulerParallel = new SchedulerParallel();
+                        	schedule = schedulerParallel.createOptimalSchedule(taskList, Main.numberOfProcessors, Main.numberOfCores, thisController);
+						} else {
+							scheduler = new Scheduler();
+							schedule = scheduler.createOptimalScheduleVisualised(taskList, Main.numberOfProcessors, thisController);
+						}
                         fileio.writeFile(schedule);
                         return null;
                     }

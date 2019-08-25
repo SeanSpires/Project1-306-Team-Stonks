@@ -1,5 +1,7 @@
 package mvc.model;
 
+import mvc.controller.MenuController;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
@@ -12,10 +14,10 @@ public class SchedulerParallel {
 	private ForkJoinPool forkJoinPool;
 	
 	private AtomicLong bestLowerBound;
-	private AtomicLong bestUpperBound;	
+	private AtomicLong bestUpperBound;
 	
 	
-	public Node createOptimalSchedule(List<Task> tasks, int numProc, int numCores) {
+	public Node createOptimalSchedule(List<Task> tasks, int numProc, int numCores, MenuController controller) {
 		
 		this.openNodes = new PriorityBlockingQueue<>();
 		this.forkJoinPool = new ForkJoinPool(numCores);
@@ -28,7 +30,7 @@ public class SchedulerParallel {
 		ArrayList<SchedulerParallelTask> schedulerTasks = new ArrayList<SchedulerParallelTask>();
 		
 		for(int i = 0 ; i < numCores; i++) {
-			SchedulerParallelTask t = new SchedulerParallelTask(openNodes, numProc, bestLowerBound, bestUpperBound);
+			SchedulerParallelTask t = new SchedulerParallelTask(openNodes, numProc, bestLowerBound, bestUpperBound, controller);
 			schedulerTasks.add(t);
 			forkJoinPool.invoke(t);
 		}
@@ -37,7 +39,8 @@ public class SchedulerParallel {
 		for (SchedulerParallelTask t : schedulerTasks) {
 			Node joined = (Node) t.join();
 			if(out == null || joined.getLowerBound() < out.getLowerBound()) {
-				out = joined;		
+				out = joined;
+				controller.updateGraph(out.getScheduledTasks());
 			}
 		}
 				

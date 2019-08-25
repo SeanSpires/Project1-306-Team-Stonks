@@ -1,5 +1,7 @@
 package mvc.model;
 
+import mvc.controller.MenuController;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,13 +19,15 @@ public class SchedulerParallelTask extends RecursiveTask<Object> {
 	
 	private int numProc;
 
+	private MenuController controller;
 
 	public SchedulerParallelTask(PriorityBlockingQueue<Node> openNodes, int numProc,
-			AtomicLong bestLowerBound, AtomicLong bestUpperBound) {
+			AtomicLong bestLowerBound, AtomicLong bestUpperBound, MenuController controller) {
 		
 		this.numProc = numProc;
 		this.openNodes = openNodes;
 		this.bestUpperBound = bestUpperBound;
+		this.controller = controller;
 
 	}
 
@@ -76,7 +80,8 @@ public class SchedulerParallelTask extends RecursiveTask<Object> {
 			}
 			
 			node = new Node(openNodes.poll());
-			
+			// add code here
+			controller.updateGraph(node.getScheduledTasks());
 			if (node.getLowerBound() == node.getUpperBound() && node.getUnscheduledTasks().isEmpty()) {
 				return node;
 			}
