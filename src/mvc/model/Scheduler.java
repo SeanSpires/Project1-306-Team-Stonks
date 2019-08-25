@@ -66,7 +66,7 @@ public class Scheduler {
 		double lowerBound;
 		
 		while (algoNotFinished) {
-			for (Task t : new ArrayList<>(node.getUnscheduledTasks())) {
+			for (Task t : new ArrayList<>(node.getUnscheduledTasks())) {			
 				for (int i = 1; i < numProc + 1; i++) {
 					Node childNode = new Node(node);
 					if (containsParents(node, t) || t.getParentTasks().isEmpty()) {

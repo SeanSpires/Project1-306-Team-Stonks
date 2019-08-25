@@ -2,11 +2,9 @@ package tests;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import mvc.model.FileIO;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -104,135 +102,134 @@ public class SchedulerTest {
 //	}
     
 
-
+    @Ignore
     @Test
-	public void testSevenNodes() {
+	public void testSimpleSchedule() {
 
     /*
+    * simpleSchedulerTest tests the basic scheduling algorithm
+    * with the simple example input from the project specification.
     *
-    * This test uses the provided seven node example.
+    * Only one root task and one leaf task.
     *
     * */
         tasks = new ArrayList<>();
-        FileIO file = new FileIO();
-        file.readFile("Nodes_7_OutTree.dot");
-        file.processNodes();
-        file.processTransitions();
-        List<Task> tasks = file.getTaskList();
         scheduler = new Scheduler();
+
+        Task task1 = new Task(1);
+        Task task2 = new Task(2);
+        Task task3 = new Task(3);
+        Task task4 = new Task(4);
+        Task task5 = new Task(5);
+
+        task1.setWeight(2);
+        task2.setWeight(2);
+        task3.setWeight(2);
+        task4.setWeight(5);
+        task5.setWeight(1);
+
+        task1.setSubTasks(task2, 2);
+        task1.setSubTasks(task3, 2);
+        
+        task2.setParentTasks(task1);
+        task3.setParentTasks(task1);
+        
+        task2.setSubTasks(task4, 2);
+        
+        task3.setSubTasks(task5, 2);
+        
+        task4.setParentTasks(task2);
+        
+        task4.setSubTasks(task5, 2);
+        task5.setParentTasks(task4);
+        task5.setParentTasks(task3);
+
+
+        tasks.add(task2);
+        tasks.add(task1);
+        tasks.add(task3);
+        tasks.add(task4);
+        tasks.add(task5);
+
+		//Schedule s = scheduler.createBasicSchedule(tasks, 1);
         Node s = scheduler.createOptimalSchedule(tasks, 2);
-
-        System.out.println("=========================================================");        System .out.println("Testing Nodes_7_OutTree.dot");
+        
+        System.out.println(s.getScheduledTasks().size());
         for (Task t : s.getScheduledTasks()) {
-
-            System.out.println("Node number: " + t.getNodeNumber() + " Start:  " + t.getStartTime() + " Comp time: " + t.getStatus()
-                    + " processor: " +  t.getProcessor());
+        	
+        	System.out.println("Node number: " + t.getNodeNumber() + "Comp time: " + t.getStatus()
+        			+ " processor: " +  t.getProcessor());
         }
-        System.out.println("=========================================================");    }
+    }
     
    
     @Test
-	public void testEightNodes() {
+	public void testSevenSchedule() {
 
+    /*
+    * simpleSchedulerTest tests the basic scheduling algorithm
+    * with the simple example input from the project specification.
+    *
+    * Only one root task and one leaf task.
+    *
+    * */
         tasks = new ArrayList<>();
         scheduler = new Scheduler();
-        FileIO file = new FileIO();
-        file.readFile("Nodes_8_Random.dot");
-        file.processNodes();
-        file.processTransitions();
-        tasks = file.getTaskList();
+
+        Task task1 = new Task(0);
+        Task task2 = new Task(1);
+        Task task3 = new Task(2);
+        Task task4 = new Task(3);
+        Task task5 = new Task(4);
+        Task task6 = new Task(5);
+        Task task7 = new Task(6);
+
+        task1.setWeight(5);
+        task2.setWeight(6);
+        task3.setWeight(5);
+        task4.setWeight(6);
+        task5.setWeight(4);
+        task6.setWeight(7);
+        task7.setWeight(7);
+
+        task1.setSubTasks(task2, 15);
+        task1.setSubTasks(task3, 11);
+        task1.setSubTasks(task4, 11);
+        
+        task2.setParentTasks(task1);
+        task3.setParentTasks(task1);
+        task4.setParentTasks(task1);
+        
+        task2.setSubTasks(task5, 19);
+        task2.setSubTasks(task6, 4);
+        task2.setSubTasks(task7, 21);
+        
+        task5.setParentTasks(task2);
+        task6.setParentTasks(task2);
+        task7.setParentTasks(task2);       
+
+
+        tasks.add(task1);
+        tasks.add(task2);
+        tasks.add(task3);
+        tasks.add(task4);
+        tasks.add(task5);
+        tasks.add(task6);
+        tasks.add(task7);
+
+		//Schedule s = scheduler.createBasicSchedule(tasks, 1);
         Node s = new Scheduler().createOptimalSchedule(tasks, 2);
         
-        //System.out.println(s.getScheduledTasks().size());
-        System.out.println("=========================================================");        System .out.println("Testing Nodes_8_Random.dot");
+        System.out.println(s.getScheduledTasks().size());
         for (Task t : s.getScheduledTasks()) {
-
-            System.out.println("Node number: " + t.getNodeNumber() + " Start:  " + t.getStartTime() + " Comp time: " + t.getStatus()
-                    + " processor: " +  t.getProcessor());
+        	
+        	System.out.println("Node number: " + t.getNodeNumber() + "Comp time: " + t.getStatus()
+        			+ " processor: " +  t.getProcessor());
         }
-        System.out.println("=========================================================");    }
-
-
-
-    @Test
-    public void tesNineNodes() {
-
-        /*
-         *
-         * */
-        tasks = new ArrayList<>();
-        scheduler = new Scheduler();
-        FileIO file = new FileIO();
-        file.readFile("Nodes_9_SeriesParallel.dot");
-        file.processNodes();
-        file.processTransitions();
-        tasks = file.getTaskList();
-        Node s = new Scheduler().createOptimalSchedule(tasks, 2);
-
-        //System.out.println(s.getScheduledTasks().size());
-        System.out.println("=========================================================");
-        for (Task t : s.getScheduledTasks()) {
-
-            System.out.println("Node number: " + t.getNodeNumber() + " Start:  " + t.getStartTime() + " Comp time: " + t.getStatus()
-                    + " processor: " +  t.getProcessor());
-        }
-        System.out.println("=========================================================");
     }
-
-
-
-    @Test
-    public void tesTenNodes() {
-
-        /*
-         *
-         * */
-        tasks = new ArrayList<>();
-        scheduler = new Scheduler();
-        FileIO file = new FileIO();
-        file.readFile("Nodes_10_Random.dot");
-        file.processNodes();
-        file.processTransitions();
-        tasks = file.getTaskList();
-        Node s = new Scheduler().createOptimalSchedule(tasks, 2);
-
-        //System.out.println(s.getScheduledTasks().size());
-        System.out.println("=========================================================");
-        System .out.println("Testing Nodes_10_Random.dot on two processors");
-        for (Task t : s.getScheduledTasks()) {
-
-            System.out.println("Node number: " + t.getNodeNumber() + " Start:  " + t.getStartTime() + " Comp time: " + t.getStatus()
-                    + " processor: " +  t.getProcessor());
-        }
-        System.out.println("=========================================================");
-    }
-
-    @Test
-    public void tesElevenNodes() {
-
-        /*
-         *
-         * */
-        tasks = new ArrayList<>();
-        scheduler = new Scheduler();
-        FileIO file = new FileIO();
-        file.readFile("Nodes_11_OutTree.dot");
-        file.processNodes();
-        file.processTransitions();
-        tasks = file.getTaskList();
-        Node s = new Scheduler().createOptimalSchedule(tasks, 2);
-
-        //System.out.println(s.getScheduledTasks().size());
-        System.out.println("=========================================================");
-        System .out.println("Testing Nodes_11_OutTree.dot on two processors");
-        for (Task t : s.getScheduledTasks()) {
-
-            System.out.println("Node number: " + t.getNodeNumber() + " Start:  " + t.getStartTime() + " Comp time: " + t.getStatus()
-                    + " processor: " +  t.getProcessor());
-        }
-        System.out.println("=========================================================");
-
-    }
+        
+        
+        
       
     //    assertEquals(s.getScheduledTasks().get(0).getStatus(), 3);
         
