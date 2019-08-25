@@ -20,20 +20,11 @@
         </children>
     </AnchorPane>
     <AnchorPane fx:id="_topMenu" prefHeight="100.0" prefWidth="1034.0">
-        <Button fx:id="_runBtn" graphicTextGap="0.0" layoutX="857.0" layoutY="29.0" mnemonicParsing="false" onAction="#handleRunButton">
+        <Button fx:id="_runBtn" disable="false" layoutX="936.0" layoutY="29.0" mnemonicParsing="false" onAction="#handleRunButton">
             <graphic>
                 <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../view/images/icons8-play-52.png" />
-                    </image>
-                </ImageView>
-            </graphic>
-        </Button>
-        <Button fx:id="_stopBtn" disable="true" layoutX="936.0" layoutY="29.0" mnemonicParsing="false" onAction="#handleStopButton">
-            <graphic>
-                <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../view/images/icons8-stop-60.png" />
                     </image>
                 </ImageView>
             </graphic>
