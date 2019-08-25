@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Node class represents a Schedule.
+ */
 public class Node implements Comparable{
 
 
@@ -19,17 +22,25 @@ public class Node implements Comparable{
     // Lower Bound
     private double lowerBound;
 
+    /**
+     * Constructor for Node. Copies the Node object to solve referencing issues faced.
+     * @param node
+     */
     public Node(Node node) {
+        // Adds a task that has not been scheduled into the unscheduledTasks list.
         for(Task task : node.getUnscheduledTasks()) {
     		this.unscheduledTasks.add(new Task(task));
     	}
+        // Adds a task that has been scheduled into the scheduledTasks list.
         for(Task task : node.getScheduledTasks()) {
     		this.scheduledTasks.add(new Task(task));
     	}
+        // Sets the Upper and lower found fields.
         this.upperBound = node.getUpperBound();
         this.lowerBound = node.getLowerBound();
         
         Map<Integer, List<Task>> procTasks = node.getScheduledTasksByProcessor();
+        // Gets the tasks in each process and adds it into the taskList.
         for(Integer task : procTasks.keySet()) {
         	List<Task> taskList = new ArrayList<>();
         	for(Task t : procTasks.get(task)) {
@@ -39,8 +50,10 @@ public class Node implements Comparable{
     	}
     }
 
-    
-    
+
+    /**
+     * Default construct of Node
+     */
     public Node() {
         this.unscheduledTasks = new ArrayList<>();
         this.scheduledTasks = new ArrayList<Task> ();
@@ -49,6 +62,11 @@ public class Node implements Comparable{
         this.lowerBound = Double.POSITIVE_INFINITY;
     }
 
+    /**
+     * Gets the task that corresponds to the input number from the scheduledTasks list.
+     * @param i - Integer that represents a task
+     * @return t - If the tasks does exist, null - If the task doesn't exist.
+     */
     public Task getTaskByNumber(Integer i) {
     	for(Task t : scheduledTasks) {
     		if(t.getNodeNumber() == i) {
@@ -56,18 +74,29 @@ public class Node implements Comparable{
     		}
     	}
     	return null;
-    	
     }
-    
+
+    /**
+     * Standard getter for unscheduledTasks
+     * @return - unscheduledTasks list.
+     */
     public List<Task> getUnscheduledTasks() {
         return unscheduledTasks;
     }
 
+    /**
+     * Standard setter for unscheduledTasks
+     * @param unscheduledTasks - input list of unscheduled tasks.
+     */
     public void setUnscheduledTasks(List<Task> unscheduledTasks) {
     	
         this.unscheduledTasks = unscheduledTasks;
     }
 
+    /**
+     * Removes the input task from the unscheduledTasks list.
+     * @param task - task to be removed.
+     */
     public void removeUnscheduledTask(Task task) {
     	for(Task t : new ArrayList<>(this.unscheduledTasks)) {
     		if(t.getNodeNumber() == task.getNodeNumber()) {
@@ -76,16 +105,27 @@ public class Node implements Comparable{
     	}
     }
 
-
+    /**
+     * Standard getter for scheduledTasks.
+     * @return - scheduledTasks list.
+     */
     public List<Task>  getScheduledTasks() {
         return scheduledTasks;
     }
 
+    /**
+     * Standard setter for scheduledTasks.
+     * @param scheduledTasks - List of Scheduled Tasks.
+     */
     public void setScheduledTasks(List<Task> scheduledTasks) {
         this.scheduledTasks = scheduledTasks;
     }
 
-
+    /**
+     * Method to add the input task, into the input process
+     * @param task
+     * @param proc
+     */
     public void addTasksToProcessor(Task task,int proc) {
     	List<Task> tempList = this.scheduledTasksByProcessor.get(proc);
     	
@@ -100,7 +140,13 @@ public class Node implements Comparable{
             this.scheduledTasksByProcessor.put(proc, tempList);
     	}
     }
-    
+
+    /**
+     * Returns all the tasks for the specified process.
+     * @param proc - current process.
+     * @return new List - if there does not exist a currently existing list for the input process.
+     *         scheduledTasksByProcessor - for the specified process.
+     */
     public List<Task> getTasksForProcessor(int proc) {
     	if (this.scheduledTasksByProcessor.get(proc) == null) {
     		return new ArrayList<>();
@@ -109,43 +155,67 @@ public class Node implements Comparable{
     	return this.scheduledTasksByProcessor.get(proc);
     }
 
-
+    /**
+     * Standard getter for upperBound
+     * @return upperBound field.
+     */
     public double getUpperBound() {
         return upperBound;
     }
 
+    /**
+     * Standard setter for upperBound.
+     * @param upperBound - double for the upper bound of the node.
+     */
     public void setUpperBound(double upperBound) {
         this.upperBound = upperBound;
     }
 
+    /**
+     * Standard getter for the LowerBound.
+     * @return - lowerBound field for the node.
+     */
     public double getLowerBound() {
         return lowerBound;
     }
 
+    /**
+     * Standard setter for the lowerBound field.
+     * @param lowerBound - double lowerBound for the node.
+     */
     public void setLowerBound(double lowerBound) {
         this.lowerBound = lowerBound;
     }
 
-
-
+    /**
+     * Method to add a task into the scheduledTask list of the node.
+     * @param task - input task user wants to add into the list.
+     */
     public void addScheduledTask(Task task) {
     	this.scheduledTasks.add(task);
     }
 
-
-
+    /**
+     * Standard getter for scheduledTasksByProcessor.
+     * @return - HashMap scheduledTasksByProcessor.
+     */
 	public HashMap<Integer, List<Task>> getScheduledTasksByProcessor() {
 		return scheduledTasksByProcessor;
 	}
 
-
-
+    /**
+     * Standard setter for scheduledTasksByProcessor.
+     * @param scheduledTasksByProcessor
+     */
 	public void setScheduledTasksByProcessor(HashMap<Integer, List<Task>> scheduledTasksByProcessor) {
 		this.scheduledTasksByProcessor = scheduledTasksByProcessor;
 	}
 
-
-
+    /**
+     * Essential for the priority queue. This allows the priority queue know which node to place.
+     * @param node
+     * @return Numbers to see if the in the previous queue is Smaller, Larger, the Same as the input node.
+     */
 	@Override
 	public int compareTo(Object node) {
 		if(node instanceof Node) {

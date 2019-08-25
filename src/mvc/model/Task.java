@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * This is a class for each Task in a schedule.
+ */
 public class Task {
 
     private int nodeNumber;
@@ -15,11 +18,18 @@ public class Task {
     private List<Task> parentTasks = new ArrayList<>();
     private HashMap<Integer, Integer> subTasks = new HashMap<>();
 
-
+    /**
+     * Constructor for Task
+     * @param nodeNumber - The ID of the task.
+     */
     public Task(int nodeNumber){
         this.nodeNumber = nodeNumber;
     }
-    
+
+    /**
+     * Constructor for Task when there is an input of another task.
+     * @param t - a Task.
+     */
     public Task(Task t) {
     	this.nodeNumber = t.nodeNumber;
     	this.weight = t.weight;
@@ -32,7 +42,10 @@ public class Task {
     	}
     	this.subTasks = new HashMap<>(t.subTasks);
     }
-    
+
+    /**
+     * The methods below are just standard getters and setters for each field in the class.
+     */
 
     public int getStatus() {
     	return this.status;
