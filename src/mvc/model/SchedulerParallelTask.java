@@ -14,16 +14,16 @@ public class SchedulerParallelTask extends RecursiveTask<Object> {
 	private static final long serialVersionUID = 1L;
 
 	private PriorityBlockingQueue<Node> openNodes;
-	
+
 	private AtomicLong bestUpperBound;	
-	
+
 	private int numProc;
 
 	private MenuController controller;
 
 	public SchedulerParallelTask(PriorityBlockingQueue<Node> openNodes, int numProc,
 			AtomicLong bestLowerBound, AtomicLong bestUpperBound, MenuController controller) {
-		
+
 		this.numProc = numProc;
 		this.openNodes = openNodes;
 		this.bestUpperBound = bestUpperBound;
@@ -38,7 +38,7 @@ public class SchedulerParallelTask extends RecursiveTask<Object> {
 		int startTime = 0;
 		Node node = new Node(openNodes.poll());
 
-		
+
 		while (true) {		
 			for (Task t : new ArrayList<>(node.getUnscheduledTasks())) {
 				for (int i = 1; i < numProc + 1; i++) {
@@ -59,14 +59,9 @@ public class SchedulerParallelTask extends RecursiveTask<Object> {
 
 						lowerBound = calcLowerBound(childNode, numProc);
 						childNode.setLowerBound(lowerBound);
-						
+
 						if (upperBound < bestUpperBound.get()) {
-							bestUpperBound.set(upperBound);
-							for (Node n : new ArrayList<>(openNodes)) {
-								if (n.getLowerBound() > bestUpperBound.get()) {
-									openNodes.remove(n);
-								}
-							}
+							bestUpperBound.set(upperBound);	
 						}
 
 						if (childNode.getLowerBound() > childNode.getUpperBound()) {
@@ -78,16 +73,16 @@ public class SchedulerParallelTask extends RecursiveTask<Object> {
 					}
 				}
 			}
-			
+
 			node = new Node(openNodes.poll());
-			// add code here
+			
 			controller.updateGraph(node.getScheduledTasks());
-			if (node.getLowerBound() == node.getUpperBound() && node.getUnscheduledTasks().isEmpty()) {
+			if (node.getLowerBound() == bestUpperBound.get() && node.getUnscheduledTasks().isEmpty()) {
 				return node;
 			}
 		}
 	}
-	
+
 	private boolean containsParents(Node node, Task t) {
 
 		List<Task> scheduled = node.getScheduledTasks();		
@@ -123,7 +118,7 @@ public class SchedulerParallelTask extends RecursiveTask<Object> {
 
 		return makeSpan;
 	}
-	
+
 
 	private long calcLowerBound(Node node, int numProc) {
 
@@ -138,43 +133,44 @@ public class SchedulerParallelTask extends RecursiveTask<Object> {
 		makeSpan += (sum / numProc);
 
 		return (long) makeSpan;
-
 	}
 
 
 
 	private long calcUpperBound(Node node, int numProc) {
-		
-		int makeSpan = 0;
-		List<Task> unscheduledTasks = new ArrayList<>(node.getUnscheduledTasks());
 
+		List<Task> unscheduledTasks = new ArrayList<>(node.getUnscheduledTasks());
+		int makeSpan = 0;
 
 		while (!unscheduledTasks.isEmpty()) {
 			Task t = null;
 			for (int i = 1; i < numProc + 1; i++) {
 				t = PickGreedyTask(node);
-				
+
 				if (t == null) {
 					return calcMakeSpan(node);
 				}
-				
+
 				int startTime = getStartTime(i, t, node);
 				t.setStatus(startTime + t.getWeight());
+				t.setProcessor(i);
 				node.addScheduledTask(t);
 				node.addTasksToProcessor(t, i);
 				node.removeUnscheduledTask(t);
 				unscheduledTasks.remove(t);
 			}
 		}
-		
+
 		makeSpan = calcMakeSpan(node);
 		return makeSpan;
-		
+
+
+
 	}
 
 	private Task PickGreedyTask(Node node) {
 		List<Task> tasks = new ArrayList<>();
-		
+
 		for (Task t : node.getUnscheduledTasks()) {
 			if (containsParents(node, t) || t.getParentTasks().isEmpty()) {
 				tasks.add(t);
@@ -184,14 +180,12 @@ public class SchedulerParallelTask extends RecursiveTask<Object> {
 			return null;
 		}
 		Task minTask = tasks.get(0);
- 
-		for (Task t: tasks) {
+
+		for (Task t : tasks) {
 			if (t.getWeight() < minTask.getWeight()) {
 				minTask = t;
-
 			}
 		}
-		
 		return minTask;
 	}
 
