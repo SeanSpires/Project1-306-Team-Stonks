@@ -12,13 +12,14 @@ import org.junit.Test;
 import mvc.model.Node;
 
 import mvc.model.Scheduler;
+import mvc.model.SchedulerParallel;
 import mvc.model.Task;
 
 public class SchedulerTest {
 
     private List<Task> tasks;
     private Scheduler scheduler;
-
+    private SchedulerParallel schedulerParallel;
 
 //	@Test
 //	public void testSimpleSchedule() {
@@ -115,6 +116,7 @@ public class SchedulerTest {
     * */
         tasks = new ArrayList<>();
         scheduler = new Scheduler();
+        schedulerParallel = new SchedulerParallel();
 
         Task task1 = new Task(1);
         Task task2 = new Task(2);
@@ -152,10 +154,11 @@ public class SchedulerTest {
         tasks.add(task5);
 
 		//Schedule s = scheduler.createBasicSchedule(tasks, 1);
-        Node s = scheduler.createOptimalSchedule(tasks, 2);
+      //  Node s = scheduler.createOptimalSchedule(tasks, 2);
+        Node sp = schedulerParallel.createOptimalSchedule(tasks, 4, 4);
         
-        System.out.println(s.getScheduledTasks().size());
-        for (Task t : s.getScheduledTasks()) {
+        System.out.println(sp.getScheduledTasks().size());
+        for (Task t : sp.getScheduledTasks()) {
         	
         	System.out.println("Node number: " + t.getNodeNumber() + "Comp time: " + t.getStatus()
         			+ " processor: " +  t.getProcessor());
@@ -175,6 +178,7 @@ public class SchedulerTest {
     * */
         tasks = new ArrayList<>();
         scheduler = new Scheduler();
+        schedulerParallel = new SchedulerParallel();
 
         Task task1 = new Task(0);
         Task task2 = new Task(1);
@@ -218,7 +222,7 @@ public class SchedulerTest {
         tasks.add(task7);
 
 		//Schedule s = scheduler.createBasicSchedule(tasks, 1);
-        Node s = new Scheduler().createOptimalSchedule(tasks, 2);
+        Node s = schedulerParallel.createOptimalSchedule(tasks, 4, 4);
         
         System.out.println(s.getScheduledTasks().size());
         for (Task t : s.getScheduledTasks()) {
