@@ -187,7 +187,8 @@ public final class MenuController implements Initializable{
 							scheduler = new Scheduler();
 							schedule = scheduler.createOptimalSchedule(taskList, Main.numberOfProcessors, thisController);
 						}
-                        fileio.writeFile(schedule);
+						updateGraph(schedule.getScheduledTasks());
+						fileio.writeFile(schedule);
                         return null;
                     }
 
