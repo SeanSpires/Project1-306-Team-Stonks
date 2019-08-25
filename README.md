@@ -10,7 +10,7 @@
 | MarioSinovcic | Mario Sinovcic | msin595 | 
 | joshiefu | Joshua Fu | jfu047| 
 
-## Building and running the jar
+## Building and running the JAR
 
 <details>
   <summary><strong>Building the JAR</strong> </summary>
@@ -50,7 +50,10 @@
 </details>
   
 ## Wiki
-As well as the documentaion of our code, the wiki of this project also contains files from our planning phase. This includes our Meeting Minutes as well as our pair programming logs.
-
-The wiki also gives some background information to the problem and introduces our solution.
-
+The wiki of this repository contains detailed information about our project. This includes:
+* Background of the problem
+* Our approach to the solution
+* Code documentation
+* Project planning 
+* Meeting minutes
+* Pair programming logs
