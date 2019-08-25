@@ -2,7 +2,6 @@ package mvc.model;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 public class FileIO {
@@ -16,9 +15,9 @@ public class FileIO {
      * Writes the right inputs into the file.
      * @param data - A completed Schedule.
      */
-    public void writeFile(Schedule data) {
+    public void writeFile(Node data) {
     	
-    	LinkedHashMap<Task, Integer> schedule = data.getTasks();
+    	List<Task> schedule = data.getScheduledTasks();
     	String outputFileName;
     	
     	if (!(mvc.Main.outputFileName == null)) {
@@ -38,12 +37,13 @@ public class FileIO {
 
             fw.write("digraph \"" + outputFileName +"\" {\n");
 
-            for (Task t : schedule.keySet()) {
+            for (Task t : schedule) {
                 int node = t.getNodeNumber();
                 int weight = t.getWeight();
                 int processor = t.getProcessor();
-                int startTime = schedule.get(t);
-                fw.write("\t"+ node + "\t[Weight=" + weight + ",Start=" + startTime + ",Processor=" + processor + "];\n");
+                int startTime = t.getStartTime();
+                int endTime = t.getStatus();
+                fw.write("\t"+ node + "\t[Weight=" + weight + ",Start=" + startTime + ",End=" + endTime + ",Processor=" + processor + "];\n");
             }
 
             for(String s : transitionList){
@@ -179,5 +179,10 @@ public class FileIO {
      */
     public List<Task> getTaskList() {
         return taskList;
+    }
+
+    public void processInput(){
+        processNodes();
+        processTransitions();
     }
 }
