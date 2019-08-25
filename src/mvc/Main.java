@@ -147,7 +147,7 @@ public class Main extends Application {
         Node schedule;
         if(numberOfCores > 1){ //Multiple Cores
             SchedulerParallel scheduler = new SchedulerParallel();
-            schedule = scheduler.createOptimalSchedule(taskList, numberOfProcessors, numberOfCores, null);
+            schedule = scheduler.createOptimalSchedule(taskList, numberOfProcessors, numberOfCores);
 
         } else { //Single Core
             Scheduler scheduler = new Scheduler();

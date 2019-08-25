@@ -17,10 +17,10 @@ public class Node implements Comparable{
     // Map of scheduled tasks
     private List<Task>  scheduledTasks = new ArrayList<>();
 
-    // Upper Bound
     private double upperBound;
-    // Lower Bound
     private double lowerBound;
+    
+    private double lastBL = 0;
 
     /**
      * Constructor for Node. Copies the Node object to solve referencing issues faced.
@@ -219,7 +219,7 @@ public class Node implements Comparable{
 	@Override
 	public int compareTo(Object node) {
 		if(node instanceof Node) {
-			if(((Node) node).getLowerBound() < this.getLowerBound()) {
+			if(((Node) node).getUpperBound() < this.getUpperBound()) {
 				return 1;
 			}else {
 				return -1;
@@ -228,6 +228,43 @@ public class Node implements Comparable{
 		return 0;
 		
 	}
+	
+    @Override
+    public int hashCode(){
+        int out = 1;
+        Node new1 = new Node(this).normalize();
+        for(Integer proc : new1 .scheduledTasksByProcessor.keySet()){
+            for(Task t : new1 .scheduledTasksByProcessor.get(proc)) {
+                out = out + t.hashCode();
+            }
+        }
+        return out;
+    }
+    
+    public Node normalize(){
+        for(Integer procVertices : this.scheduledTasksByProcessor.keySet()){
+            int start = this.scheduledTasksByProcessor.get(procVertices).get(0).getNodeNumber();
+            for (Task t : this.scheduledTasksByProcessor.get(procVertices)) {
+                if (this.getTaskByNumber(start).getStartTime() > this.getTaskByNumber(t.getNodeNumber()).getStartTime()) {
+                    start = t.getNodeNumber();
+                }
+            }
+            for (Task t : this.scheduledTasksByProcessor.get(procVertices)) {
+                this.getTaskByNumber(t.getNodeNumber()).setProcessor(start);
+            }
+        }
+        return this;
+    }
+
+    public void setLastBL(double bl){
+        this.lastBL = bl;
+    }
+
+    public double getLastBL(){
+        return this.lastBL;
+    }
+
+
 
 }
 

@@ -1,11 +1,11 @@
 digraph "Nodes_7_OutTree-output.dot" {
 	0	[Weight=5,Start=0,End=5,Processor=2];
 	1	[Weight=6,Start=5,End=11,Processor=2];
+	5	[Weight=7,Start=15,End=22,Processor=1];
+	3	[Weight=6,Start=22,End=28,Processor=1];
 	6	[Weight=7,Start=11,End=18,Processor=2];
-	2	[Weight=5,Start=16,End=21,Processor=1];
-	3	[Weight=6,Start=18,End=24,Processor=2];
-	5	[Weight=7,Start=21,End=28,Processor=1];
-	4	[Weight=4,Start=24,End=28,Processor=2];
+	4	[Weight=4,Start=18,End=22,Processor=2];
+	2	[Weight=5,Start=22,End=27,Processor=2];
 	0 -> 1	 [Weight=15];
 	0 -> 2	 [Weight=11];
 	0 -> 3	 [Weight=11];
