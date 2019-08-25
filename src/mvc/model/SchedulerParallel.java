@@ -56,7 +56,11 @@ public class SchedulerParallel {
 							e.printStackTrace();
 						}
 						finally {
-							controller.updateGraph(out.getScheduledTasks());
+							if(controller==null){
+								//Do nothing
+							} else {
+								controller.updateGraph(out.getScheduledTasks());
+							}
 							notFinished = false;
 							forkJoinPool.shutdownNow();
 						}

@@ -75,8 +75,11 @@ public class SchedulerParallelTask extends RecursiveTask<Object> {
 			}
 
 			node = new Node(openNodes.poll());
-			
-			controller.updateGraph(node.getScheduledTasks());
+			if (controller==null){
+				//Do nothing
+			} else {
+				controller.updateGraph(node.getScheduledTasks());
+			}
 			if (node.getLowerBound() == bestUpperBound.get() && node.getUnscheduledTasks().isEmpty()) {
 				return node;
 			}

@@ -187,7 +187,7 @@ public final class MenuController implements Initializable{
                         	schedule = schedulerParallel.createOptimalSchedule(taskList, Main.numberOfProcessors, Main.numberOfCores, thisController);
 						} else {
 							scheduler = new Scheduler();
-							schedule = scheduler.createOptimalScheduleVisualised(taskList, Main.numberOfProcessors, thisController);
+							schedule = scheduler.createOptimalSchedule(taskList, Main.numberOfProcessors, thisController);
 						}
                         fileio.writeFile(schedule);
                         return null;

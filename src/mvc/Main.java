@@ -1,9 +1,6 @@
 package mvc;
 
-import mvc.model.FileIO;
-import mvc.model.Node;
-import mvc.model.Scheduler;
-import mvc.model.Task;
+import mvc.model.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,10 +26,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader. load(getClass().getResource("view/fxml/MenuWindow.fxml"));
+        Parent root = FXMLLoader. load(getClass().getResource("view/FXML/MenuWindow.fxml"));
         primaryStage.setTitle("Project1-306");
         Scene mainScene = new Scene(root, 1024, 700);
-        mainScene.getStylesheets().add(getClass().getResource("view/css/menuWindow.css").toExternalForm());
+        mainScene.getStylesheets().add(getClass().getResource("view/CSS/menuWindow.css").toExternalForm());
         primaryStage.setResizable(false);
         primaryStage.setScene(mainScene);
         primaryStage.show();
@@ -90,6 +87,32 @@ public class Main extends Application {
             numberOfCores = 1;
             numberOfProcessors = Integer.parseInt(args[1]);
 
+            for (String s :argsList){ //Checks for invalid param
+                if(s.equals("-o") || s.equals("-v") || s.equals("-p") ){ //Checks if it either -o, -v or -p
+                    continue;
+                } else {
+                    int index = argsList.indexOf(s);
+                    int indexOfP = argsList.indexOf("-p");
+                    int indexOfO = argsList.indexOf("-o");
+                    try {
+                        int input = Integer.parseInt(s);
+                        if((index != indexOfP + 1)) {
+                            if(index != indexOfO + 1) {
+                                if (index != 1) {
+                                    runFailed();
+                                }
+                            }
+                        }
+                    } catch (NumberFormatException | NullPointerException | ArrayIndexOutOfBoundsException e) {
+                        if(index != indexOfO + 1){
+                            if(index != 0){
+                                runFailed();
+                            }
+                        }
+                    }
+                }
+            }
+
             if (argsList.contains("-o")) {
                 try {
                     outputFileName = args[argsList.indexOf("-o")+1];
@@ -97,9 +120,7 @@ public class Main extends Application {
                     System.out.println("No valid input for file output name (after -o). test");
                     runFailed();
                 }
-
                 outputFileName = args[argsList.indexOf("-o")+1];
-
             }
             if(argsList.contains("-p")){
                 try{
@@ -109,14 +130,12 @@ public class Main extends Application {
                     runFailed();
                 }
             }
-
             if (argsList.contains("-v")) {
                 launch();
+            } else{
+                runAlgorithm();
+                System.exit(1);
             }
-            System.out.println("\n-p: value:"+numberOfCores+"  -o value:"+outputFileName);
-
-            runAlgorithm();
-            System.exit(1);
         }
     }
 
@@ -125,8 +144,15 @@ public class Main extends Application {
         fileio.readFile(inputFileName);
         fileio.processInput();
         taskList = fileio.getTaskList();
-        Scheduler scheduler = new Scheduler();
-        Node schedule = scheduler.createOptimalSchedule(taskList, numberOfProcessors);
+        Node schedule;
+        if(numberOfCores > 1){ //Multiple Cores
+            SchedulerParallel scheduler = new SchedulerParallel();
+            schedule = scheduler.createOptimalSchedule(taskList, numberOfProcessors, numberOfCores, null);
+
+        } else { //Single Core
+            Scheduler scheduler = new Scheduler();
+            schedule = scheduler.createOptimalSchedule(taskList, numberOfProcessors, null);
+        }
         fileio.writeFile(schedule);
     }
 
