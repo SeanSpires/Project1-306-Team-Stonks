@@ -80,7 +80,7 @@ public final class MenuController implements Initializable{
 	 */
 	public void initColours() {
 		this.colour.add("status-red");
-		this.colour.add("status-green");
+		this.colour.add("status-orange");
 	}
 
 	/**
