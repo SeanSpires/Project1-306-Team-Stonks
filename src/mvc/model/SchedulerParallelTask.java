@@ -4,45 +4,66 @@ import mvc.controller.MenuController;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.RecursiveTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class SchedulerParallelTask extends RecursiveTask<Object> {
-
+public class SchedulerParallelTask extends RecursiveTask {
+	
 	private static final long serialVersionUID = 1L;
 
 	private PriorityBlockingQueue<Node> openNodes;
-
+	
 	private AtomicLong bestUpperBound;	
+	
 
 	private int numProc;
 
-	private MenuController controller;
+	private HashSet<Integer> closed;
+
+	private static AtomicBoolean done;
+
 
 	public SchedulerParallelTask(PriorityBlockingQueue<Node> openNodes, int numProc,
-			AtomicLong bestLowerBound, AtomicLong bestUpperBound, MenuController controller) {
-
+			AtomicLong bestLowerBound, AtomicLong bestUpperBound, HashSet<Integer> closed, AtomicBoolean done) {
+		this.done = done;
+		this.closed = closed;
 		this.numProc = numProc;
 		this.openNodes = openNodes;
+
 		this.bestUpperBound = bestUpperBound;
-		this.controller = controller;
 
 	}
 
 	@Override
 	protected Object compute() {
-		long upperBound;
-		long lowerBound;
+		double upperBound;
 		int startTime = 0;
-		Node node = new Node(openNodes.poll());
 
+		while (true) {
 
-		while (true) {		
+			Node node = openNodes.poll();
+			if(node == null){
+				return null;
+			}
+			if(done.get()){
+				if(node.getUnscheduledTasks().isEmpty()){
+					return node;
+				}
+				return null;
+			}
+			if (node.getUnscheduledTasks().isEmpty()){
+				done.set(true);
+				return node;
+			}
+			closed.add(node.hashCode());
 			for (Task t : new ArrayList<>(node.getUnscheduledTasks())) {
-				for (int i = 1; i < numProc + 1; i++) {
+				for (int i = 1; i <= numProc; i++) {
 					Node childNode = new Node(node);
+
 					if (containsParents(node, t) || t.getParentTasks().isEmpty()) {
 						childNode.removeUnscheduledTask(t);
 						t = new Task(t);
@@ -53,36 +74,44 @@ public class SchedulerParallelTask extends RecursiveTask<Object> {
 						childNode.addScheduledTask(t);
 						childNode.addTasksToProcessor(t, i);
 
-						upperBound = calcUpperBound(new Node(childNode), numProc);
+						upperBound = Math.max(childNode.getLastBL(), t.getStartTime() + getComputationalBottomLevel(new Node(childNode), t));
+
+						childNode.setLastBL(upperBound);
 
 						childNode.setUpperBound(upperBound);
 
-						lowerBound = calcLowerBound(childNode, numProc);
-						childNode.setLowerBound(lowerBound);
-
-						if (upperBound < bestUpperBound.get()) {
-							bestUpperBound.set(upperBound);	
-						}
-
-						if (childNode.getLowerBound() > childNode.getUpperBound()) {
+						if (upperBound >= bestUpperBound.get()) {
 							continue;
 						}
-						else {
-							openNodes.add(childNode);
+						if (closed.contains(childNode.hashCode())) {
+							continue;
 						}
+
+						if (upperBound < bestUpperBound.get() && childNode.getUnscheduledTasks().isEmpty()) {
+							bestUpperBound.set((long) upperBound);
+						}
+
+						openNodes.add(childNode);
 					}
 				}
 			}
-
-			node = new Node(openNodes.poll());
-			if (controller==null){
-				//Do nothing
-			} else {
-				controller.updateGraph(node.getScheduledTasks());
+		}
+	}
+	
+	
+	public int getComputationalBottomLevel(Node input, Task added) {
+		if (added.getSubTasks().size() > 0) {
+			int max = 0;
+			for (Integer i : added.getSubTasks().keySet()) {
+				Task t = added.getSubTasks().get(i);
+				int current = (int) (getComputationalBottomLevel(input, t));
+				if (max < current) {
+					max = current;
+				}
 			}
-			if (node.getLowerBound() == bestUpperBound.get() && node.getUnscheduledTasks().isEmpty()) {
-				return node;
-			}
+			return max + (int) added.getWeight();
+		} else {
+			return (int) added.getWeight();
 		}
 	}
 
@@ -107,92 +136,6 @@ public class SchedulerParallelTask extends RecursiveTask<Object> {
 	}
 
 
-	private int calcMakeSpan(Node node) {
-		int makeSpan = 0;
-		int temptCompTime = 0;
-		List<Task> tasks = node.getScheduledTasks();
-
-		for (Task t : tasks) {
-			temptCompTime = t.getStatus();
-			if (temptCompTime > makeSpan) {
-				makeSpan = temptCompTime;
-			}
-		}
-
-		return makeSpan;
-	}
-
-
-	private long calcLowerBound(Node node, int numProc) {
-
-		double makeSpan = 0;
-		int sum = 0;
-		List<Task> unscheduledTasks = node.getUnscheduledTasks();
-		for (Task t : unscheduledTasks) {
-			sum += t.getWeight();
-		}
-
-		makeSpan = calcMakeSpan(node);
-		makeSpan += (sum / numProc);
-
-		return (long) makeSpan;
-	}
-
-
-
-	private long calcUpperBound(Node node, int numProc) {
-
-		List<Task> unscheduledTasks = new ArrayList<>(node.getUnscheduledTasks());
-		int makeSpan = 0;
-
-		while (!unscheduledTasks.isEmpty()) {
-			Task t = null;
-			for (int i = 1; i < numProc + 1; i++) {
-				t = PickGreedyTask(node);
-
-				if (t == null) {
-					return calcMakeSpan(node);
-				}
-
-				int startTime = getStartTime(i, t, node);
-				t.setStatus(startTime + t.getWeight());
-				t.setProcessor(i);
-				node.addScheduledTask(t);
-				node.addTasksToProcessor(t, i);
-				node.removeUnscheduledTask(t);
-				unscheduledTasks.remove(t);
-			}
-		}
-
-		makeSpan = calcMakeSpan(node);
-		return makeSpan;
-
-
-
-	}
-
-	private Task PickGreedyTask(Node node) {
-		List<Task> tasks = new ArrayList<>();
-
-		for (Task t : node.getUnscheduledTasks()) {
-			if (containsParents(node, t) || t.getParentTasks().isEmpty()) {
-				tasks.add(t);
-			}
-		}
-		if (tasks.isEmpty()) {
-			return null;
-		}
-		Task minTask = tasks.get(0);
-
-		for (Task t : tasks) {
-			if (t.getWeight() < minTask.getWeight()) {
-				minTask = t;
-			}
-		}
-		return minTask;
-	}
-
-
 	private int getStartTime(int proc, Task task, Node node) {
 		int comCost = 0;
 		int endTime = 0;
@@ -206,7 +149,7 @@ public class SchedulerParallelTask extends RecursiveTask<Object> {
 				endTime = t.getStatus();
 			}
 			else {
-				comCost = t.getSubTasks().get(task.getNodeNumber());
+				comCost = t.getSubTaskArcs().get(task.getNodeNumber());
 				endTime = t.getStatus();				
 			}
 			allStartTimes.add(comCost + endTime);
@@ -220,7 +163,4 @@ public class SchedulerParallelTask extends RecursiveTask<Object> {
 
 		return Collections.max(allStartTimes);
 	}
-
-
-
 }

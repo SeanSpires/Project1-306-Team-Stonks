@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * This is a class for each Task in a schedule.
  */
+
 public class Task {
 
     private int nodeNumber;
@@ -16,26 +17,30 @@ public class Task {
     private int status;
     private int startTime;
     private List<Task> parentTasks = new ArrayList<>();
-    private HashMap<Integer, Integer> subTasks = new HashMap<>();
+    private HashMap<Integer, Integer> subTaskArcs = new HashMap<>();
+    private HashMap<Integer, Task> subTasks = new HashMap<>();
 
     /**
      * Constructor for Task
      * @param nodeNumber - The ID of the task.
      */
+
     public Task(int nodeNumber){
         this.nodeNumber = nodeNumber;
     }
+    
 
-    /**
-     * Constructor for Task when there is an input of another task.
-     * @param t - a Task.
-     */
+/**
+ * Constructor for Task when there is an input of another task.
+ * @param t - a Task.
+ */
     public Task(Task t) {
     	this.nodeNumber = t.nodeNumber;
     	this.weight = t.weight;
     	this.processor = t.processor;
     	this.status = t.status;
     	this.startTime = t.startTime;
+    	this.subTaskArcs = t.subTaskArcs;
     	
     	for(Task task : t.parentTasks) {
     		this.parentTasks.add(new Task(task));
@@ -43,10 +48,15 @@ public class Task {
     	this.subTasks = new HashMap<>(t.subTasks);
     }
 
-    /**
-     * The methods below are just standard getters and setters for each field in the class.
-     */
 
+/**
+ * The methods below are just standard getters and setters for each field in the class.
+ */
+    @Override
+    public int hashCode(){
+       return (int) ((this.nodeNumber* 31 + this.processor) * 31 + this.startTime) * 31;
+    }
+    
     public int getStatus() {
     	return this.status;
     }
@@ -84,13 +94,16 @@ public class Task {
         this.parentTasks.add(task);
     }
 
-    public HashMap<Integer, Integer> getSubTasks() {
-
+    public HashMap<Integer, Integer> getSubTaskArcs() {
+        return subTaskArcs;
+    }
+    public HashMap<Integer, Task> getSubTasks() {
         return subTasks;
     }
 
     public void setSubTasks(Task task, Integer weight) {
-        subTasks.put(task.getNodeNumber(), weight);
+        subTasks.put(task.getNodeNumber(), task);
+        subTaskArcs.put(task.getNodeNumber(), weight);
     }
 
 	public int getStartTime() {
@@ -100,10 +113,6 @@ public class Task {
 	public void setStartTime(int startTime) {
 		this.startTime = startTime;
 	}
-    
-    
-
-
 
 
 }
