@@ -205,7 +205,11 @@ public class Node implements Comparable{
 		return 0;
 		
 	}
-	
+
+    /**
+    * Method which computes a hashcode for a node
+    * This hashcode is used in the identification of nodes in equailty testing
+    */
     @Override
     public int hashCode(){
         int out = 1;
@@ -218,11 +222,17 @@ public class Node implements Comparable{
         return out;
     }
 
-
+    /**
+    * Standard setter method for the last BL field
+    */
     public void setLastBL(double bl){
         this.lastBL = bl;
     }
 
+	
+    /**
+    * Standard getter method for the last BL field
+    */
     public double getLastBL(){
         return this.lastBL;
     }
