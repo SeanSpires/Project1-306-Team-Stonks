@@ -5,14 +5,22 @@ import mvc.controller.MenuController;
 
 import java.util.*;
 
+/**
+ * The scheduler class is responsable for creating an optimal scheudle (Node).
+ */
 public class Scheduler {
-
-	
-	
+	/**
+     	* Create an optimal schedule using branch & bound A* algorithm.
+	* Takes in a list of unschedulded tasks and the number of processors to create an optimal
+	* schedule based off these two inputs. A menucontroller is passed in to update the frontend
+	* during runtime.
+	* Further details on how the algorithm works can be found in git wiki
+    	*/
 	public Node createOptimalSchedule(List<Task> tasks, int numProc, MenuController controller) {
 
+		// queue of nodes to be explored
 		PriorityQueue<Node> openNodes = new PriorityQueue<>();
-		Node node = new Node();
+		Node node = new Node(); //create root node
 		node.setUnscheduledTasks(tasks);
 
 		boolean algoNotFinished = true;
@@ -21,6 +29,7 @@ public class Scheduler {
 		int startTime = 0;
 		double upperBound;
 		
+		// create a hashset of nodes that have already been visted
 		HashSet<Integer> closed = new HashSet<Integer>();
 		
 		while (algoNotFinished) {
@@ -61,7 +70,8 @@ public class Scheduler {
 				}
 			}
 			
-			Node minNode = openNodes.poll();
+			Node minNode = openNodes.poll(); // get head of queue
+			
 			if(controller == null){
 				//Do nothing
 			} else {
@@ -74,13 +84,16 @@ public class Scheduler {
 
 			node = new Node(minNode);
 
-			closed.add(node.hashCode());
+			closed.add(node.hashCode()); // node has been visited 
 		}
 		return null;
 	}
 	
 	
-	
+	/**
+     	*  Computes the computational bottom level of the current schedule and the task to be added.
+	*  The computational bottom level is the maximum potentional path through the schedule.
+    	*/
 	public int getComputationalBottomLevel(Node input, Task added) {
 		if (added.getSubTasks().size() > 0) {
 			int max = 0;
@@ -97,6 +110,10 @@ public class Scheduler {
 		}
 	}
 
+	/**
+	* Helper function which checks if the parents of a specific task is scheduled in a schedule
+	* If a task has no parents (i.e. is a root node), the function also returns true.
+	*/
 	private boolean containsParents(Node node, Task t) {
 
 		List<Task> scheduled = node.getScheduledTasks();
@@ -118,7 +135,10 @@ public class Scheduler {
 	}
 
 
-
+	/**
+	* getStartTime takes in a task that wants to be scheduled on a specfic processor and the schedule that
+	* it wants to be scheduled on. This function will calculate the start time of this for the schedule
+	*/
 	private int getStartTime(int proc, Task task, Node node) {
 		int comCost = 0;
 		int endTime = 0;
