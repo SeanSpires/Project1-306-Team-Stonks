@@ -11,6 +11,14 @@ import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
+
+/**
+* This class is used in the parallelization of the branch and bound A* algorithm
+* Objects of this class and created and scheduled on mulitiple threads in the
+* SchedulerParallel class. Some information of this class is shared between
+* different instances of this class's objects. This is made threadsafe by using
+* atomic variables.
+*/
 public class SchedulerParallelTask extends RecursiveTask {
 	
 	private static final long serialVersionUID = 1L;
@@ -27,7 +35,9 @@ public class SchedulerParallelTask extends RecursiveTask {
 	private static AtomicBoolean done;
 	private MenuController controller;
 
-
+	/**
+	* A standard constructor taking inputs and setting the appropriate fields. 
+	*/
 	public SchedulerParallelTask(PriorityBlockingQueue<Node> openNodes, int numProc,
 			AtomicLong bestLowerBound, AtomicLong bestUpperBound, HashSet<Integer> closed, AtomicBoolean done, MenuController controller) {
 		this.done = done;
@@ -41,6 +51,14 @@ public class SchedulerParallelTask extends RecursiveTask {
 
 	}
 
+	/**
+	* When a thread with this class's object is invoked. This compute method is called.
+	* The compute's algorithmic to find an optimal schedule is nearly identical to the
+	* algorithmic logic in the createOptimalSchedule() method in the Scheduler class.
+	* The main difference is that the compute() method deals with some atomic variables
+	* as certain variables are shared between threads. When the compute method ends when an
+	* optimal node is found, the method then returns this node is found.
+	*/
 	@Override
 	protected Object compute() {
 		double upperBound;
@@ -109,6 +127,11 @@ public class SchedulerParallelTask extends RecursiveTask {
 	}
 	
 	
+		
+	/**
+     	*  Computes the computational bottom level of the current schedule and the task to be added.
+	*  The computational bottom level is the maximum potentional path through the schedule.
+    	*/
 	public int getComputationalBottomLevel(Node input, Task added) {
 		if (added.getSubTasks().size() > 0) {
 			int max = 0;
@@ -125,6 +148,10 @@ public class SchedulerParallelTask extends RecursiveTask {
 		}
 	}
 
+	/**
+	* Helper function which checks if the parents of a specific task is scheduled in a schedule
+	* If a task has no parents (i.e. is a root node), the function also returns true.
+	*/
 	private boolean containsParents(Node node, Task t) {
 
 		List<Task> scheduled = node.getScheduledTasks();		
@@ -145,7 +172,10 @@ public class SchedulerParallelTask extends RecursiveTask {
 		return true;
 	}
 
-
+	/**
+	* getStartTime takes in a task that wants to be scheduled on a specfic processor and the schedule that
+	* it wants to be scheduled on. This function will calculate the start time of this for the schedule
+	*/
 	private int getStartTime(int proc, Task task, Node node) {
 		int comCost = 0;
 		int endTime = 0;
