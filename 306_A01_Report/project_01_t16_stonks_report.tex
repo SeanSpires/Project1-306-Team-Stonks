@@ -19,7 +19,6 @@ breaklines=true
 
 \title{Multiprocess Scheduling Application\\
 {\footnotesize Team 16 Stonks}
-\thanks{Identify applicable funding agency here. If none, delete this.}
 }
 
 \author{
@@ -63,7 +62,7 @@ This report evaluates the development of the solution to the Parallel Scheduling
 \end{abstract}
 
 \begin{IEEEkeywords}
-mp-hard, scheduling, algorithm, branch-and-bound, A*, multithreading, parallelisation 
+mp-hard, task, scheduling, algorithm, branch-and-bound, A*, multithreading, parallelisation 
 \end{IEEEkeywords}
 
 \section{Introduction}
@@ -75,7 +74,13 @@ The overarching development process was the Waterfall method specified by the cl
 
 Crucial models that the team always referred back to during the development of the product was the Gantt chart and the Project Network diagram. These diagrams reminded the group of the plan, functional/temporal dependencies, and progression of each task. A useful aspect to using PlanHammer was the ability to set the progress of the tasks that were currently worked on, and this enabled each group member to quickly see if the team was on schedule for the next tasks.\\
 
-The requirement of utilising the Waterfall developmental process posed as a challenge to the team as this is the first time the group embarked on a project that strictly follows the progression as mentioned earlier style. Therefore, initially, it was challenging for the team to abide by the plan and carry it out. One aspect of the difficulty was the development of the visualisation of the solution. Usually, a team member would begin drawing up designs and plans of the user interface and work in parallel with the development of the algorithm, but we had to ensure that this did not occur and that we followed the waterfall method. 
+The requirement of utilising the Waterfall developmental process posed as a challenge to the team as this is the first time the group embarked on a project that strictly follows the progression as mentioned earlier style. Therefore, initially, it was strenuous for the team to abide by the plan and carry it out. One aspect of the difficulty was the development of the visualisation of the solution. Usually, a team member would begin drawing up designs and plans of the user interface and work in parallel with the development of the algorithm, but we had to ensure that this did not occur and that we followed the waterfall method. (Please see figure one for the diagram of work progression).
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.4\textwidth]{images/fig3.png}}
+\caption{General work progression diagram.}
+\label{fig}
+\end{figure}
 
 \subsection{Communication and Decision Making}
 Communication within a team is paramount to the success of the project. Team Stonks felt that proper communication channels needed to be set up for the smooth running of the project. The main communication tool that the team used was Facebook Messenger.  However, Messenger was only used for the planning of the meeting times, locations and small decision making as the team decided that large decisions should be made in-person so as to avoid any miscommunication that might arise from online messaging. \\
@@ -90,11 +95,11 @@ As the team consisted of five good friends, each team member understood that any
 Overall, through the conflicts the team faced, working towards a common goal was essential for getting past conflicts/disputes. Additionally, having an attitude that respected individual team member's views and opinions allowed the team to effectively and efficiently resolve any conflicts faced.
 
 \subsection{Tools and Technologies}
-As multiple people were working on the project, a GitHub repository was created with all the team members as collaborators. Utilizing the different branches of the repository, the team was able to work on various aspects of the project at the same time without interfering with each other. Only when these aspects were completed could they be merged and implemented into the master branch. \\
+As multiple people were working on the project, a GitHub repository was created with all the team members as collaborators. Utilising the different branches of the repository, the team was able to work on various aspects of the project at the same time without interfering with each other. Only when these aspects were completed could they be merged and implemented into the master branch. \\
 
 Using a repository is also advantageous in that it provides version control. If any part of the code was wrong for whatever reason, there was always the option to fall back on a previous iteration of the system. This feature was crucial when during a merge from the master branch into a development branch, an error occurred, and the repository had to be rebased to effectively what it was half a week ago. During the process, although much of the commit history was lost, the repository was able to have the local working iteration pushed onto it.\\
 
-In terms of the external libraries, JavaFX is used for the visualization. JavaFX provided a component system that enabled the creation of custom components such as the Gantt Chart and the Zoomable Scroll Pane and supported CSS styling. The end product was a user interface that was both simple to implement, and intuitive to use.
+In terms of the external libraries, JavaFX was used for the visualisation. JavaFX provided a component system that enabled the creation of custom components such as the Gantt Chart and the Zoomable Scroll Pane and supported CSS styling. The end product was a user interface that was both simple to implement, and intuitive to use.
 
 
 \subsection{Work Culture}
@@ -125,7 +130,7 @@ Documentation& 10 & 15 & 35 & 10 & 30 \\
 \end{table}
 
 \subsection{Fit For Purpose}
-The solution provided by the development team is fit for purpose. The waterfall process and design specifications given by the client were strictly followed. This ensured the team from diverging their focus and prevented possibilities of scope-creep. 
+The solution provided by the development team is fit for purpose. The waterfall process and design specifications given by the client were strictly followed. This ensured the team from diverging their focus and prevented possibilities of scope-creep. Furthermore, rigorous testings ensured that each dependency is valid, preserved, and reliable.
 
 
 \section{Implementation}
@@ -133,11 +138,11 @@ The solution provided by the development team is fit for purpose. The waterfall 
 The client of this project suggested that the team should explore the solution space via two methodologies, branch-and-bound and A* (pronounced A Star). The branch-and-bound algorithm is a design paradigm made for creating solutions for combinatorial optimisation problems such as the scheduling problem. The idea behind the algorithm is to exhaustively search through every possible permutation of schedules with the given tasks and pre-defined number of processors. Each initial partial schedule introduces multiple subsequent schedules which could derive from the parent schedule. These subsequent schedules should be explored as they may contain the desired optimal solution; hence, branching. However, blindly searching the entire problem space poses a problem of inefficiency when a noticeably non-optimal partial schedule is explored. Therefore, in addition to branching into potentially viable child schedules, the algorithm also keeps track of the current best solution and compares it before expanding a partial schedule. This additional layer of checking reduces the solution space significantly; which both improves memory usage and overall performance.
 \\
 
-The A* algorithm is the amalgamation of several design iterations built on top of Edsger Dijkstra?s best path algorithm with the incorporation of a heuristic calculation that suggests a general direction. (Cs.indstate.edu. 2019). The general idea behind the algorithm is that A* will traverse the problem space by calculating an estimation of the potential schedules it has explored, and go along a path which seems to be the most promising and viable combinations. However, the calculation of the heuristic could either drastically improve the algorithm?s speed of finding the optimal schedule or waste time extending schedules which are unlikely to be optimal. Therefore, there are advantages and disadvantages to both algorithms. The team rigorously researched both algorithms and performed several team meetings to arrive at the end algorithm of choice. Furthermore, during meetings the team deemed it unnecessary to employ external libraries for the purposes of implementing the scheduling algorithm.
+The A* algorithm is the amalgamation of several design iterations built on top of Edsger Dijkstra's best path algorithm with the incorporation of a heuristic calculation that suggests a general direction. (Cs.indstate.edu. 2019). The general idea behind the algorithm is that A* will traverse the problem space by calculating an estimation of the potential schedules it has explored, and go along a path which seems to be the most promising and viable combinations. However, the calculation of the heuristic could either drastically improve the algorithm?s speed of finding the optimal schedule or waste time extending schedules which are unlikely to be optimal. Therefore, there are advantages and disadvantages to both algorithms. The team rigorously researched both algorithms and performed several team meetings to arrive at the end algorithm of choice. Furthermore, during meetings the team deemed it unnecessary to employ external libraries for the purposes of implementing the scheduling algorithm.
 
 
 \subsection{Algorithm}
-The final implementation of the algorithm has been dubbed ?Branch-and-Bound-A*?. The reasoning for this is the algorithm combines the work of Rahman?s branch-and-bound algorithm, with one the key A* heuristics of Sinnen. The final algorithm creates the search space like a normal branch-and-bound algorithm, but traverses the space using heuristics akin to A*. The branch-and-bound logic of Rahman was mostly kept. However, Sinnen's heuristics were added in favour of Rahman's. \\
+The final implementation of the algorithm has been dubbed ?Branch-and-Bound-A*?. The reasoning for this is the algorithm combines the work of Rahman's branch-and-bound algorithm, with one the key A* heuristics of Sinnen. The final algorithm creates the search space like a normal branch-and-bound algorithm, but traverses the space using heuristics akin to A*. The branch-and-bound logic of Rahman was mostly kept. However, Sinnen's heuristics were added in favour of Rahman's. \\
 
 \begin{figure}[htbp]
 \centerline{\includegraphics[width=0.4\textwidth]{images/fig1.png}}
@@ -145,13 +150,13 @@ The final implementation of the algorithm has been dubbed ?Branch-and-Bound-A*?.
 \label{fig}
 \end{figure}
 
-Rahman?s pseudo-code (please refer to figure one) is a general branch-and-bound algorithm for finding optimal schedules. Being a general combinatorial optimisation algorithm, Rahman?s algorithm considers all possible solutions to find an optimal schedule. However, the algorithm, using lower and upper bounds, discards subsets of solutions that are abortive. \\
+Rahman?s pseudo-code (please refer to figure two) is a general branch-and-bound algorithm for finding optimal schedules. Being a general combinatorial optimisation algorithm, Rahman?s algorithm considers all possible solutions to find an optimal schedule. However, the algorithm, using lower and upper bounds, discards subsets of solutions that are abortive. \\
 Initially, Rahman?s algorithm was implemented in its entirety. However, upon validating the algorithm through JUnit tests, problems were discovered with Rahman?s method of calculating the upper bound of a schedule. The algorithm always produced a valid schedule, but only produced an optimal schedule for smaller graphs.
 \\
 
 To get Rahman?s algorithm to work in all possible cases, the upper and lower bounds would have to be modified. Rahman?s upper bound heuristic was replaced with Sinnen?s bottom level of a schedule as the upper bound. Rahman?s lower bound heuristic was removed entirely. Alongside this, some conditional logic as to which schedules to prune and which to explore was also changed. The final algorithm, Branch-and-Bound-A* pseudocode is as follows (note: The terms node and schedule are interchangable): 
 
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}
 Create a closed list of schedules already visited
 Use a priority queue of schedules ordered by lowest upper bound cost
 Create empty root schedule and add it to priority queue
@@ -234,7 +239,7 @@ No new data structures had to be created, and most of the sequential algorithm c
 As the Fork/Join framework was used, the parallelised algorithm needed to be split between a parallel task that does the algorithmic computation, and a manager that calls this task and handles its output. The algorithmic logic of the parallel task is almost identical to the sequential algorithmic, with the only difference being that on each iteration the algorithmic checks to see if any other thread has finished, and if it has, the thread will stop computation and return. In the implementation, this task was encapsulated in a class called SchedulerParallelTask, which extended RecursiveTask. Alongside this, a new class, SchedulerParallel, was also implemented. SchedulerParallel?s role was to create an optimal schedule using multiple threads. The pseudo-code of how the two classes work together to create an optimal schedule is as follows:
 
 
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}
 
 createOptimalSchedule(unscheduled tasks, number of processors, number of cores, menu controller)
 Create new fork join pool = pool
@@ -271,11 +276,18 @@ Return out
 
 \section{Visualisation}
 \subsection{Concept}
-The intent of the visualisation component was to provide the user with meaningful live visual feedback of the search. Furthermore, the specifications indicate that the visualisation needs to update as the algorithm progress and also needs to provide some form of interaction. When designing any user interface, there is a natural and commonplace tradeoff between displaying the complexity of the data and keeping the interface intuitive and easy to understand. In the case of this project, the data complexity is associated with all the different iterations of the algorithm and the continually changing optimal schedule. As a result, presenting the progress directly would be too difficult to understand due to the exhaustive methodology behind the search functionality. Therefore, our team decided to try to minimise the amount of text-based output. More specifically, the team would only display detailed text information when the user requested it (e.g., details about specific tasks). This allowed the rest of the interface to focus on the main graphical component. This segment of the graphical user interface (GUI) would serve as the focal point for the live visualisation. To further justify this concept, and accompanying layout, research was conducted to ensure that that this was an appropriate choice for the specifications given. Specifically, finding projects with similar interfaces and specifications helped solidify the team?s understanding of visualisation solution would be fit-for-purpose in this project.\\
+The intent of the visualisation component was to provide the user with meaningful live visual feedback of the search. Furthermore, the specifications indicate that the visualisation needs to update as the algorithm progress and also needs to provide some form of interaction. When designing any user interface, there is a natural and commonplace tradeoff between displaying the complexity of the data and keeping the interface intuitive and easy to understand. In the case of this project, the data complexity is associated with all the different iterations of the algorithm and the continually changing optimal schedule. As a result, presenting the progress directly would be too difficult to understand due to the exhaustive methodology behind the search functionality. Therefore, our team decided to try to minimise the amount of text-based output. More specifically, the team would only display detailed text information when the user requested it (e.g., details about specific tasks). This allowed the rest of the interface to focus on the main graphical component. This segment of the graphical user interface (GUI) would serve as the focal point for the live visualisation. To further justify this concept, and accompanying layout, research was conducted to ensure that that this was an appropriate choice for the specifications given. Specifically, finding projects with similar interfaces and specifications helped solidify the team?s understanding of visualisation solution would be fit for purpose in this project.\\
 
 
 \subsection{Implementation}
-The interface went through multiple iterative stages to get to the final design (fig.3). Notably, the graphic component was initially implemented as a tree with the intent of displaying the branching structure of the algorithm. The two significant problems that were found with this approach were to do the meaningfulness of the display and the native java tree libraries not suiting the interface specifications. Similar complications would occur during the development of this solution due to this section of the project having comparatively open-ended specifications. Major design decisions and problem-solving sessions were all combatted with in-person group discussions along with individual research, exploration and validation. The waterfall development process lead the team to an application with two major sections driven by user interaction. \\
+The interface went through multiple iterative stages to get to the final design (please see figure four). Notably, the graphic component was initially implemented as a tree with the intent of displaying the branching structure of the algorithm. The two significant problems that were found with this approach were to do the meaningfulness of the display and the native java tree libraries not suiting the interface specifications. Similar complications would occur during the development of this solution due to this section of the project having comparatively open-ended specifications. Major design decisions and problem-solving sessions were all combatted with in-person group discussions along with individual research, exploration and validation. The waterfall development process lead the team to an application with two major sections driven by user interaction. \\
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.4\textwidth]{images/fig4.png}}
+\caption{Final Iteration of the Graphical User Interface.}
+\label{fig}
+\end{figure}
+
 
 \subsection{Illustrative Visual Output}
 The overall layout for the visualisation platform utilised the common rule of thirds design principle. The top two-thirds of the display was dedicated to the primary output, which in the case of our project was a Gantt chart. On initialisation, this section of the interface shows an empty chart prompting the user to press the start button. This design decision was critical in promoting user-centred control and intuitively communicating to the user that the algorithm had not started yet. \\
@@ -290,11 +302,24 @@ To further enhance the user experience, the Gantt chart was made zoomable via di
 \subsection{Advanced Visual Features}
 The other part of the visualisation is more detailed and consists of less graphically orientated output. Once the algorithm has stopped, which is indicated by the timer stopping, the user can interact with the output and gather some more detailed, meaningful information. Tooltips have been implemented so that each Task can be hovered over to reveal more details. This includes the Task's start time, task number, weight and processor. This feature intends to not only solidify the visualization details but to also provide a direct visual metaphor for the output file with the optimal schedule. Further data output is provided by the bottom bar, which includes a live timer, for immediate real-time feedback, along with some information about the user's input (cores and processors). This was intended to help users identify if they had mistyped anything that was not what they intended to enter but also wouldn't be picked up by the error checking. \\
 The whole visualisation part of this project was implemented using the JavaFX library, with Scene Builder used as a utility to create the general layout. As JavaFX did not natively have components that we required, such as the Zoomable ScrollPane and the Gantt chart component, we found resources on Stack Overflow that we modified to suit our uses. \\
-The Zoomable ScrollPane is a class that inherits from the JavaFX ScrollPane component. In this class, scroll event listeners have been added to implement the zoom function. Whenever a scroll is detected, the new positions of the contents of the pane will be calculated and displayed accordingly. As this class is technically a ScrollPane, it means that with the pannable attribute set to true, the user will be able to move the graph around by clicking and dragging the mouse.\\
+The Zoomable ScrollPane is a class that inherits from the JavaFX ScrollPane component. In this class, scroll event listeners have been added to implement the zoom function. Whenever a scroll is detected, the new positions of the contents of the pane will be calculated and displayed accordingly. As this class is technically a ScrollPane, it means that with the pannable attribute set to true, the user will be able to move the graph around by clicking and dragging the mouse (please refer to figure five).\\
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.4\textwidth]{images/fig5.png}}
+\caption{Zoom and drag feature of the Graphical User Interface.}
+\label{fig}
+\end{figure}
+
 
 The Gantt chart is a more complex component that inherits from the XYChart component. After initialising the chart, it waits for update calls which will be handled by the controller. When the algorithm (Scheduler object) finds a new potentially optimal schedule, it will invoke the updateGraph() method on the controller object with the schedule as the parameter. The controller will then retrieve the list of scheduled tasks from that schedule and extract the information it needs. The start time and the process associated with the task is used as the X and Y axis values respectively, with the weight of the task used as the length of the block displayed on the chart. All of this information, as well as the task number, is passed through as parameters to the Gantt Chart component. \\
 
-To provide the user with more information about the schedule, a JavaFX Tooltip is associated with each task/block. The tooltip pops up whenever a task hovered over, providing the user with all of the task?s information. 
+To provide the user with more information about the schedule, a JavaFX Tooltip is associated with each task/block. The tooltip pops up whenever a task hovered over, providing the user with all of the information regarding the task. Please see figure six.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.4\textwidth]{images/fig6.png}}
+\caption{Intuitive illustration of task information.}
+\label{fig}
+\end{figure}
 
 \subsection{Comparison Between Sequential and Parallel Visualisation}
 In practice, there was no difference in visualisation between sequential and parallel visualisation. The only difference was the display letting the user know that the program was being run on n amount of cores. However, the user would notice that the Gantt chart would ?flicker? more. This is not a bug, but rather a design decision after considering the trade-offs. \\
