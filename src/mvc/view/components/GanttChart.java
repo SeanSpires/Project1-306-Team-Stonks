@@ -15,12 +15,6 @@ import java.util.function.Consumer;
 
 
 
-
-/**
- * This class was designed by user: Roland from StackOverflow
- * https://stackoverflow.com/questions/27975898/gantt-chart-from-scratch
- */
-
 public class GanttChart<X, Y> extends XYChart<X, Y> {
 
     public static class ExtraData {
